@@ -1,0 +1,91 @@
+package hr.fer.zemris.java.hw01;
+
+import java.util.Scanner;
+
+/**
+ * A program that calculates and prints a given rectangle's area and perimeter.
+ * Input the width and height of the rectangle either as command-line arguments or though the console.
+ */
+
+public class Rectangle {
+
+    /**
+     * Main method. Determines a rectangle's dimensions and prints its data to the console.
+     * @param args command-line arguments interpreted as width and height, if any are given
+     */
+    public static void main (String[] args) {
+        double width = 0;
+        double height = 0;
+
+        if (args.length == 0) {
+            width = readDimensionFromConsole("širinu");
+            height = readDimensionFromConsole("duljinu");
+        } else if (args.length == 2) {
+            width = Double.parseDouble(args[0]);
+            height = Double.parseDouble(args[1]);
+        } else {
+            System.out.println("Wrong number of input arguments.");
+            System.exit(1);
+        }
+
+        System.out.format("Pravokutnik širine %.1f i visine %.1f ima površinu %.1f te opseg %.1f.%n",
+                width, height, area(width, height), perimeter(width, height));
+    }
+
+    /**
+     * Calculates the perimeter of a given rectangle.
+     * @param width width of the rectangle
+     * @param height height of the rectangle.
+     * @return perimeter of the rectangle
+     */
+    public static double perimeter(double width, double height) {
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("Rectangle dimensions can't be negative.");
+        }
+
+        return 2 * (width + height);
+    }
+
+    /**
+     * Calculates the area of a given rectangle.
+     * @param width width of the rectangle
+     * @param height height of the rectangle.
+     * @return area of the rectangle
+     */
+    public static double area(double width, double height) {
+        if (width < 0 || height < 0) {
+            throw new IllegalArgumentException("Rectangle dimensions can't be negative.");
+        }
+
+        return width * height;
+    }
+
+    /**
+     * Reads a rectangle dimension from the console.
+     * @param dimension rectangle dimension to read (e.g. "širinu" or "visinu")
+     * @return dimension value that was read from the console
+     */
+    private static double readDimensionFromConsole(String dimension) {
+        try (Scanner sc = new Scanner(System.in)) {
+            while (true) {
+                System.out.format("Unesite %s > ", dimension);
+
+                if (sc.hasNext()) {
+                    String input = sc.next();
+
+                    try {
+                        double value = Double.parseDouble(input);
+                        if (value < 0) {
+                            System.out.println("Unijeli ste negativnu vrijednost.");
+                            continue;
+                        }
+                        return value;
+
+                    } catch (NumberFormatException ex) {
+                        System.out.format("'%s' se ne može protumačiti kao broj.%n", input);
+                    }
+                }
+            }
+        }
+    }
+}
