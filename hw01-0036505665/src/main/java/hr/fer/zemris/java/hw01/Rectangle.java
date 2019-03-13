@@ -22,8 +22,8 @@ public class Rectangle {
 
         if (args.length == 0) {
             try (Scanner sc = new Scanner(System.in)) {
-                width = readRectangleDimension(sc,"širinu");
-                height = readRectangleDimension(sc,"duljinu");
+                width = readRectangleDimension(sc, "širinu");
+                height = readRectangleDimension(sc, "duljinu");
             }
 
         } else if (args.length == 2) {
@@ -36,7 +36,7 @@ public class Rectangle {
             }
 
         } else {
-            System.out.println("Wrong number of input arguments.");
+            System.out.println("Pogrešan broj ulaznih argumenata.");
             System.exit(1);
         }
 
