@@ -54,7 +54,7 @@ public class UniqueNumbers {
                     break;
                 }
 
-                System.out.format("'%s' nije cijeli broj.", input);
+                System.out.format("'%s' nije cijeli broj.%n", input);
             }
         }
 
