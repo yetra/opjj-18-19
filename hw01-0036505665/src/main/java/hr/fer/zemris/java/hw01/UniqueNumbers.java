@@ -3,9 +3,11 @@ package hr.fer.zemris.java.hw01;
 import java.util.Scanner;
 
 /**
- * A program which creates an ordered binary tree of unique node values.
- * Node values are input through the console.
- * Typing 'kraj' prints the tree in ascending & descending order and ends the program.
+ * A program which creates and prints an ordered binary tree of unique node values.
+ * Node values are input through the console. Typing "kraj" prints the tree and ends the program.
+ *
+ * @author Bruna Dujmović
+ *
  */
 public class UniqueNumbers {
 
