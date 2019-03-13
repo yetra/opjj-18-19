@@ -17,13 +17,13 @@ public class Rectangle {
      * @param args command-line arguments interpreted as width and height, if any are given
      */
     public static void main (String[] args) {
-        double width = 0;
-        double height = 0;
+        double width = 0.0;
+        double height = 0.0;
 
         if (args.length == 0) {
             try (Scanner sc = new Scanner(System.in)) {
-                width = readRectangleDimension(sc,"širinu");
-                height = readRectangleDimension(sc,"duljinu");
+                width = readRectangleDimension(sc, "širinu");
+                height = readRectangleDimension(sc, "duljinu");
             }
 
         } else if (args.length == 2) {
@@ -36,12 +36,12 @@ public class Rectangle {
             }
 
         } else {
-            System.out.println("Wrong number of input arguments.");
+            System.out.println("Pogrešan broj ulaznih argumenata.");
             System.exit(1);
         }
 
-        System.out.format("Pravokutnik širine %.1f i visine %.1f ima površinu %.1f te opseg %.1f.%n",
-                width, height, area(width, height), perimeter(width, height));
+        System.out.println("Pravokutnik širine " + width + " i visine " + height  + " ima površinu "
+                + area(width, height) + " te opseg " + perimeter(width, height) + ".");
     }
 
     /**
