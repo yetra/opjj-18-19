@@ -18,8 +18,10 @@ public class Rectangle {
         double height = 0;
 
         if (args.length == 0) {
-            width = readDimensionFromConsole("širinu");
-            height = readDimensionFromConsole("duljinu");
+            try (Scanner sc = new Scanner(System.in)) {
+                width = readRectangleDimension(sc,"širinu");
+                height = readRectangleDimension(sc,"duljinu");
+            }
         } else if (args.length == 2) {
             try {
                 width = Double.parseDouble(args[0]);
@@ -35,6 +37,35 @@ public class Rectangle {
 
         System.out.format("Pravokutnik širine %.1f i visine %.1f ima površinu %.1f te opseg %.1f.%n",
                 width, height, area(width, height), perimeter(width, height));
+    }
+
+    /**
+     * Reads a rectangle dimension from the console.
+     * @param scanner Scanner object that is used to read the dimension
+     * @param dimension rectangle dimension to read (e.g. "širinu" or "visinu")
+     * @return dimension value that was read from the console
+     */
+    private static double readRectangleDimension(Scanner scanner, String dimension) {
+        while (true) {
+            System.out.format("Unesite %s > ", dimension);
+
+            if (scanner.hasNext()) {
+                String input = scanner.next();
+
+                try {
+                    double value = Double.parseDouble(input);
+
+                    if (value < 0) {
+                        System.out.println("Unijeli ste negativnu vrijednost.");
+                        continue;
+                    }
+                    return value;
+
+                } catch (NumberFormatException ex) {
+                    System.out.format("'%s' se ne može protumačiti kao broj.%n", input);
+                }
+            }
+        }
     }
 
     /**
@@ -63,34 +94,5 @@ public class Rectangle {
         }
 
         return width * height;
-    }
-
-    /**
-     * Reads a rectangle dimension from the console.
-     * @param dimension rectangle dimension to read (e.g. "širinu" or "visinu")
-     * @return dimension value that was read from the console
-     */
-    private static double readDimensionFromConsole(String dimension) {
-        try (Scanner sc = new Scanner(System.in)) {
-            while (true) {
-                System.out.format("Unesite %s > ", dimension);
-
-                if (sc.hasNext()) {
-                    String input = sc.next();
-
-                    try {
-                        double value = Double.parseDouble(input);
-                        if (value < 0) {
-                            System.out.println("Unijeli ste negativnu vrijednost.");
-                            continue;
-                        }
-                        return value;
-
-                    } catch (NumberFormatException ex) {
-                        System.out.format("'%s' se ne može protumačiti kao broj.%n", input);
-                    }
-                }
-            }
-        }
     }
 }
