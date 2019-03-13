@@ -8,10 +8,14 @@ import java.util.Scanner;
  * Typing 'kraj' prints the tree in ascending & descending order and ends the program.
  */
 public class UniqueNumbers {
+
+    /**
+     * Static class that represents a binary tree node.
+     */
     public static class TreeNode {
-        TreeNode left;
-        TreeNode right;
-        int value;
+        TreeNode left;  // Left child of the tree node
+        TreeNode right; // Right child of the tree node
+        int value;  // Value of the tree node
     }
 
     /**
