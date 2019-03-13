@@ -40,8 +40,8 @@ public class Rectangle {
             System.exit(1);
         }
 
-        System.out.format("Pravokutnik širine %.1f i visine %.1f ima površinu %.1f te opseg %.1f.%n",
-                width, height, area(width, height), perimeter(width, height));
+        System.out.println("Pravokutnik širine " + width + " i visine " + height  + " ima površinu "
+                + area(width, height) + " te opseg " + perimeter(width, height) + ".");
     }
 
     /**
