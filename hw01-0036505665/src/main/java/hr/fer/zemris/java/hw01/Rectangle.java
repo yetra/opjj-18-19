@@ -17,8 +17,8 @@ public class Rectangle {
      * @param args command-line arguments interpreted as width and height, if any are given
      */
     public static void main (String[] args) {
-        double width = 0;
-        double height = 0;
+        double width = 0.0;
+        double height = 0.0;
 
         if (args.length == 0) {
             try (Scanner sc = new Scanner(System.in)) {
