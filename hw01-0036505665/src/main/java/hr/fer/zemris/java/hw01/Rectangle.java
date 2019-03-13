@@ -5,6 +5,9 @@ import java.util.Scanner;
 /**
  * A program that calculates and prints a given rectangle's area and perimeter.
  * Input the width and height of the rectangle either as command-line arguments or though the console.
+ *
+ * @author Bruna Dujmović
+ *
  */
 
 public class Rectangle {
@@ -22,6 +25,7 @@ public class Rectangle {
                 width = readRectangleDimension(sc,"širinu");
                 height = readRectangleDimension(sc,"duljinu");
             }
+
         } else if (args.length == 2) {
             try {
                 width = Double.parseDouble(args[0]);
@@ -30,6 +34,7 @@ public class Rectangle {
                 System.out.println("Argumenti komandne linije ne mogu se protumačiti kao brojevi.");
                 System.exit(1);
             }
+
         } else {
             System.out.println("Wrong number of input arguments.");
             System.exit(1);
@@ -40,7 +45,7 @@ public class Rectangle {
     }
 
     /**
-     * Reads a rectangle dimension from the console.
+     * Reads a rectangle dimension using a Scanner object.
      * @param scanner Scanner object that is used to read the dimension
      * @param dimension rectangle dimension to read (e.g. "širinu" or "visinu")
      * @return dimension value that was read from the console
@@ -74,7 +79,7 @@ public class Rectangle {
      * @param height height of the rectangle.
      * @return perimeter of the rectangle
      */
-    public static double perimeter(double width, double height) {
+    private static double perimeter(double width, double height) {
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Rectangle dimensions can't be negative.");
         }
@@ -88,7 +93,7 @@ public class Rectangle {
      * @param height height of the rectangle.
      * @return area of the rectangle
      */
-    public static double area(double width, double height) {
+    private static double area(double width, double height) {
         if (width < 0 || height < 0) {
             throw new IllegalArgumentException("Rectangle dimensions can't be negative.");
         }
