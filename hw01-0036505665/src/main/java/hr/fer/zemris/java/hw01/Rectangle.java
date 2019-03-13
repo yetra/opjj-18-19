@@ -21,8 +21,13 @@ public class Rectangle {
             width = readDimensionFromConsole("širinu");
             height = readDimensionFromConsole("duljinu");
         } else if (args.length == 2) {
-            width = Double.parseDouble(args[0]);
-            height = Double.parseDouble(args[1]);
+            try {
+                width = Double.parseDouble(args[0]);
+                height = Double.parseDouble(args[1]);
+            } catch (NumberFormatException ex) {
+                System.out.println("Argumenti komandne linije ne mogu se protumačiti kao brojevi.");
+                System.exit(1);
+            }
         } else {
             System.out.println("Wrong number of input arguments.");
             System.exit(1);
