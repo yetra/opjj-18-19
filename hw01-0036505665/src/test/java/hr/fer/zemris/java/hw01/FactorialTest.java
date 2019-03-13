@@ -23,6 +23,6 @@ public class FactorialTest {
     @Test
     public void testNegativeNumber() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Factorial.factorial(-5));
-        assertEquals("Number must not be negative.", exception.getMessage());
+        assertEquals("Number can't be negative.", exception.getMessage());
     }
 }

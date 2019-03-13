@@ -4,13 +4,14 @@ import java.util.Scanner;
 
 /**
  * A program that calculates and prints the factorials of integers between 3 and 20.
- * Inputs are accepted through the console. Typing 'kraj' ends the program.
+ * Inputs are accepted through the console. Typing "kraj" ends the program.
  *
  * @author Bruna Dujmović
  *
  */
 
 public class Factorial {
+
     /**
      * Main method. Reads from the console and prints the factorials of numbers between 3 and 20.
      * @param args command-line arguments, not used
@@ -32,6 +33,7 @@ public class Factorial {
 
             } else {
                 String input = sc.next();
+
                 if (input.equals("kraj")) {
                     System.out.println("Doviđenja.");
                     break;
@@ -50,7 +52,7 @@ public class Factorial {
      */
     public static long factorial(int number) {
         if (number < 0) {
-            throw new IllegalArgumentException("Number must not be negative.");
+            throw new IllegalArgumentException("Number can't be negative.");
         }
 
         long factorial = 1L;
