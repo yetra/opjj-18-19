@@ -146,8 +146,11 @@ public class ArrayIndexedCollection extends Collection {
      * @param value the element to be inserted
      * @param position the index at which the specified element is to be inserted
      * @throws IndexOutOfBoundsException if the specified position is not in range [0, {@code size}]
+     * @throws NullPointerException if the specified element is {@code null}
      */
     public void insert(Object value, int position) {
+        Objects.requireNonNull(value);
+
         if (position < 0 || position > size) {
             throw new IndexOutOfBoundsException("The given position is not in range [0, " + size + "].");
         }
