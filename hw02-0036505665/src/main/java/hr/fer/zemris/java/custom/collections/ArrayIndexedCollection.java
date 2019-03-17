@@ -234,11 +234,9 @@ public class ArrayIndexedCollection extends Collection {
      *         the value is not found
      */
     public int indexOf(Object value) {
-        if (value != null) {
-            for (int i = 0; i < size; i++) {
-                if (elements[i].equals(value)) {
-                    return i;
-                }
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(value)) {
+                return i;
             }
         }
         return -1;
