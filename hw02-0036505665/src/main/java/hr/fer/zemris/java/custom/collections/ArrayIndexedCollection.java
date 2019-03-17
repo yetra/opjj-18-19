@@ -111,7 +111,7 @@ public class ArrayIndexedCollection extends Collection {
      * If this collection is already full, {@code add} will double its capacity.
      *
      * @param value the object to add to this collection
-     * @throws NullPointerException if the given object is null
+     * @throws NullPointerException if the given object is {@code null}
      */
     @Override
     public void add(Object value) {
@@ -129,6 +129,40 @@ public class ArrayIndexedCollection extends Collection {
         }
     }
 
+    @Override
+    public boolean contains(Object value) {
+        return indexOf(value) == -1;
+    }
+
+
+    @Override
+    public boolean remove(Object value) {
+        return super.remove(value);
+    }
+
+    @Override
+    public Object[] toArray() {
+        return super.toArray();
+    }
+
+    @Override
+    public void forEach(Processor processor) {
+        super.forEach(processor);
+    }
+
+    @Override
+    public void addAll(Collection other) {
+        super.addAll(other);
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            elements[i] = null;
+        }
+        size = 0;
+    }
+
     /**
      * Returns the element at the specified position in this collection.
      *
@@ -140,14 +174,6 @@ public class ArrayIndexedCollection extends Collection {
             throw new IndexOutOfBoundsException("The given index is not in range [0, " + size + "-1].");
         }
         return elements[index];
-    }
-
-    @Override
-    public void clear() {
-        for (int i = 0; i < size; i++) {
-            elements[i] = null;
-        }
-        size = 0;
     }
 
     /**

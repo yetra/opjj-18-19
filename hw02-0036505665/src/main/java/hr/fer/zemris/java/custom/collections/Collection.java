@@ -42,8 +42,8 @@ public class Collection {
     }
 
     /**
-     * Returns {@code true} if this collection contains a given element, as
-     * determined by the {@code equals} method.
+     * Returns {@code true} if this collection contains a given element, as determined
+     * by the {@code equals} method.
      *
      * @param value value of element to check for
      * @return {@code true} if this collection contains a given element
@@ -53,9 +53,9 @@ public class Collection {
     }
 
     /**
-     * Returns {@code true} if this collection contains a given element and
-     * removes one occurence of it. In this class, it is not specified which
-     * occurrence will be removed.
+     * Returns {@code true} if this collection contains a given element and removes
+     * one occurrence of it. In this class, it is not specified which occurrence will
+     * be removed.
      *
      * @param value value of element to remove
      * @return {@code true} if this collection contained a given element and one
@@ -66,8 +66,8 @@ public class Collection {
     }
 
     /**
-     * Allocates a new array of size equal to the size of this collection, fills
-     * it with this collection's content and returns the array. This method never
+     * Allocates a new array of size equal to the size of this collection, fills it
+     * with this collection's content and returns the array. This method never
      * returns {@code null}.
      *
      * @return the newly allocated and filled array
@@ -79,9 +79,9 @@ public class Collection {
     }
 
     /**
-     * Iterates over this collection and calls the {@code processor.process}
-     * method for each element. The order in which elements will be sent is
-     * undefined in this class.
+     * Iterates over this collection and calls the {@code processor.process} method
+     * for each element. The order in which elements will be sent is undefined in
+     * this class.
      *
      * @param processor the processor whose {@code process} method will be called
      *                  for each element
@@ -99,7 +99,8 @@ public class Collection {
     public void addAll(Collection other) {
 
         /**
-         * An implementation of the {@code Processor} generic class which can add an object to a given collection.
+         * An implementation of the {@code Processor} generic class which can add an
+         * object to a given collection.
          */
         class AddToCollectionProcessor extends Processor {
             /**
