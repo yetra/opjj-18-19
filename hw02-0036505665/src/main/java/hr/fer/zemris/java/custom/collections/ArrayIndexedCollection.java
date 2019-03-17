@@ -131,7 +131,7 @@ public class ArrayIndexedCollection extends Collection {
 
     @Override
     public boolean contains(Object value) {
-        return indexOf(value) == -1;
+        return indexOf(value) != -1;
     }
 
     /**
