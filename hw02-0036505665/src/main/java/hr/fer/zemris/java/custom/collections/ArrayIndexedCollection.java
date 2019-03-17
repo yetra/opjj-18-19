@@ -134,25 +134,43 @@ public class ArrayIndexedCollection extends Collection {
         return indexOf(value) == -1;
     }
 
-
+    /**
+     * Returns {@code true} if this collection contains a given element and removes
+     * the first occurrence of it.
+     *
+     * @param value value of element to remove
+     * @return {@code true} if this collection contained a given element and its
+     *         first occurrence was removed
+     */
     @Override
     public boolean remove(Object value) {
-        return super.remove(value);
+        for (Object element : elements) {
+            if (element.equals(value)) {
+                remove(indexOf(element));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public Object[] toArray() {
-        return super.toArray();
+        return Arrays.copyOf(elements, size);
     }
 
+    /**
+     * Iterates over each element of this collection in the order in which they are
+     * stored in the {@code elements} array and calls the {@code processor.process}
+     * method for each element.
+     *
+     * @param processor the processor whose {@code process} method will be called
+     *                  for each element
+     */
     @Override
     public void forEach(Processor processor) {
-        super.forEach(processor);
-    }
-
-    @Override
-    public void addAll(Collection other) {
-        super.addAll(other);
+        for (Object element : elements) {
+            processor.process(element);
+        }
     }
 
     @Override
