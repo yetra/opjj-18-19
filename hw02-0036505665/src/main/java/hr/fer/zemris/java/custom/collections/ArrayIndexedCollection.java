@@ -4,8 +4,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * This class is an implementation of a resizable array-backed collection of objects.
- * Duplicate elements are allowed. Storage of {@code null} references is not allowed.
+ * This class is an implementation of a resizable array-backed collection of
+ * objects.
+ *
+ * Duplicate elements are allowed. The storage of {@code null} references is not
+ * allowed.
  *
  * @author Bruna Dujmović
  *
@@ -18,25 +21,30 @@ public class ArrayIndexedCollection extends Collection {
     private static final int DEFAULT_CAPACITY = 16;
 
     /**
-     * The capacity (maximum number of elements that can be stored in {@code elements}) of this collection.
+     * The capacity (maximum number of elements that can be stored in the
+     * {@code elements} array) of this collection.
      */
     private static int capacity;
 
     /**
-     * The current size of this collection (the number of elements actually stored in the {@code elements} array).
+     * The current size of this collection (the number of elements actually stored in
+     * the {@code elements} array).
      */
     private int size;
 
     /**
-     * An array of object references whose length is determined by the {@code capacity} variable.
+     * An array of object references whose length is determined by the
+     * {@code capacity} variable.
      */
     private Object[] elements;
 
     /**
-     * Constructs an empty {@code ArrayIndexedCollection} collection of the specified initial capacity.
+     * Constructs an empty {@code ArrayIndexedCollection} collection of the specified
+     * initial capacity.
      *
      * @param initialCapacity the initial capacity of this collection
-     * @throws IllegalArgumentException if the specified initial capacity is less than 1
+     * @throws IllegalArgumentException if the specified initial capacity is less
+     *         than 1
      */
     public ArrayIndexedCollection(int initialCapacity) {
         if (initialCapacity < 1) {
@@ -47,16 +55,19 @@ public class ArrayIndexedCollection extends Collection {
     }
 
     /**
-     * Constructs an empty {@code ArrayIndexedCollection} collection with an initial capacity of 16.
+     * Constructs an empty {@code ArrayIndexedCollection} collection with an initial
+     * capacity of 16.
      */
     public ArrayIndexedCollection() {
         this(DEFAULT_CAPACITY);
     }
 
     /**
-     * Constructs an {@code ArrayIndexedCollection} collection which contains the elements of the specified collection.
+     * Constructs an {@code ArrayIndexedCollection} collection which contains the
+     * elements of the specified collection.
      *
-     * @param collection the collection whose elements will be copied into this collection
+     * @param collection the collection whose elements will be copied into this
+     *                   collection
      * @throws NullPointerException if the specified collection is null
      */
     public ArrayIndexedCollection(Collection collection) {
@@ -67,13 +78,16 @@ public class ArrayIndexedCollection extends Collection {
     }
 
     /**
-     * Constructs an {@code ArrayIndexedCollection} collection of specified initial capacity which contains the elements
+     * Constructs an {@code ArrayIndexedCollection} collection of specified initial
+     * capacity which contains the elements
      * of the specified collection.
      *
-     * If the given {@code initialCapacity} is smaller than the size of {@code collection}, the size of {@code collection}
-     * will be used as this collection's capacity.
+     * If the given {@code initialCapacity} is smaller than the size of
+     * {@code collection}, the size of {@code collection} will be used as this
+     * collection's capacity.
      *
-     * @param collection the collection whose elements will be copied into this collection
+     * @param collection the collection whose elements will be copied into this
+     *                   collection
      * @param initialCapacity the initial capacity of this collection
      * @throws NullPointerException if the specified collection is null
      */
@@ -94,7 +108,6 @@ public class ArrayIndexedCollection extends Collection {
         return size;
     }
 
-    @Override
     /**
      * Adds a given object into this collection into the first empty place.
      * If this collection is already full, {@code add} will double its capacity.
@@ -102,6 +115,7 @@ public class ArrayIndexedCollection extends Collection {
      * @param value the object to add to this collection
      * @throws NullPointerException if the given object is null
      */
+    @Override
     public void add(Object value) {
         Objects.requireNonNull(value);
 
@@ -140,12 +154,13 @@ public class ArrayIndexedCollection extends Collection {
 
     /**
      * Inserts the specified element at the specified position in this collection.
-     * This method does not overwrite the current element at {@code position}, but shifts it
-     * and any subsequent elements to the right.
+     * This method does not overwrite the current element at {@code position}, but
+     * shifts it and any subsequent elements to the right.
      *
      * @param value the element to be inserted
      * @param position the index at which the specified element is to be inserted
-     * @throws IndexOutOfBoundsException if the specified position is not in range [0, {@code size}]
+     * @throws IndexOutOfBoundsException if the specified position is not in range
+     *         [0, {@code size}]
      * @throws NullPointerException if the specified element is {@code null}
      */
     public void insert(Object value, int position) {
@@ -169,10 +184,12 @@ public class ArrayIndexedCollection extends Collection {
     }
 
     /**
-     * Returns the index of the first occurrence of the given element or -1 if the value is not found in this collection.
+     * Returns the index of the first occurrence of the given element or -1 if
+     * the value is not found in this collection.
      *
      * @param value the element whose index is to be returned
-     * @return the index of the first occurrence of the given element or -1 if the value is not found
+     * @return the index of the first occurrence of the given element or -1 if
+     *         the value is not found
      */
     public int indexOf(Object value) {
         if (value != null) {
