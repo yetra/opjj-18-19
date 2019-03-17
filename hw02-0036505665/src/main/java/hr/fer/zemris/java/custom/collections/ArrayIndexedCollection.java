@@ -125,6 +125,8 @@ public class ArrayIndexedCollection extends Collection {
         for (int i = 0; i < capacity; i++) {
             if (elements[i] == null) {
                 elements[i] = value;
+                size++;
+                break;
             }
         }
     }
