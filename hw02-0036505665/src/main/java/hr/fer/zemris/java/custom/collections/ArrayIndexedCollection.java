@@ -217,7 +217,7 @@ public class ArrayIndexedCollection extends Collection {
             elements = Arrays.copyOf(elements, capacity);
         }
 
-        for (int i = size-1; i >= position; i++) {
+        for (int i = size-1; i >= position; i--) {
             elements[i+1] = elements[i];
         }
 
