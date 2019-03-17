@@ -102,19 +102,6 @@ public class Collection {
          * An implementation of the {@code Processor} generic class which can add an object to a given collection.
          */
         class AddToCollectionProcessor extends Processor {
-
-            /** The collection that will be added to in the {@code process} method. */
-            private Collection collection;
-
-            /**
-             * Constructor which accepts a {@code Collection} object.
-             *
-             * @param collection the {@code Collection} object
-             */
-            public AddToCollectionProcessor(Collection collection) {
-                this.collection = collection;
-            }
-
             /**
              * Processes a given object so that it is added to the collection.
              *
@@ -122,11 +109,11 @@ public class Collection {
              */
             @Override
             public void process(Object value) {
-                collection.add(value);
+                Collection.this.add(value);
             }
         }
 
-        this.forEach(new AddToCollectionProcessor(this));
+        other.forEach(new AddToCollectionProcessor());
     }
 
     /**
