@@ -42,7 +42,8 @@ public class Collection {
     }
 
     /**
-     * Returns {@code true} if this collection contains a given element, as determined by the {@code equals} method.
+     * Returns {@code true} if this collection contains a given element, as
+     * determined by the {@code equals} method.
      *
      * @param value value of element to check for
      * @return {@code true} if this collection contains a given element
@@ -52,41 +53,48 @@ public class Collection {
     }
 
     /**
-     * Returns {@code true} if this collection contained a given element and one occurrence of it was removed.
-     * In this class, it is not specified which occurrence will be removed.
+     * Returns {@code true} if this collection contains a given element and
+     * removes one occurence of it. In this class, it is not specified which
+     * occurrence will be removed.
      *
      * @param value value of element to remove
-     * @return {@code true} if the element existed in this collection and one occurrence was removed
+     * @return {@code true} if this collection contained a given element and one
+     *         occurrence of it was removed
      */
     public boolean remove(Object value) {
         return false;
     }
 
     /**
-     * Allocates a new array of size equal to the size of this collection, fills it with this collection's content and
-     * returns the array. This method never returns {@code null}.
+     * Allocates a new array of size equal to the size of this collection, fills
+     * it with this collection's content and returns the array. This method never
+     * returns {@code null}.
      *
      * @return the newly allocated and filled array
-     * @throws UnsupportedOperationException if the {@code toArray} method is not supported by this collection
+     * @throws UnsupportedOperationException if the {@code toArray} method is
+     *         not supported by this collection
      */
     public Object[] toArray() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Iterates over this collection and calls the {@code processor.process} method for each element.
-     * The order in which elements will be sent is undefined in this class.
+     * Iterates over this collection and calls the {@code processor.process}
+     * method for each element. The order in which elements will be sent is
+     * undefined in this class.
      *
-     * @param processor the processor whose {@code process} method will be called for each element
+     * @param processor the processor whose {@code process} method will be called
+     *                  for each element
      */
     public void forEach(Processor processor) {
-
     }
 
     /**
-     * Adds all elements from a given collection into this collection. The given collection remains unchanged.
+     * Adds all elements from a given collection into this collection. The given
+     * collection remains unchanged.
      *
-     * @param other the collection whose elements will be added into this collection
+     * @param other the collection whose elements will be added into this
+     *              collection
      */
     public void addAll(Collection other) {
 
