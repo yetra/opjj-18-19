@@ -50,6 +50,7 @@ public class ArrayIndexedCollection extends Collection {
         if (initialCapacity < 1) {
             throw new IllegalArgumentException("Array capacity must not be less than 1.");
         }
+
         capacity = initialCapacity;
         elements = new Object[capacity];
     }
@@ -60,21 +61,6 @@ public class ArrayIndexedCollection extends Collection {
      */
     public ArrayIndexedCollection() {
         this(DEFAULT_CAPACITY);
-    }
-
-    /**
-     * Constructs an {@code ArrayIndexedCollection} collection which contains the
-     * elements of the specified collection.
-     *
-     * @param collection the collection whose elements will be copied into this
-     *                   collection
-     * @throws NullPointerException if the specified collection is null
-     */
-    public ArrayIndexedCollection(Collection collection) {
-        Objects.requireNonNull(collection, "Collection must not be null.");
-        capacity = collection.size();
-        size = capacity;
-        elements = collection.toArray();
     }
 
     /**
@@ -101,6 +87,18 @@ public class ArrayIndexedCollection extends Collection {
         }
         size = capacity;
         elements = collection.toArray();
+    }
+
+    /**
+     * Constructs an {@code ArrayIndexedCollection} collection which contains the
+     * elements of the specified collection.
+     *
+     * @param collection the collection whose elements will be copied into this
+     *                   collection
+     * @throws NullPointerException if the specified collection is null
+     */
+    public ArrayIndexedCollection(Collection collection) {
+        this(collection, collection.size());
     }
 
     @Override
