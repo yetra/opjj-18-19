@@ -3,8 +3,19 @@ package hr.fer.zemris.java.custom.collections.demo;
 import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.collections.ObjectStack;
 
+/**
+ * A demonstration of the {@code ObjectStack} class.
+ *
+ * This program accepts a single command-line argument - a POSIX expression and
+ * evaluates it.
+ */
 public class StackDemo {
 
+    /**
+     * Main method. Evaluates given POSIX expression string.
+     * @param args the command-line arguments - one must be given (the POSIX
+     *             expression string)
+     */
     public static void main(String[] args) {
 
         if (args.length != 1) {
@@ -47,6 +58,18 @@ public class StackDemo {
         }
     }
 
+    /**
+     * Helper function which performs a mathematical operation on two given
+     * operands based on the given operator.
+     *
+     * @param operator the operator of the operation
+     * @param firstOperand the first operand of the operation
+     * @param secondOperand the second operand of the operation
+     * @return the result of the mathematical operation
+     * @throws ArithmeticException if division by zero is attempted
+     * @throws IllegalArgumentException if the operator is illegal (not in
+     *         {+, -, *, /, %})
+     */
     private static int performOperation(String operator, int firstOperand, int secondOperand) {
         switch (operator) {
             case "+":
