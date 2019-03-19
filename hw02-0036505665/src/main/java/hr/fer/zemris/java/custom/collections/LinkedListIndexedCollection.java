@@ -99,6 +99,61 @@ public class LinkedListIndexedCollection extends Collection {
         size++;
     }
 
+    @Override
+    public boolean contains(Object value) {
+        for (ListNode node = first; node != null; node = node.next) {
+            if (node.value.equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean remove(Object value) {
+        for (ListNode node = first; node != null; node = node.next) {
+            if (node.value.equals(value)) {
+                node.previous.next = node.next;
+                size--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Object[] toArray() {
+        Object[] listArray = new Object[size];
+
+        ListNode node = first;
+        for (int i = 0; i < size; i++) {
+            listArray[i] = node.value;
+            node = node.next;
+        }
+
+        return listArray;
+    }
+
+    /**
+     * Iterates over each element of this collection in the order in which they are
+     * stored in the {@code elements} array and calls the {@code processor.process}
+     * method for each element.
+     *
+     * @param processor {@inheritDoc}
+     */
+    @Override
+    public void forEach(Processor processor) {
+        for (ListNode node = first; node != null; node = node.next) {
+            processor.process(node.value);
+        }
+    }
+
+    @Override
+    public void clear() {
+        first = last = null;
+        size = 0;
+    }
+
     /**
      * Returns the element at the specified position in this collection.
      *
@@ -120,12 +175,6 @@ public class LinkedListIndexedCollection extends Collection {
         }
 
         return node.value;
-    }
-
-    @Override
-    public void clear() {
-        first = null;
-        size = 0;
     }
 
     /**
