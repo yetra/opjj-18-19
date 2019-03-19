@@ -170,8 +170,8 @@ public class ArrayIndexedCollection extends Collection {
      */
     @Override
     public void forEach(Processor processor) {
-        for (Object element : elements) {
-            processor.process(element);
+        for (int i = 0; i < size; i++) {
+            processor.process(elements[i]);
         }
     }
 
