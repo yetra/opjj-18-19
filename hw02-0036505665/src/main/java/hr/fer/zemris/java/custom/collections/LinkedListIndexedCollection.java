@@ -92,8 +92,14 @@ public class LinkedListIndexedCollection extends Collection {
         ListNode node = new ListNode();
         node.value = value;
 
+        if (first == null) {
+            first = node;
+        } else {
+            node.previous = last;
+            last.next = node;
+        }
+
         node.next = null;
-        node.previous = last;
         last = node;
 
         size++;
@@ -202,10 +208,13 @@ public class LinkedListIndexedCollection extends Collection {
                     ListNode newNode = new ListNode();
                     newNode.value = value;
 
-                    newNode.next = node;
                     newNode.previous = node.previous;
-                    size++;
+                    newNode.next = node;
 
+                    node.previous.next = newNode;
+                    node.previous = node;
+
+                    size++;
                     break;
                 }
                 node = node.next;
@@ -248,7 +257,7 @@ public class LinkedListIndexedCollection extends Collection {
         ListNode node = first;
         for (int i = 0; i < size; i++) {
             if (i == index) {
-                node.previous = node.next;
+                node.previous.next = node.next;
                 size--;
                 break;
             }
