@@ -3,8 +3,11 @@ package hr.fer.zemris.java.custom.collections;
 import java.util.Objects;
 
 /**
- * This class is an implementation of an indexed, linked list-backed collection of objects.
- * Duplicate elements are allowed. Storage of {@code null} references is not allowed.
+ * This class is an implementation of an indexed, linked list-backed collection
+ * of objects.
+ *
+ * Duplicate elements are allowed. The storage of {@code null} references is not
+ * allowed.
  *
  * @author Bruna Dujmović
  *
@@ -26,13 +29,14 @@ public class LinkedListIndexedCollection extends Collection {
         ListNode previous;
 
         /**
-         * Value of the current node.
+         * The value of this node.
          */
         Object value;
     }
 
     /**
-     * The current size of this collection (the number of elements actually stored in the {@code elements} array).
+     * The current size of this collection (the number of elements actually stored
+     * in the {@code elements} array).
      */
     private int size;
 
@@ -48,7 +52,8 @@ public class LinkedListIndexedCollection extends Collection {
 
     /**
      * Constructs an empty {@code LinkedListIndexedCollection} collection.
-     * This collection's {@code size} is set to zero, and {@code first = last = null}.
+     * This collection's {@code size} is set to zero, and {@code first = last = null}
+     * (the variables are initialized by default).
      */
     public LinkedListIndexedCollection() {
     }
@@ -74,8 +79,8 @@ public class LinkedListIndexedCollection extends Collection {
 
     /**
      * void add(Object value);
-     * Adds the given object to the end of this collection. The newly added element becomes the
-     * element at the biggest index.
+     * Adds the given object to the end of this collection. The newly added element
+     * becomes the element at the biggest index.
      *
      * @param value the object to add to this collection
      * @throws NullPointerException if the given object is {@code null}
@@ -125,12 +130,13 @@ public class LinkedListIndexedCollection extends Collection {
 
     /**
      * Inserts the specified element at the specified position in this collection.
-     * This method does not overwrite the current element at {@code position}, but shifts it
-     * and any subsequent elements to the right.
+     * This method does not overwrite the current element at {@code position}, but
+     * shifts it and any subsequent elements to the right.
      *
      * @param value the element to be inserted
      * @param position the index at which the specified element is to be inserted
-     * @throws IndexOutOfBoundsException if the specified position is not in range [0, {@code size}]
+     * @throws IndexOutOfBoundsException if the specified position is not in range
+     *         [0, {@code size}]
      */
     public void insert(Object value, int position) {
         if (position < 0 || position > size) {
@@ -159,10 +165,12 @@ public class LinkedListIndexedCollection extends Collection {
     }
 
     /**
-     * Returns the index of the first occurrence of the given element or -1 if the value is not found in this collection.
+     * Returns the index of the first occurrence of the given element or -1 if the
+     * value is not found in this collection.
      *
      * @param value the element whose index is to be returned
-     * @return the index of the first occurrence of the given element or -1 if the value is not found
+     * @return the index of the first occurrence of the given element or -1 if the
+     *         value is not found
      */
     public int indexOf(Object value) {
         if (value != null) {
@@ -181,6 +189,8 @@ public class LinkedListIndexedCollection extends Collection {
      * Removes the element at the specified index from this collection.
      *
      * @param index the index of the element that is to be removed
+     * @throws IndexOutOfBoundsException if the specified index is not in range
+     *         [0, {@code size}-1]
      */
     public void remove(int index) {
         if (index < 0 || index > size-1) {
