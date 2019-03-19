@@ -222,15 +222,14 @@ public class LinkedListIndexedCollection extends Collection {
      *         value is not found
      */
     public int indexOf(Object value) {
-        if (value != null) {
-            ListNode node = first;
-            for (int i = 0; i < size; i++) {
-                if (node.value.equals(value)) {
-                    return i;
-                }
-                node = node.next;
+        ListNode node = first;
+        for (int i = 0; i < size; i++) {
+            if (node.value.equals(value)) {
+                return i;
             }
+            node = node.next;
         }
+
         return -1;
     }
 
