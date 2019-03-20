@@ -51,7 +51,7 @@ public class StackDemo {
         }
 
         if (stack.size() != 1) {
-            System.out.println("ERROR Failed to evaluate expression \"" + args[0] + "\".");
+            System.out.println("Unable to evaluate expression \"" + args[0] + "\".");
             System.exit(1);
         } else {
             System.out.println("Expression evaluates to " + stack.pop() + ".");
