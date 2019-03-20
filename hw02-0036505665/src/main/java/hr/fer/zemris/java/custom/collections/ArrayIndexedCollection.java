@@ -138,9 +138,9 @@ public class ArrayIndexedCollection extends Collection {
      */
     @Override
     public boolean remove(Object value) {
-        for (Object element : elements) {
-            if (element.equals(value)) {
-                remove(indexOf(element));
+        for (int i = 0; i < size; i++) {
+            if (elements[i].equals(value)) {
+                remove(i);
                 return true;
             }
         }
