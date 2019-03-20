@@ -164,21 +164,31 @@ public class LinkedListIndexedCollection extends Collection {
     /**
      * Returns the element at the specified position in this collection.
      *
+     * The complexity of this method is not greater than n/2+1.
+     *
      * @param index the index of the element to return
-     * @throws IndexOutOfBoundsException if the index is not in range [0, {@code size}-1]
+     * @throws IndexOutOfBoundsException if the index is not in range
+     *         [0, {@code size}-1]
      */
     public Object get(int index) {
         if (index < 0 || index > size-1) {
-            throw new IndexOutOfBoundsException("The given index is not in range [0, " + size + "-1].");
+            throw new IndexOutOfBoundsException(
+                    "The given index is not in range [0, " + size + "-1].");
         }
 
-        // TODO check if index is closer to start/end then iterate from start/end accordingly
-        ListNode node = first;
-        for (int i = 0; i < size; i++) {
-            if (i == index) {
-                break;
+        ListNode node;
+
+        if (index < size/2) {
+            node = first;
+            for (int i = 0; i != index; i++) {
+                node = node.next;
             }
-            node = node.next;
+
+        } else {
+            node = last;
+            for (int i = size-1; i != index; i--) {
+                node = node.previous;
+            }
         }
 
         return node.value;
