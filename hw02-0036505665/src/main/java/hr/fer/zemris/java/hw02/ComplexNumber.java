@@ -3,12 +3,17 @@ package hr.fer.zemris.java.hw02;
 import java.util.Objects;
 
 /**
- * A class that models a complex number.
+ * A class that models a complex number. Its maxmimum precision is 10E-6.
  *
  * @author Bruna Dujmović
  *
  */
 public class ComplexNumber {
+
+    /**
+     * Maximum precision for comparing doubles.
+     */
+    private static final double MAX_PRECISION = 10e-6;
 
     /**
      * Real part of the complex number.
@@ -267,13 +272,21 @@ public class ComplexNumber {
         return s;
     }
 
+    /**
+     * Compares this complex number with {@code o}. Two complex numbers are
+     * considered equal if their real and imaginary complex parts are equal.
+     * The maximum precision is 10E-6.
+     *
+     * @param o the object to compare this complex number with
+     * @return {@code true} if the objects are equal
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ComplexNumber that = (ComplexNumber) o;
-        return Double.compare(that.real, real) == 0 &&
-                Double.compare(that.imaginary, imaginary) == 0;
+        return Math.abs(real - that.real) < MAX_PRECISION &&
+                Math.abs(imaginary - that.imaginary) < MAX_PRECISION;
     }
 
     @Override
