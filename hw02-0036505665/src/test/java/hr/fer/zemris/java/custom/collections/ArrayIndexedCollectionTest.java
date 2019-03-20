@@ -34,7 +34,7 @@ public class ArrayIndexedCollectionTest {
 
         Exception exception1 = assertThrows(NullPointerException.class,
                 () -> new ArrayIndexedCollection(null, 1));
-        assertEquals("Collection must not be null.", exception1.getMessage());
+        assertEquals("Collection parameter cannot be null.", exception1.getMessage());
         Exception exception2 = assertThrows(IllegalArgumentException.class,
                 () -> new ArrayIndexedCollection(collection, -5));
         assertEquals("Array capacity must not be less than 1.", exception2.getMessage());
@@ -51,7 +51,7 @@ public class ArrayIndexedCollectionTest {
 
         Exception exception = assertThrows(NullPointerException.class,
                 () -> new ArrayIndexedCollection(null, 1));
-        assertEquals("Collection must not be null.", exception.getMessage());
+        assertEquals("Collection parameter cannot be null.", exception.getMessage());
     }
 
     @Test
