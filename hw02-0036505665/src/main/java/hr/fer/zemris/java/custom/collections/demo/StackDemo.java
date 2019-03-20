@@ -32,21 +32,7 @@ public class StackDemo {
                 stack.push(Integer.parseInt(element));
 
             } else {
-                try {
-                    int secondOperand = (int) stack.pop();
-                    int firstOperand = (int) stack.pop();
-
-                    int result = performOperation(element, firstOperand, secondOperand);
-                    stack.push(result);
-
-                } catch (ArithmeticException ex) {
-                    System.out.println(ex.getMessage());
-                    System.exit(1);
-
-                } catch (IllegalArgumentException | EmptyStackException ex) {
-                    System.out.println("This posix expression is invalid.");
-                    System.exit(1);
-                }
+                performOperation(stack, element);
             }
         }
 
@@ -59,8 +45,37 @@ public class StackDemo {
     }
 
     /**
-     * Helper function which performs a mathematical operation on two given
-     * operands based on the given operator.
+     * Helper function which performs a mathematical operation on the last
+     * two elements that were pushed on the stack. The result of the operation
+     * is pushed back on the stack.
+     *
+     * @param stack the stack to pop the operands from and push the result to
+     * @param element the string that represents a mathematical operation
+     * @throws ArithmeticException if division by zero is attempted
+     * @throws IllegalArgumentException if the operator is illegal (not in
+     *         {+, -, *, /, %})
+     */
+    private static void performOperation(ObjectStack stack, String element) {
+        try {
+            int secondOperand = (int) stack.pop();
+            int firstOperand = (int) stack.pop();
+
+            int result = evaluate(element, firstOperand, secondOperand);
+            stack.push(result);
+
+        } catch (ArithmeticException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+
+        } catch (IllegalArgumentException | EmptyStackException ex) {
+            System.out.println("This posix expression is invalid.");
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Helper function which evaluates a mathematical expression of
+     * based on a given operator string.
      *
      * @param operator the operator of the operation
      * @param firstOperand the first operand of the operation
@@ -70,7 +85,7 @@ public class StackDemo {
      * @throws IllegalArgumentException if the operator is illegal (not in
      *         {+, -, *, /, %})
      */
-    private static int performOperation(String operator, int firstOperand, int secondOperand) {
+    private static int evaluate(String operator, int firstOperand, int secondOperand) {
         switch (operator) {
             case "+":
                 return firstOperand + secondOperand;
