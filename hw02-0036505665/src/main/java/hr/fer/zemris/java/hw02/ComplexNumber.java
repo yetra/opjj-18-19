@@ -26,7 +26,7 @@ public class ComplexNumber {
     private final double magnitude;
 
     /**
-     * Angle of the complex number.
+     * Angle of the complex number. Always in range [0, 2pi].
      */
     private final double angle;
 
@@ -41,8 +41,7 @@ public class ComplexNumber {
         this.imaginary = imaginary;
 
         magnitude = Math.sqrt(real*real + imaginary*imaginary);
-        // TODO [-pi/2, pi/2] => [0, 2pi]
-        angle = Math.atan2(imaginary, real);
+        angle = Math.atan2(imaginary, real) + Math.PI;
     }
 
     /**
