@@ -184,6 +184,10 @@ public class ComplexNumber {
      * @return the nth power of this complex number
      */
     public ComplexNumber power(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException("Power must not be negative.");
+        }
+
         double powMagnitude = Math.pow(magnitude, n);
         double real = powMagnitude * Math.cos(n*angle);
         double imaginary = powMagnitude * Math.sin(n*angle);
@@ -198,9 +202,13 @@ public class ComplexNumber {
      * @return an array of the nth roots of this complex number
      */
     public ComplexNumber[] root(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("Root must not be negative or zero.");
+        }
+
         ComplexNumber[] nthRoot = new ComplexNumber[n];
 
-        double nthRootOfMagnitude = Math.pow(magnitude, 1/n);
+        double nthRootOfMagnitude = Math.pow(magnitude, 1.0/n);
         for (int k = 0; k < n; k++) {
             double kthAngle = (angle + 2*Math.PI*k) / n;
             double kthReal = nthRootOfMagnitude * Math.cos(kthAngle);
