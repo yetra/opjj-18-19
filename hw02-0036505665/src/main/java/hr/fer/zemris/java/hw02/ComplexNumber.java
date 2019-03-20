@@ -85,17 +85,18 @@ public class ComplexNumber {
      * @return the complex number that was parsed from the string
      */
     public static ComplexNumber parse(String s) {
-        // TODO i/+i/-i OR +123.123-i OR 9231.2313+i OR .2312
-
-        String[] parts = s.split("(?=[+-])");
+        String normalizedInput = s.replaceAll("(?<!\\d)i$", "1i").replaceAll("\\s+", "");
+        String[] parts = normalizedInput.split("(?=[+-])");
         double real, imaginary;
 
         try {
             switch (parts.length) {
                 case 2:
-                    real = Double.parseDouble(parts[0]);
-                    imaginary = Double.parseDouble(parts[1].substring(0, parts[1].length()-1));
-                    return new ComplexNumber(real, imaginary);
+                    if (parts[1].endsWith("i")) {
+                        real = Double.parseDouble(parts[0]);
+                        imaginary = Double.parseDouble(parts[1].substring(0, parts[1].length() - 1));
+                        return new ComplexNumber(real, imaginary);
+                    }
 
                 case 1:
                     if (parts[0].endsWith("i")) {
