@@ -74,7 +74,7 @@ public class ArrayIndexedCollection extends Collection {
      */
     public ArrayIndexedCollection(Collection collection, int initialCapacity) {
         this(initialCapacity);
-        Objects.requireNonNull(collection, "Collection must not be null.");
+        Objects.requireNonNull(collection, "Collection parameter cannot be null.");
 
         int capacity = initialCapacity < collection.size() ?
                 collection.size() : initialCapacity;
@@ -102,6 +102,8 @@ public class ArrayIndexedCollection extends Collection {
     /**
      * Adds a given object into this collection into the first empty place.
      * If this collection is already full, {@code add} will double its capacity.
+     *
+     * The average complexity of this method is n.
      *
      * @param value the object to add to this collection
      * @throws NullPointerException if the given object is {@code null}
@@ -178,12 +180,16 @@ public class ArrayIndexedCollection extends Collection {
     /**
      * Returns the element at the specified position in this collection.
      *
+     * The average complexity of this method is 1.
+     *
      * @param index the index of the element to return
-     * @throws IndexOutOfBoundsException if the index is not in range [0, {@code size}-1]
+     * @throws IndexOutOfBoundsException if the index is not in range
+     *         [0, {@code size}-1]
      */
     public Object get(int index) {
         if (index < 0 || index > size-1) {
-            throw new IndexOutOfBoundsException("The given index is not in range [0, " + size + "-1].");
+            throw new IndexOutOfBoundsException(
+                    "The given index is not in range [0, " + size + "-1].");
         }
         return elements[index];
     }
@@ -192,6 +198,8 @@ public class ArrayIndexedCollection extends Collection {
      * Inserts the specified element at the specified position in this collection.
      * This method does not overwrite the current element at {@code position}, but
      * shifts it and any subsequent elements to the right.
+     *
+     * The average complexity of this method is n.
      *
      * @param value the element to be inserted
      * @param position the index at which the specified element is to be inserted
@@ -203,7 +211,8 @@ public class ArrayIndexedCollection extends Collection {
         Objects.requireNonNull(value);
 
         if (position < 0 || position > size) {
-            throw new IndexOutOfBoundsException("The given position is not in range [0, " + size + "].");
+            throw new IndexOutOfBoundsException(
+                    "The given position is not in range [0, " + size + "].");
         }
 
         if (size == elements.length) {
@@ -221,6 +230,8 @@ public class ArrayIndexedCollection extends Collection {
     /**
      * Returns the index of the first occurrence of the given element or -1 if
      * the value is not found in this collection.
+     *
+     * The average complexity of this method is n.
      *
      * @param value the element whose index is to be returned
      * @return the index of the first occurrence of the given element or -1 if
@@ -242,7 +253,8 @@ public class ArrayIndexedCollection extends Collection {
      */
     public void remove(int index) {
         if (index < 0 || index > size-1) {
-            throw new IndexOutOfBoundsException("The given index is not in range [0, " + size + "-1].");
+            throw new IndexOutOfBoundsException(
+                    "The given index is not in range [0, " + size + "-1].");
         }
 
         for (int i = index; i < size-1; i++) {

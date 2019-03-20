@@ -66,7 +66,7 @@ public class LinkedListIndexedCollection extends Collection {
      * @throws NullPointerException if the specified collection is null
      */
     public LinkedListIndexedCollection(Collection collection) {
-        Objects.requireNonNull(collection);
+        Objects.requireNonNull(collection, "Collection parameter cannot be null.");
 
         this.addAll(collection);
         size = collection.size();
@@ -78,16 +78,17 @@ public class LinkedListIndexedCollection extends Collection {
     }
 
     /**
-     * void add(Object value);
      * Adds the given object to the end of this collection. The newly added element
      * becomes the element at the biggest index.
+     *
+     * The average complexity of this method is 1.
      *
      * @param value the object to add to this collection
      * @throws NullPointerException if the given object is {@code null}
      */
     @Override
     public void add(Object value) {
-        Objects.requireNonNull(value);
+        Objects.requireNonNull(value, "Value parameter cannot be null.");
 
         ListNode node = new ListNode();
         node.value = value;
@@ -188,6 +189,8 @@ public class LinkedListIndexedCollection extends Collection {
      * This method does not overwrite the current element at {@code position}, but
      * shifts it and any subsequent elements to the right.
      *
+     * The average complexity of this method is n.
+     *
      * @param value the element to be inserted
      * @param position the index at which the specified element is to be inserted
      * @throws IndexOutOfBoundsException if the specified position is not in range
@@ -195,7 +198,8 @@ public class LinkedListIndexedCollection extends Collection {
      */
     public void insert(Object value, int position) {
         if (position < 0 || position > size) {
-            throw new IndexOutOfBoundsException("The given position is not in range [0, " + size + "].");
+            throw new IndexOutOfBoundsException(
+                    "The given position is not in range [0, " + size + "].");
         }
 
         if (position == size) {
@@ -226,6 +230,8 @@ public class LinkedListIndexedCollection extends Collection {
      * Returns the index of the first occurrence of the given element or -1 if the
      * value is not found in this collection.
      *
+     * The average complexity of this method is n.
+     *
      * @param value the element whose index is to be returned
      * @return the index of the first occurrence of the given element or -1 if the
      *         value is not found
@@ -251,7 +257,8 @@ public class LinkedListIndexedCollection extends Collection {
      */
     public void remove(int index) {
         if (index < 0 || index > size-1) {
-            throw new IndexOutOfBoundsException("The given index is not in range [0, " + size + "-1].");
+            throw new IndexOutOfBoundsException(
+                    "The given index is not in range [0, " + size + "-1].");
         }
 
         ListNode node = first;
