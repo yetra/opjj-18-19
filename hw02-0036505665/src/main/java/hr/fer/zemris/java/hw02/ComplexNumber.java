@@ -222,7 +222,17 @@ public class ComplexNumber {
 
     @Override
     public String toString() {
-        //TODO
-        return "";
+        String s = "";
+
+        s += (real == 0.0) ? "" : real;
+
+        s += (imaginary > 0) ? "+" : "";
+
+        s += (imaginary == 0.0) ? ""
+                : (imaginary == 1.0) ? "i"
+                : (imaginary == -1.0) ? "-i"
+                : imaginary + "i";
+
+        return s;
     }
 }
