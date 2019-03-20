@@ -253,15 +253,17 @@ public class ComplexNumber {
     public String toString() {
         String s = "";
 
-        s += (real == 0.0) ? "" : real;
+        // real part
+        s += (real == 0.0 && imaginary != 0.0) ? "" : real;
 
-        s += (imaginary > 0) ? "+" : "";
+        // sign
+        s += (imaginary > 0 && real != 0.0) ? "+" : "";
 
-        s += (imaginary == 0.0) ? ""
-                : (imaginary == 1.0) ? "i"
-                : (imaginary == -1.0) ? "-i"
-                : imaginary + "i";
-
+        // imaginary part
+        s += (imaginary == 0.0) ? "" :
+                (imaginary == 1.0) ? "i" :
+                        (imaginary == -1.0) ? "-i" :
+                                imaginary + "i";
         return s;
     }
 
