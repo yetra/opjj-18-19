@@ -84,8 +84,35 @@ public class ComplexNumber {
      * @return the complex number that was parsed from the string
      */
     public static ComplexNumber parse(String s) {
-        //TODO with Scanner or regexps
-        return null;
+        // TODO i/+i/-i OR +123.123-i OR 9231.2313+i OR .2312
+
+        String[] parts = s.split("(?=[+-])");
+        double real, imaginary;
+
+        try {
+            switch (parts.length) {
+                case 2:
+                    real = Double.parseDouble(parts[0]);
+                    imaginary = Double.parseDouble(parts[1].substring(0, parts[1].length()-1));
+                    return new ComplexNumber(real, imaginary);
+
+                case 1:
+                    if (parts[0].endsWith("i")) {
+                        imaginary = Double.parseDouble(parts[0].substring(0, parts[0].length()-1));
+                        return ComplexNumber.fromImaginary(imaginary);
+
+                    } else {
+                        real = Double.parseDouble(parts[0]);
+                        return ComplexNumber.fromReal(real);
+                    }
+
+                default:
+                    throw new NumberFormatException();
+            }
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("The string \"" + s +
+                    "\" is not a valid complex number.");
+        }
     }
 
     /**
