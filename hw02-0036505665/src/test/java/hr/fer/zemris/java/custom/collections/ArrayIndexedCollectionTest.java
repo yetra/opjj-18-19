@@ -27,13 +27,17 @@ public class ArrayIndexedCollectionTest {
         ArrayIndexedCollection collection = prepareCollectionOfSize(5);
 
         ArrayIndexedCollection testCollection = new ArrayIndexedCollection(collection, 1);
+        assertNotNull(testCollection);
         assertEquals(5, testCollection.size());
-        for (int i = 0; i < 5; i++) {
-            assertTrue(testCollection.contains(i));
-        }
+        assertArrayEquals(collection.toArray(), testCollection.toArray());
 
-        Exception exception = assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null, 1));
-        assertEquals("Collection must not be null.", exception.getMessage());
+
+        Exception exception1 = assertThrows(NullPointerException.class,
+                () -> new ArrayIndexedCollection(null, 1));
+        assertEquals("Collection must not be null.", exception1.getMessage());
+        Exception exception2 = assertThrows(IllegalArgumentException.class,
+                () -> new ArrayIndexedCollection(collection, -5));
+        assertEquals("Array capacity must not be less than 1.", exception2.getMessage());
     }
 
     @Test
@@ -41,12 +45,21 @@ public class ArrayIndexedCollectionTest {
         ArrayIndexedCollection collection = prepareCollectionOfSize(5);
 
         ArrayIndexedCollection testCollection = new ArrayIndexedCollection(collection, 1);
+        assertNotNull(testCollection);
         assertEquals(5, testCollection.size());
-        for (int i = 0; i < 5; i++) {
-            assertTrue(testCollection.contains(i));
-        }
+        assertArrayEquals(collection.toArray(), testCollection.toArray());
 
-        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null));
+        Exception exception = assertThrows(NullPointerException.class,
+                () -> new ArrayIndexedCollection(null, 1));
+        assertEquals("Collection must not be null.", exception.getMessage());
+    }
+
+    @Test
+    public void testSize() {
+        ArrayIndexedCollection collection = prepareCollectionOfSize(12);
+        assertEquals(12, collection.size());
+        collection = new ArrayIndexedCollection();
+        assertEquals(0, collection.size());
     }
 
     @Test
@@ -69,6 +82,56 @@ public class ArrayIndexedCollectionTest {
 
         assertThrows(IndexOutOfBoundsException.class, () -> collection.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> collection.get(collection.size()));
+    }
+
+    @Test
+    public void testContains() {
+        ArrayIndexedCollection collection = prepareCollectionOfSize(10);
+
+        for (int i = 0; i < 10; i++) {
+            assertTrue(collection.contains(i));
+        }
+        assertFalse(collection.contains(null));
+    }
+
+    @Test
+    public void testRemove1() {
+        ArrayIndexedCollection collection = prepareCollectionOfSize(5);
+
+        assertEquals(5, collection.size());
+        assertTrue(collection.remove(Integer.valueOf(3)));
+        assertEquals(4, collection.size());
+        assertFalse(collection.remove(Integer.valueOf(3)));
+    }
+
+    @Test
+    public void testToArray() {
+        ArrayIndexedCollection collection = prepareCollectionOfSize(4);
+        Object[] testArray = {0, 1, 2, 3};
+        assertArrayEquals(testArray, collection.toArray());
+
+        collection = new ArrayIndexedCollection(3);
+        testArray = new Object[0];
+        assertArrayEquals(testArray, collection.toArray());
+    }
+
+    @Test
+    public void testForEach() {
+        class TestProcessor extends Processor {
+            String values = "Values:";
+
+            @Override
+            public void process(Object value) {
+                values += " " + value.toString();
+            }
+        }
+
+        ArrayIndexedCollection collection = prepareCollectionOfSize(4);
+        String testString = "Values: 0 1 2 3";
+        TestProcessor processor = new TestProcessor();
+
+        collection.forEach(processor);
+        assertEquals(testString, processor.values);
     }
 
     @Test
@@ -112,7 +175,7 @@ public class ArrayIndexedCollectionTest {
     }
 
     @Test
-    public void testRemove() {
+    public void testRemove2() {
         ArrayIndexedCollection collection = prepareCollectionOfSize(5);
 
         Object removedElement = collection.get(3);
