@@ -21,12 +21,6 @@ public class ArrayIndexedCollection extends Collection {
     private static final int DEFAULT_CAPACITY = 16;
 
     /**
-     * The capacity (maximum number of elements that can be stored in the
-     * {@code elements} array) of this collection.
-     */
-    private static int capacity;
-
-    /**
      * The current size of this collection (the number of elements actually stored in
      * the {@code elements} array).
      */
@@ -51,8 +45,7 @@ public class ArrayIndexedCollection extends Collection {
             throw new IllegalArgumentException("Array capacity must not be less than 1.");
         }
 
-        capacity = initialCapacity;
-        elements = new Object[capacity];
+        elements = new Object[initialCapacity];
     }
 
     /**
@@ -76,17 +69,17 @@ public class ArrayIndexedCollection extends Collection {
      *                   collection
      * @param initialCapacity the initial capacity of this collection
      * @throws NullPointerException if the specified collection is null
+     * @throws IllegalArgumentException if the specified initial capacity is less
+     *         than 1
      */
     public ArrayIndexedCollection(Collection collection, int initialCapacity) {
+        this(initialCapacity);
         Objects.requireNonNull(collection, "Collection must not be null.");
 
-        if (initialCapacity < collection.size()) {
-            capacity = collection.size();
-        } else {
-            capacity = initialCapacity;
-        }
-        size = capacity;
-        elements = collection.toArray();
+        int capacity = initialCapacity < collection.size() ?
+                collection.size() : initialCapacity;
+        size = collection.size();
+        elements = Arrays.copyOf(collection.toArray(), capacity);
     }
 
     /**
@@ -115,14 +108,13 @@ public class ArrayIndexedCollection extends Collection {
      */
     @Override
     public void add(Object value) {
-        Objects.requireNonNull(value);
+        Objects.requireNonNull(value, "Cannot add null element to the collection.");
 
-        if (size == capacity) {
-            capacity *= 2;
-            elements = Arrays.copyOf(elements, capacity);
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, 2*elements.length);
         }
 
-        for (int i = 0; i < capacity; i++) {
+        for (int i = 0; i < elements.length; i++) {
             if (elements[i] == null) {
                 elements[i] = value;
                 size++;
@@ -214,9 +206,8 @@ public class ArrayIndexedCollection extends Collection {
             throw new IndexOutOfBoundsException("The given position is not in range [0, " + size + "].");
         }
 
-        if (size == capacity) {
-            capacity += 1;
-            elements = Arrays.copyOf(elements, capacity);
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, 2*elements.length);
         }
 
         for (int i = size-1; i >= position; i--) {
