@@ -26,6 +26,14 @@ public class LinkedListIndexedCollectionTest {
     }
 
     @Test
+    public void testSize() {
+        LinkedListIndexedCollection collection = prepareCollectionOfSize(12);
+        assertEquals(12, collection.size());
+        collection = new LinkedListIndexedCollection();
+        assertEquals(0, collection.size());
+    }
+
+    @Test
     public void testAdd() {
         LinkedListIndexedCollection collection = prepareCollectionOfSize(10);
         Object testElement = "test_element";
@@ -44,6 +52,56 @@ public class LinkedListIndexedCollectionTest {
 
         assertThrows(IndexOutOfBoundsException.class, () -> collection.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> collection.get(collection.size()));
+    }
+
+    @Test
+    public void testContains() {
+        LinkedListIndexedCollection collection = prepareCollectionOfSize(10);
+
+        for (int i = 0; i < 10; i++) {
+            assertTrue(collection.contains(i));
+        }
+        assertFalse(collection.contains(null));
+    }
+
+    @Test
+    public void testRemove1() {
+        LinkedListIndexedCollection collection = prepareCollectionOfSize(5);
+
+        assertEquals(5, collection.size());
+        assertTrue(collection.remove(Integer.valueOf(3)));
+        assertEquals(4, collection.size());
+        assertFalse(collection.remove(Integer.valueOf(3)));
+    }
+
+    @Test
+    public void testToArray() {
+        LinkedListIndexedCollection collection = prepareCollectionOfSize(4);
+        Object[] testArray = {0, 1, 2, 3};
+        assertArrayEquals(testArray, collection.toArray());
+
+        collection = new LinkedListIndexedCollection();
+        testArray = new Object[0];
+        assertArrayEquals(testArray, collection.toArray());
+    }
+
+    @Test
+    public void testForEach() {
+        class TestProcessor extends Processor {
+            String values = "Values:";
+
+            @Override
+            public void process(Object value) {
+                values += " " + value.toString();
+            }
+        }
+
+        LinkedListIndexedCollection collection = prepareCollectionOfSize(4);
+        String testString = "Values: 0 1 2 3";
+        TestProcessor processor = new TestProcessor();
+
+        collection.forEach(processor);
+        assertEquals(testString, processor.values);
     }
 
     @Test
