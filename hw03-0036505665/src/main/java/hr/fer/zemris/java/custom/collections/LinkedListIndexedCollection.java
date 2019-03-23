@@ -364,8 +364,9 @@ public class LinkedListIndexedCollection implements Collection {
                 throw new NoSuchElementException();
             }
 
+            Object value = currentNode.value;
             currentNode = currentNode.next;
-            return currentNode.previous.value;
+            return value;
         }
 
         /**
