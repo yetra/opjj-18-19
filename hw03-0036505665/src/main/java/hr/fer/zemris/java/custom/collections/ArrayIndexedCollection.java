@@ -15,7 +15,7 @@ import java.util.Objects;
  * @author Bruna Dujmović
  *
  */
-public class ArrayIndexedCollection implements Collection {
+public class ArrayIndexedCollection implements List {
 
     /**
      * Default initial capacity.
@@ -171,14 +171,13 @@ public class ArrayIndexedCollection implements Collection {
     }
 
     /**
-     * Returns the element at the specified position in this collection.
-     *
+     * {@inheritDoc}
      * The average complexity of this method is 1.
      *
-     * @param index the index of the element to return
      * @throws IndexOutOfBoundsException if the index is not in range
      *         [0, {@code size}-1]
      */
+    @Override
     public Object get(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
@@ -189,18 +188,13 @@ public class ArrayIndexedCollection implements Collection {
     }
 
     /**
-     * Inserts the specified element at the specified position in this collection.
-     * This method does not overwrite the current element at {@code position}, but
-     * shifts it and any subsequent elements to the right.
-     *
+     * {@inheritDoc}
      * The average complexity of this method is n.
      *
-     * @param value the element to be inserted
-     * @param position the index at which the specified element is to be inserted
      * @throws IndexOutOfBoundsException if the specified position is not in range
      *         [0, {@code size}]
-     * @throws NullPointerException if the specified element is {@code null}
      */
+    @Override
     public void insert(Object value, int position) {
         Objects.requireNonNull(value, "Value parameter cannot be null.");
         if (position < 0 || position > size) {
@@ -220,16 +214,10 @@ public class ArrayIndexedCollection implements Collection {
     }
 
     /**
-     * Returns the index of the first occurrence of the given element or -1 if
-     * the value is not found in this collection.
-     *
+     * {@inheritDoc}
      * The average complexity of this method is n.
-     *
-     * @param value the element whose index is to be returned
-     * @return the index of the first occurrence of the given element or -1 if
-     *         the value is not found
-     * @throws NullPointerException if the specified element is {@code null}
      */
+    @Override
     public int indexOf(Object value) {
         Objects.requireNonNull(value, "Value parameter cannot be null.");
 
@@ -243,10 +231,12 @@ public class ArrayIndexedCollection implements Collection {
     }
 
     /**
-     * Removes the element at the specified index from this collection.
+     * {@inheritDoc}
      *
-     * @param index the index of the element that is to be removed
+     * @throws IndexOutOfBoundsException if the specified index is not in range
+     *         [0, {@code size}-1]
      */
+    @Override
     public void remove(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
