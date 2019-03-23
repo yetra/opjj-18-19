@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.custom.collections;
 
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -280,7 +281,7 @@ public class ArrayIndexedCollection implements Collection {
     }
 
     /**
-     * A helper function which doubles the capacity of this collection.
+     * A helper method which doubles the capacity of this collection.
      */
     private void doubleCapacityIfNeeded() {
         if (size == elements.length) {
@@ -310,6 +311,12 @@ public class ArrayIndexedCollection implements Collection {
         private ArrayIndexedCollection collection;
 
         /**
+         * A count of the modifications of the collection at the time of this
+         * {@code ArrayElementsGetter}'s creation.
+         */
+        private long savedModificationCount;
+
+        /**
          * Sole constructor. Accepts a reference to the collection whose elements this
          * getter will return.
          *
@@ -322,20 +329,38 @@ public class ArrayIndexedCollection implements Collection {
 
             this.index = 0;
             this.collection = collection;
+            this.savedModificationCount = collection.modificationCount;
         }
 
         @Override
         public boolean hasNextElement() {
+            checkModifications();
+
             return collection.elements[index] != null;
         }
 
         @Override
         public Object getNextElement() {
+            checkModifications();
+
             if (!hasNextElement()) {
                 throw new NoSuchElementException();
             }
 
             return collection.elements[index++];
+        }
+
+        /**
+         * A helper method which compares the {@code collection}'s current modification
+         * count with {@code savedModificationCount}.
+         *
+         * @throws ConcurrentModificationException if the {@code collection} has been
+         *         modified after this getter's creation
+         */
+        private void checkModifications() {
+            if (savedModificationCount != collection.modificationCount) {
+                throw new ConcurrentModificationException();
+            }
         }
     }
 }

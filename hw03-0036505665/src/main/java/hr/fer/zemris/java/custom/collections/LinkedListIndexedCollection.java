@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.custom.collections;
 
+import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -327,6 +328,12 @@ public class LinkedListIndexedCollection implements Collection {
         private LinkedListIndexedCollection collection;
 
         /**
+         * A count of the modifications of the collection at the time of this
+         * {@code LinkedListElementsGetter}'s creation.
+         */
+        private long savedModificationCount;
+
+        /**
          * Sole constructor. Accepts a reference to the collection whose elements this
          * getter will return.
          *
@@ -339,21 +346,39 @@ public class LinkedListIndexedCollection implements Collection {
 
             this.currentNode = collection.first;
             this.collection = collection;
+            this.savedModificationCount = collection.modificationCount;
         }
 
         @Override
         public boolean hasNextElement() {
+            checkModifications();
+
             return currentNode != null;
         }
 
         @Override
         public Object getNextElement() {
+            checkModifications();
+
             if (!hasNextElement()) {
                 throw new NoSuchElementException();
             }
 
             currentNode = currentNode.next;
             return currentNode.previous.value;
+        }
+
+        /**
+         * A helper method which compares the {@code collection}'s current modification
+         * count with {@code savedModificationCount}.
+         *
+         * @throws ConcurrentModificationException if the {@code collection} has been
+         *         modified after this getter's creation
+         */
+        private void checkModifications() {
+            if (savedModificationCount != collection.modificationCount) {
+                throw new ConcurrentModificationException();
+            }
         }
     }
 }
