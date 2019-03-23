@@ -291,37 +291,42 @@ public class ArrayIndexedCollection implements Collection {
 
     @Override
     public ElementsGetter createElementsGetter() {
-        return new ArrayElementsGetter(elements);
+        return new ArrayElementsGetter(this);
     }
 
     /**
-     * An implementation of the {@code ElementsGetter} interface.
+     * An implementation of the {@code ElementsGetter} interface for this collection.
      */
     private static class ArrayElementsGetter implements ElementsGetter {
 
         /**
          * The index of the currently observed element of the {@code elements} array.
          */
-        private int index = 0;
+        private int index;
 
         /**
-         * A reference to this collections {@code elements} array.
+         * A reference to the collection whose elements this getter will return.
          */
-        private Object[] elements;
+        private ArrayIndexedCollection collection;
 
         /**
-         * Sole constructor. Accepts a reference to this collection's {@code elements}
-         * array.
+         * Sole constructor. Accepts a reference to the collection whose elements this
+         * getter will return.
          *
-         * @param elements a reference to this collections {@code elements} array
+         * @param collection a reference to the collection whose elements this getter
+         *                    will return
+         * @throws NullPointerException if the given collection is {@code null}
          */
-        public ArrayElementsGetter(Object[] elements) {
-            this.elements = elements;
+        public ArrayElementsGetter(ArrayIndexedCollection collection) {
+            Objects.requireNonNull(collection);
+
+            this.index = 0;
+            this.collection = collection;
         }
 
         @Override
         public boolean hasNextElement() {
-            return elements[index] != null;
+            return collection.elements[index] != null;
         }
 
         @Override
@@ -330,7 +335,7 @@ public class ArrayIndexedCollection implements Collection {
                 throw new NoSuchElementException();
             }
 
-            return elements[index++];
+            return collection.elements[index++];
         }
     }
 }

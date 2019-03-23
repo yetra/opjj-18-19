@@ -308,11 +308,11 @@ public class LinkedListIndexedCollection implements Collection {
 
     @Override
     public ElementsGetter createElementsGetter() {
-        return new LinkedListElementsGetter(first);
+        return new LinkedListElementsGetter(this);
     }
 
     /**
-     * An implementation of the {@code ElementsGetter} interface.
+     * An implementation of the {@code ElementsGetter} interface for this collection.
      */
     private static class LinkedListElementsGetter implements ElementsGetter {
 
@@ -322,13 +322,23 @@ public class LinkedListIndexedCollection implements Collection {
         private ListNode currentNode;
 
         /**
-         * Sole constructor. Accepts a reference to a {@code ListNode} in this
-         * collection.
-         *
-         * @param currentNode a reference to a {@code ListNode} in this collection
+         * A reference to the collection whose elements this getter will return.
          */
-        public LinkedListElementsGetter(ListNode currentNode) {
-            this.currentNode = currentNode;
+        private LinkedListIndexedCollection collection;
+
+        /**
+         * Sole constructor. Accepts a reference to the collection whose elements this
+         * getter will return.
+         *
+         * @param collection a reference to the collection whose elements this getter
+         *                    will return
+         * @throws NullPointerException if the given collection is {@code null}
+         */
+        public LinkedListElementsGetter(LinkedListIndexedCollection collection) {
+            Objects.requireNonNull(collection);
+
+            this.currentNode = collection.first;
+            this.collection = collection;
         }
 
         @Override
@@ -342,7 +352,8 @@ public class LinkedListIndexedCollection implements Collection {
                 throw new NoSuchElementException();
             }
 
-            return currentNode = currentNode.next;
+            currentNode = currentNode.next;
+            return currentNode.previous.value;
         }
     }
 }
