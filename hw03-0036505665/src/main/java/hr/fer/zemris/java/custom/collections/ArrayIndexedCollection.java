@@ -34,6 +34,11 @@ public class ArrayIndexedCollection implements Collection {
     private Object[] elements;
 
     /**
+     * A count of the modifications of this collection.
+     */
+    private long modificationCount = 0L;
+
+    /**
      * Constructs an empty {@code ArrayIndexedCollection} collection of the specified
      * initial capacity.
      *
@@ -228,6 +233,7 @@ public class ArrayIndexedCollection implements Collection {
         elements[position] = value;
 
         size++;
+        modificationCount++;
     }
 
     /**
@@ -270,6 +276,7 @@ public class ArrayIndexedCollection implements Collection {
         elements[size-1] = null;
 
         size--;
+        modificationCount++;
     }
 
     /**
@@ -278,6 +285,7 @@ public class ArrayIndexedCollection implements Collection {
     private void doubleCapacityIfNeeded() {
         if (size == elements.length) {
             elements = Arrays.copyOf(elements, 2*elements.length);
+            modificationCount++;
         }
     }
 

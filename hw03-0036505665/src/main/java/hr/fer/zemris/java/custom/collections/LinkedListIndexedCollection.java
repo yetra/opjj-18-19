@@ -52,6 +52,11 @@ public class LinkedListIndexedCollection implements Collection {
     private ListNode last;
 
     /**
+     * A count of the modifications of this collection.
+     */
+    private long modificationCount = 0L;
+
+    /**
      * Constructs an empty {@code LinkedListIndexedCollection} collection.
      * This collection's {@code size} is set to zero, and {@code first = last = null}
      * (the variables are initialized by default).
@@ -105,6 +110,7 @@ public class LinkedListIndexedCollection implements Collection {
         last = node;
 
         size++;
+        modificationCount++;
     }
 
     @Override
@@ -116,6 +122,7 @@ public class LinkedListIndexedCollection implements Collection {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -127,9 +134,11 @@ public class LinkedListIndexedCollection implements Collection {
             if (node.value.equals(value)) {
                 node.previous.next = node.next;
                 size--;
+                modificationCount++;
                 return true;
             }
         }
+
         return false;
     }
 
@@ -239,6 +248,7 @@ public class LinkedListIndexedCollection implements Collection {
                     node.previous = node;
 
                     size++;
+                    modificationCount++;
                     break;
                 }
                 node = node.next;
@@ -289,6 +299,7 @@ public class LinkedListIndexedCollection implements Collection {
             if (i == index) {
                 node.previous.next = node.next;
                 size--;
+                modificationCount++;
                 break;
             }
             node = node.next;
