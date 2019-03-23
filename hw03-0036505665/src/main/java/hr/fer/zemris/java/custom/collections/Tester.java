@@ -7,6 +7,7 @@ package hr.fer.zemris.java.custom.collections;
  * @author Bruna Dujmović
  *
  */
+@FunctionalInterface
 public interface Tester {
 
     /**
