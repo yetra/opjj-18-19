@@ -162,24 +162,6 @@ public class ArrayIndexedCollection implements Collection {
         return Arrays.copyOf(elements, size);
     }
 
-    /**
-     * Iterates over each element of this collection in the order in which they are
-     * stored in the {@code elements} array and calls the {@code processor.process}
-     * method for each element.
-     *
-     * @param processor the processor whose {@code process} method will be called
-     *                  for each element
-     * @throws NullPointerException if the specified processor is {@code null}
-     */
-    @Override
-    public void forEach(Processor processor) {
-        Objects.requireNonNull(processor, "Processor cannot be null.");
-
-        for (int i = 0; i < size; i++) {
-            processor.process(elements[i]);
-        }
-    }
-
     @Override
     public void clear() {
         for (int i = 0; i < size; i++) {

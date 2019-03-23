@@ -67,14 +67,20 @@ public interface Collection {
     Object[] toArray();
 
     /**
-     * Iterates over this collection and calls the {@code processor.process} method
-     * for each element. The order in which elements will be sent is undefined in
-     * this class.
+     * Iterates over each element of this collection and calls the
+     * {@code processor.process} method for each element.
      *
      * @param processor the processor whose {@code process} method will be called
      *                  for each element
+     * @throws NullPointerException if the specified processor is {@code null}
      */
-    void forEach(Processor processor);
+    default void forEach(Processor processor) {
+        Objects.requireNonNull(processor, "Processor cannot be null.");
+
+        ElementsGetter getter = this.createElementsGetter();
+
+        getter.processRemaining(processor);
+    }
 
     /**
      * Adds all elements from a given collection into this collection. The given
