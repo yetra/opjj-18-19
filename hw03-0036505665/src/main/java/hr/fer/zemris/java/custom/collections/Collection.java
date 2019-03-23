@@ -1,5 +1,8 @@
 package hr.fer.zemris.java.custom.collections;
 
+import java.util.Objects;
+import hr.fer.zemris.java.custom.collections.demo.EvenIntegerTester;
+
 /**
  * This class is a general representation of a collection of objects.
  * It should be inherited by more specific implementations of collections.
@@ -112,4 +115,25 @@ public interface Collection {
      * @return an {@code ElementsGetter} object
      */
     ElementsGetter createElementsGetter();
+
+    /**
+     * Adds all elements of the {@code col} collection which satisfy the given tester
+     * to this collection.
+     *
+     * @param col the collection whose elements will be added to this collection
+     * @param tester the tester that checks if the elements are acceptable
+     * @throws NullPointerException if {@code col} or {@code tester} are {@code null}
+     */
+    default void addAllSatisfying(Collection col, Tester tester) {
+        Objects.requireNonNull(col);
+        Objects.requireNonNull(tester);
+
+        ElementsGetter getter = col.createElementsGetter();
+
+        getter.processRemaining((value) -> {
+            if (tester.test(value)) {
+                this.add(value);
+            }
+        });
+    }
 }
