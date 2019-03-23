@@ -271,4 +271,49 @@ public class ArrayIndexedCollection implements Collection {
         elements[size-1] = null;
         size--;
     }
+
+    @Override
+    public ElementsGetter createElementsGetter() {
+        return new ArrayElementsGetter(elements);
+    }
+
+    /**
+     * An implementation of the {@code ElementsGetter} interface.
+     */
+    private static class ArrayElementsGetter implements ElementsGetter {
+
+        /**
+         * The index of the currently observed element of the {@code elements} array.
+         */
+        private int index = 0;
+
+        /**
+         * A reference to this collections {@code elements} array.
+         */
+        private Object[] elements;
+
+        /**
+         * Sole constructor. Accepts a reference to this collection's {@code elements}
+         * array.
+         *
+         * @param elements a reference to this collections {@code elements} array
+         */
+        public ArrayElementsGetter(Object[] elements) {
+            this.elements = elements;
+        }
+
+        @Override
+        public boolean hasNextElement() {
+            return elements[index] != null;
+        }
+
+        @Override
+        public Object getNextElement() {
+            if (!hasNextElement()) {
+                throw new NoSuchElementException();
+            }
+
+            return elements[index++];
+        }
+    }
 }

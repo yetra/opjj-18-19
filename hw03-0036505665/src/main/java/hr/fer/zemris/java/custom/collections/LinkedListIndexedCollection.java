@@ -294,4 +294,44 @@ public class LinkedListIndexedCollection implements Collection {
             node = node.next;
         }
     }
+
+    @Override
+    public ElementsGetter createElementsGetter() {
+        return new LinkedListElementsGetter(first);
+    }
+
+    /**
+     * An implementation of the {@code ElementsGetter} interface.
+     */
+    private static class LinkedListElementsGetter implements ElementsGetter {
+
+        /**
+         * A reference to the currently observed node in this collection.
+         */
+        private ListNode currentNode;
+
+        /**
+         * Sole constructor. Accepts a reference to a {@code ListNode} in this
+         * collection.
+         *
+         * @param currentNode a reference to a {@code ListNode} in this collection
+         */
+        public LinkedListElementsGetter(ListNode currentNode) {
+            this.currentNode = currentNode;
+        }
+
+        @Override
+        public boolean hasNextElement() {
+            return currentNode != null;
+        }
+
+        @Override
+        public Object getNextElement() {
+            if (!hasNextElement()) {
+                throw new NoSuchElementException();
+            }
+
+            return currentNode = currentNode.next;
+        }
+    }
 }

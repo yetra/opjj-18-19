@@ -106,4 +106,10 @@ public interface Collection {
      */
     void clear();
 
+    /**
+     * Creates and returns an {@code ElementsGetter} object.
+     *
+     * @return an {@code ElementsGetter} object
+     */
+    ElementsGetter createElementsGetter();
 }
