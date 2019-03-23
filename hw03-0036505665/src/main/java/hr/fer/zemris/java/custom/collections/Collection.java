@@ -1,7 +1,6 @@
 package hr.fer.zemris.java.custom.collections;
 
 import java.util.Objects;
-import hr.fer.zemris.java.custom.collections.demo.EvenIntegerTester;
 
 /**
  * This class is a general representation of a collection of objects.
