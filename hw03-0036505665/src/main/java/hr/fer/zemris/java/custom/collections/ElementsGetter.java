@@ -24,4 +24,13 @@ public interface ElementsGetter {
      * @throws NoSuchElementException if no more elements exist in the collection
      */
     Object getNextElement();
+
+    /**
+     * Calls the {@code processor.process} method for each remaining element in the
+     * collection.
+     *
+     * @param p the processor whose {@code process} method will be called
+     *                  for each remaining element
+     */
+    void processRemaining(Processor p);
 }

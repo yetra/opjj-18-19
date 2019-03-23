@@ -350,6 +350,16 @@ public class ArrayIndexedCollection implements Collection {
             return collection.elements[index++];
         }
 
+        @Override
+        public void processRemaining(Processor p) {
+            checkModifications();
+
+            while (hasNextElement()) {
+                p.process(collection.elements[index]);
+                index++;
+            }
+        }
+
         /**
          * A helper method which compares the {@code collection}'s current modification
          * count with {@code savedModificationCount}.

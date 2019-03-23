@@ -369,6 +369,16 @@ public class LinkedListIndexedCollection implements Collection {
             return value;
         }
 
+        @Override
+        public void processRemaining(Processor p) {
+            checkModifications();
+
+            while (hasNextElement()) {
+                p.process(currentNode.value);
+                currentNode = currentNode.next;
+            }
+        }
+
         /**
          * A helper method which compares the {@code collection}'s current modification
          * count with {@code savedModificationCount}.
