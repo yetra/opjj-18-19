@@ -77,8 +77,7 @@ public class ArrayIndexedCollection implements Collection {
         this(initialCapacity);
         Objects.requireNonNull(collection, "Collection parameter cannot be null.");
 
-        int capacity = initialCapacity < collection.size() ?
-                collection.size() : initialCapacity;
+        int capacity = Math.max(initialCapacity, collection.size());
         size = collection.size();
         elements = Arrays.copyOf(collection.toArray(), capacity);
     }
@@ -111,11 +110,9 @@ public class ArrayIndexedCollection implements Collection {
      */
     @Override
     public void add(Object value) {
-        Objects.requireNonNull(value, "Cannot add null element to the collection.");
+        Objects.requireNonNull(value, "Cannot add null element to this collection.");
 
-        if (size == elements.length) {
-            elements = Arrays.copyOf(elements, 2*elements.length);
-        }
+        doubleCapacityIfNeeded();
 
         for (int i = 0; i < elements.length; i++) {
             if (elements[i] == null) {
@@ -143,12 +140,14 @@ public class ArrayIndexedCollection implements Collection {
     @Override
     public boolean remove(Object value) {
         Objects.requireNonNull(value, "Value parameter cannot be null.");
+
         for (int i = 0; i < size; i++) {
             if (elements[i].equals(value)) {
                 remove(i);
                 return true;
             }
         }
+
         return false;
     }
 
@@ -197,6 +196,7 @@ public class ArrayIndexedCollection implements Collection {
             throw new IndexOutOfBoundsException(
                     "The given index is not in range [0, " + size + "-1].");
         }
+
         return elements[index];
     }
 
@@ -220,15 +220,13 @@ public class ArrayIndexedCollection implements Collection {
                     "The given position is not in range [0, " + size + "].");
         }
 
-        if (size == elements.length) {
-            elements = Arrays.copyOf(elements, 2*elements.length);
-        }
+        doubleCapacityIfNeeded();
 
         for (int i = size-1; i >= position; i--) {
             elements[i+1] = elements[i];
         }
-
         elements[position] = value;
+
         size++;
     }
 
@@ -251,6 +249,7 @@ public class ArrayIndexedCollection implements Collection {
                 return i;
             }
         }
+
         return -1;
     }
 
@@ -269,7 +268,17 @@ public class ArrayIndexedCollection implements Collection {
             elements[i] = elements[i+1];
         }
         elements[size-1] = null;
+
         size--;
+    }
+
+    /**
+     * A helper function which doubles the capacity of this collection.
+     */
+    private void doubleCapacityIfNeeded() {
+        if (size == elements.length) {
+            elements = Arrays.copyOf(elements, 2*elements.length);
+        }
     }
 
     @Override
