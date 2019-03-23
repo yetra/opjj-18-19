@@ -336,7 +336,7 @@ public class ArrayIndexedCollection implements Collection {
         public boolean hasNextElement() {
             checkModifications();
 
-            return collection.elements[index] != null;
+            return index < collection.size;
         }
 
         @Override
