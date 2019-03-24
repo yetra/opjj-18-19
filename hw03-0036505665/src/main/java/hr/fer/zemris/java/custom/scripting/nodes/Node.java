@@ -19,6 +19,7 @@ public class Node {
      * Adds a given child node to an internally managed collection of children.
      *
      * @param child the child node to add
+     * @throws NullPointerException if the given child node is {@code null}
      */
     public void addChildNode(Node child) {
         if (nodes == null) {

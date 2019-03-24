@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
+import java.util.Objects;
+
 /**
  * A node that represents a piece of textual data.
  * It inherits from the {@code Node} class.
@@ -18,8 +20,11 @@ public class TextNode extends Node {
      * Constructs a text node based on the textual data that it represents.
      *
      * @param text the textual data that the text node represents
+     * @throws NullPointerException if the given text is {@code null}
      */
     public TextNode(String text) {
+        Objects.requireNonNull(text);
+
         this.text = text;
     }
 
