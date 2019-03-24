@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw03.prob1;
 
+import java.util.Objects;
+
 /**
  * A class which models a token produced by a {@code Lexer} object.
  *
@@ -23,8 +25,11 @@ public class Token {
      *
      * @param type the type of the token
      * @param value the value of the token
+     * @throws NullPointerException if the given token is {@code null}
      */
     public Token(TokenType type, Object value) {
+        Objects.requireNonNull(type);
+
         this.type = type;
         this.value = value;
     }
