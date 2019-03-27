@@ -97,10 +97,10 @@ public class ForLoopNode extends Node {
 
     @Override
     public String toString() {
-        return "{$ FOR " + variable.asText() + " "
-                + startExpression.asText() + " "
-                + endExpression.asText() + " "
-                + (stepExpression == null ? "" : stepExpression.asText() + " ")
+        return "{$ FOR " + variable.toString() + " "
+                + startExpression.toString() + " "
+                + endExpression.toString() + " "
+                + (stepExpression == null ? "" : stepExpression.toString() + " ")
                 + "$}"
                 + super.toString()
                 + "{$ END $}";

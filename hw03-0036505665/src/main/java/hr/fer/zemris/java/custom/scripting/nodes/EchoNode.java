@@ -45,7 +45,7 @@ public class EchoNode extends Node {
         StringBuilder sb = new StringBuilder("{$= ");
 
         for (Element element : elements) {
-            sb.append(element.asText()).append(" ");
+            sb.append(element.toString()).append(" ");
         }
 
         return sb.append("$}").toString();
