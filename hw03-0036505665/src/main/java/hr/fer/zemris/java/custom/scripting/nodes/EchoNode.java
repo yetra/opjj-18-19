@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * A node that represents a command which generates some textual output dynamically.
- * It inherits from the {@code Node} class.
+ * It inherits from the {@link Node} class.
  *
  * @author Bruna Dujmović
  *

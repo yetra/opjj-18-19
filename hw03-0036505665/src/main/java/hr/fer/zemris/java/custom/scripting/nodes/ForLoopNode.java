@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * A node that represents a single for-loop construct.
- * It inherits from the {@code Node} class.
+ * It inherits from the {@link Node} class.
  *
  * @author Bruna Dujmović
  *
@@ -35,14 +35,15 @@ public class ForLoopNode extends Node {
     private Element stepExpression;
 
     /**
-     * Constructs a for-loop node based on a loop control variable, the initial value
+     * Constructs a for-loop node out of a loop control variable, the initial value
      * of the control variable, the final value of the control variable, and the step
      * by which the variable will be incremented after every loop iteration.
      *
      * @param variable the control variable of the for-loop
      * @param startExpression the initial value of the control variable
      * @param endExpression the final value of the control variable
-     * @param stepExpression the step by which the control variable will be incremented
+     * @param stepExpression the step by which the control variable will be
+     *                       incremented
      * @throws NullPointerException if {@code variable}, {@code startExpression} or
      *         {@code endExpression} are {@code null}
      */
