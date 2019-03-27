@@ -35,4 +35,13 @@ public class ElementString extends Element {
     public String asText() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        String escapedQuotes = (value.startsWith("\"") && value.endsWith("\"")) ?
+            value.replace("\"", "\\\"") : value;
+        String escapedBackslashes = escapedQuotes.replace("\\", "\\\\");
+
+        return escapedBackslashes.replace("{", "\\{");
+    }
 }
