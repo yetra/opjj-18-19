@@ -120,13 +120,9 @@ public class ArrayIndexedCollection implements List {
 
         doubleCapacityIfNeeded();
 
-        for (int i = 0; i < elements.length; i++) {
-            if (elements[i] == null) {
-                elements[i] = value;
-                size++;
-                break;
-            }
-        }
+        elements[size] = value;
+        size++;
+        modificationCount++;
     }
 
     @Override
@@ -258,7 +254,6 @@ public class ArrayIndexedCollection implements List {
     private void doubleCapacityIfNeeded() {
         if (size == elements.length) {
             elements = Arrays.copyOf(elements, 2*elements.length);
-            modificationCount++;
         }
     }
 
