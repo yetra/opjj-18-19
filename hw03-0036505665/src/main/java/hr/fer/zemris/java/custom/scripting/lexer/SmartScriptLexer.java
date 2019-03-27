@@ -325,7 +325,7 @@ public class SmartScriptLexer {
 
     private boolean stringIsOn(int index) {
         return currentIndex < data.length && (!digitIsOn(index)
-                && !Character.isWhitespace(data[index])
+                && !Character.isWhitespace(data[index]) && !tagEndIsOn(index)
                 || escapingIsOn(index, '\\'));
     }
 
