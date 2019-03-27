@@ -1,9 +1,7 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
-import hr.fer.zemris.java.custom.collections.ObjectStack;
 import hr.fer.zemris.java.custom.scripting.elems.Element;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
