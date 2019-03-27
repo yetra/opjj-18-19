@@ -26,6 +26,11 @@ public class Lexer {
     private int currentIndex;
 
     /**
+     * The current state of the lexer.
+     */
+    private LexerState state;
+
+    /**
      * Constructs a lexer which tokenizes the given text.
      *
      * @param text the text to tokenize
@@ -36,6 +41,7 @@ public class Lexer {
 
         data = text.toCharArray();
         currentIndex = 0;
+        setState(LexerState.BASIC);
     }
 
     /**
@@ -55,65 +61,84 @@ public class Lexer {
             return token = new Token(TokenType.EOF, null);
         }
 
-        // TODO make a helper method that returns a complete token String, not just the end index?
-        int tokenEnd;
-        if (letterOrEscapingIsOn(currentIndex)) {
-            tokenEnd = getTokenEnd(currentIndex, this::letterOrEscapingIsOn);
-            String word = new String(data, currentIndex, tokenEnd-currentIndex+1);
-
-            // TODO better replace for escaped characters
-            String replaceDigitEscapes = word.replaceAll("\\\\(?=\\d)", "");
-            String squashMultipleBackslashes = replaceDigitEscapes.replaceAll("\\\\+", "\\\\");
-
-            token = new Token(TokenType.WORD, squashMultipleBackslashes);
-
-        } else if (digitIsOn(currentIndex)) {
-            tokenEnd = getTokenEnd(currentIndex, this::digitIsOn);
-            String number = new String(data, currentIndex, tokenEnd-currentIndex+1);
-
-            try {
-                token = new Token(TokenType.NUMBER, Long.parseLong(number));
-            } catch (NumberFormatException ex) {
-                throw new LexerException("Can't parse " + number + " to long.");
-            }
-
+        if (state == LexerState.BASIC) {
+            token = getBasicStateToken();
         } else {
-            tokenEnd = currentIndex;
-            char symbol = data[currentIndex];
-
-            token = new Token(TokenType.SYMBOL, symbol);
+            token = getExtendedStateToken();
         }
 
-        currentIndex = tokenEnd + 1;
         return token;
     }
 
     /**
-     * Returns the index of the last character that belongs to the current token.
+     * Returns the next basic state token.
      *
-     * @param startIndex the index of
-     * @param tester a tester that checks if the currently observed character still
-     *               belongs to the current token
-     * @return the index of the last character that belongs to the current token
+     * @return the next basic state token
      */
-    private int getTokenEnd(int startIndex, CharacterTester tester) {
-        int endIndex = startIndex;
+    private Token getBasicStateToken() {
+        if (letterOrEscapingIsOn(currentIndex)) {
+            String tokenValue = readTokenStringWhile(this::letterOrEscapingIsOn);
+            return new Token(TokenType.WORD, tokenValue);
+
+        } else if (digitIsOn(currentIndex)) {
+            String tokenValue = readTokenStringWhile(this::digitIsOn);
+
+            try {
+                return new Token(TokenType.NUMBER, Long.parseLong(tokenValue));
+            } catch (NumberFormatException ex) {
+                throw new LexerException("Can't parse " + tokenValue + " to long.");
+            }
+
+        } else {
+            Character tokenValue = data[currentIndex++];
+            return new Token(TokenType.SYMBOL, tokenValue);
+        }
+    }
+
+    /**
+     * Returns the next extended state token.
+     *
+     * @return the next extended state token
+     */
+    private Token getExtendedStateToken() {
+        if (data[currentIndex] == '#') {
+            Character tokenValue = data[currentIndex++];
+            return new Token(TokenType.SYMBOL, tokenValue);
+
+        } else {
+            String tokenValue = readTokenStringWhile(this::blankOrHashIsNotOn);
+            return new Token(TokenType.WORD, tokenValue);
+        }
+    }
+
+    /**
+     * Constructs a token value string of {@link #data} characters that satisfy
+     * a given {@link CharacterTester}'s condition.
+     *
+     * @param tester the tester that checks if the currently observed character still
+     *               belongs to the current token
+     * @return a token value string of {@link #data} characters
+     */
+    private String readTokenStringWhile(CharacterTester tester) {
+        StringBuilder sb = new StringBuilder();
+        int endIndex = currentIndex;
 
         while (endIndex < data.length && tester.testCharOn(endIndex)) {
-            if (data[endIndex] == '\\') {
-                // if escaping occurred, skip both the backslash and the escaped char
+            if (state == LexerState.BASIC && data[endIndex] == '\\') {
+                sb.append(data[endIndex+1]);
                 endIndex += 2;
             } else {
-                // otherwise, just skip a normal character
+                sb.append(data[endIndex]);
                 endIndex++;
             }
         }
 
-        return endIndex-1;
+        currentIndex = endIndex; // TODO -1?
+        return sb.toString();
     }
 
     /**
-     * A helper method which skips all the blanks in the {@code data} character array.
+     * Skips blanks in the {@link #data} character array.
      */
     private void skipBlanks() {
         while (currentIndex < data.length &&
@@ -130,6 +155,17 @@ public class Lexer {
      */
     public Token getToken() {
         return token;
+    }
+
+    /**
+     * Sets this lexer's state to the specified value.
+     *
+     * @param state the state to set
+     */
+    public void setState(LexerState state) {
+        Objects.requireNonNull(state);
+
+        this.state = state;
     }
 
     /**
@@ -174,6 +210,18 @@ public class Lexer {
      */
     private boolean digitIsOn(int index) {
         return Character.isDigit(data[index]);
+    }
+
+    /**
+     * Returns {@code true} if the character on the specified index is not a blank or
+     * a hashtag.
+     *
+     * @param index the index of the character to check
+     * @return {@code true} if the character on the specified index is not a blank or
+     *         a hashtag
+     */
+    private boolean blankOrHashIsNotOn(int index) {
+        return !Character.isWhitespace(data[index]) && data[index] != '#';
     }
 
     /**
