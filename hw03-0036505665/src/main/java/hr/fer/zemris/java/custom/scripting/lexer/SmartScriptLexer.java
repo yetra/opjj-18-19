@@ -119,7 +119,7 @@ public class SmartScriptLexer {
             return new SmartScriptToken(SmartScriptTokenType.TAG_START, null);
 
         } else {
-            String tokenValue = readStringUntil(index -> !tagStartIsOn(index), true);
+            String tokenValue = readTokenValueWhile(index -> !tagStartIsOn(index), true);
             return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
         }
     }
@@ -139,11 +139,6 @@ public class SmartScriptLexer {
         } else if (escapingIsOn(currentIndex, '\"')) {
             return getNextQuotedStringToken();
 
-        } else if (letterIsOn(currentIndex) || escapingIsOn(currentIndex, '\\')) {
-            String tokenValue = readStringUntil(
-                    index -> letterIsOn(index) || escapingIsOn(index, '\\'), true);
-            return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
-
         } else if (numberStartsOn(currentIndex)) {
             try {
                 return getNextNumberToken();
@@ -152,8 +147,8 @@ public class SmartScriptLexer {
             }
 
         } else {
-            Character tokenValue = data[currentIndex++];
-            return new SmartScriptToken(SmartScriptTokenType.SYMBOL, tokenValue);
+            String tokenValue = readTokenValueWhile(this::stringIsOn, true);
+            return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
         }
     }
 
@@ -168,7 +163,7 @@ public class SmartScriptLexer {
         String tokenValue = "\"";
         currentIndex += 2;
 
-        tokenValue += readStringUntil(index -> !escapingIsOn(index, '\"'), true);
+        tokenValue += readTokenValueWhile(index -> !escapingIsOn(index, '\"'), true);
 
         if (currentIndex >= data.length) {
             throw new SmartScriptLexerException("Quote never closed.");
@@ -194,14 +189,14 @@ public class SmartScriptLexer {
             currentIndex++;
         }
 
-        tokenValue += readStringUntil(this::digitIsOn, false);
+        tokenValue += readTokenValueWhile(this::digitIsOn, false);
 
         if (currentIndex < data.length && data[currentIndex] == '.'
                 && digitIsOn(currentIndex+1)) {
             tokenValue += ".";
             currentIndex++;
 
-            tokenValue += readStringUntil(this::digitIsOn, false);
+            tokenValue += readTokenValueWhile(this::digitIsOn, false);
             return new SmartScriptToken(
                     SmartScriptTokenType.DECIMAL, Double.parseDouble(tokenValue));
         }
@@ -216,18 +211,18 @@ public class SmartScriptLexer {
      *
      * @param tester the tester that checks if a given character satisfies its
      *               condition
-     * @param escapingAllowed {@code true} if escaping is allowed in the string that
+     * @param canEscape {@code true} if escaping is allowed in the string that
      *                        will be constructed
      * @return the constructed string
      * @throws SmartScriptLexerException if escaping is not valid
      */
-    private String readStringUntil(CharacterTester tester, boolean escapingAllowed) {
+    private String readTokenValueWhile(CharacterTester tester, boolean canEscape) {
         StringBuilder tokenValue = new StringBuilder();
         int endIndex = currentIndex;
 
         while (endIndex < data.length && tester.testCharOn(endIndex)) {
 
-            if (escapingAllowed && (escapingIsOn(endIndex, '\\') ||
+            if (canEscape && (escapingIsOn(endIndex, '\\') ||
                     (state == SmartScriptLexerState.TEXT && escapingIsOn(endIndex, '{')))) {
                 tokenValue.append(data[endIndex+1]);
                 endIndex += 2;
@@ -273,16 +268,6 @@ public class SmartScriptLexer {
      */
     private boolean tagEndIsOn(int index) {
         return index < data.length-1 && data[index] == '$' && data[index+1] == '}';
-    }
-
-    /**
-     * Returns {@code true} if a letter is on the specified index.
-     *
-     * @param index the index of the character to check
-     * @return {@code true} if a letter is on the specified index
-     */
-    private boolean letterIsOn(int index) {
-        return index < data.length && Character.isLetter(data[index]);
     }
 
     /**
@@ -336,6 +321,12 @@ public class SmartScriptLexer {
      */
     private boolean numberStartsOn(int index) {
         return digitIsOn(index) || (data[index] == '-' && digitIsOn(index+1));
+    }
+
+    private boolean stringIsOn(int index) {
+        return currentIndex < data.length && (!digitIsOn(index)
+                && !Character.isWhitespace(data[index])
+                || escapingIsOn(index, '\\'));
     }
 
     /**

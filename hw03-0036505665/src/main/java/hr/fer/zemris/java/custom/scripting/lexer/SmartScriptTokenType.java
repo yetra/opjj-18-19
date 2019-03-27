@@ -5,7 +5,6 @@ public enum SmartScriptTokenType {
     STRING,
     INTEGER,
     DECIMAL,
-    SYMBOL,
     TAG_START,
     TAG_END
 }
