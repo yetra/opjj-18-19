@@ -47,4 +47,15 @@ public class Node {
     public Node getChild(int index) {
         return (Node) nodes.get(index);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0, end = numberOfChildren(); i < end; i++) {
+            sb.append(getChild(i).toString());
+        }
+
+        return sb.toString();
+    }
 }

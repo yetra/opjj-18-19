@@ -96,8 +96,12 @@ public class ForLoopNode extends Node {
 
     @Override
     public String toString() {
-        return variable.asText() + " " + startExpression.asText() + " "
+        return "{$ FOR " + variable.asText() + " "
+                + startExpression.asText() + " "
                 + endExpression.asText() + " "
-                + (stepExpression == null ? "" : stepExpression.asText() + " ");
+                + (stepExpression == null ? "" : stepExpression.asText() + " ")
+                + "$}"
+                + super.toString()
+                + "{$ END $}";
     }
 }

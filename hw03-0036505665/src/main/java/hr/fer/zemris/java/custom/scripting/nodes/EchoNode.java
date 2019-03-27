@@ -42,12 +42,12 @@ public class EchoNode extends Node {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("{$= ");
 
         for (Element element : elements) {
             sb.append(element.asText()).append(" ");
         }
 
-        return sb.toString();
+        return sb.append("$}").toString();
     }
 }
