@@ -45,6 +45,27 @@ public class Lexer {
     }
 
     /**
+     * Returns the last generated token. Calling this method does not start the
+     * generation of the next token.
+     *
+     * @return the last generated token
+     */
+    public Token getToken() {
+        return token;
+    }
+
+    /**
+     * Sets this lexer's state to the specified value.
+     *
+     * @param state the state to set
+     */
+    public void setState(LexerState state) {
+        Objects.requireNonNull(state);
+
+        this.state = state;
+    }
+
+    /**
      * Generates and returns the next toxen.
      *
      * @return the next token
@@ -69,6 +90,12 @@ public class Lexer {
 
         return token;
     }
+
+    /*
+     * -----------------------------------------------------------------------------
+     * ------------------------------ HELPER METHODS -------------------------------
+     * -----------------------------------------------------------------------------
+     */
 
     /**
      * Returns the next basic state token.
@@ -145,27 +172,6 @@ public class Lexer {
                 Character.isWhitespace(data[currentIndex])) {
             currentIndex++;
         }
-    }
-
-    /**
-     * Returns the last generated token. Calling this method does not start the
-     * generation of the next token.
-     *
-     * @return the last generated token
-     */
-    public Token getToken() {
-        return token;
-    }
-
-    /**
-     * Sets this lexer's state to the specified value.
-     *
-     * @param state the state to set
-     */
-    public void setState(LexerState state) {
-        Objects.requireNonNull(state);
-
-        this.state = state;
     }
 
     /**
