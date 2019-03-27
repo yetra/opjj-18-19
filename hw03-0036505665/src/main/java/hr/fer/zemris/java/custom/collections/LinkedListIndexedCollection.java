@@ -160,6 +160,7 @@ public class LinkedListIndexedCollection implements List {
     public void clear() {
         first = last = null;
         size = 0;
+        modificationCount++;
     }
 
      /**

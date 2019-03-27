@@ -164,6 +164,7 @@ public class ArrayIndexedCollection implements List {
             elements[i] = null;
         }
         size = 0;
+        modificationCount++;
     }
 
     /**
