@@ -1,7 +1,7 @@
 package hr.fer.zemris.java.hw03.prob1;
 
 /**
- * An exeption to be thrown if there is an issue with retrieving the next token.
+ * An exeption to be thrown if there is an issue with token retrieval.
  *
  * @author Bruna Dujmović
  *
