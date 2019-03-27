@@ -262,7 +262,7 @@ public class SmartScriptParser {
                 if (isValidVariableName(strValue)) {
                     return new ElementVariable(strValue);
                 } else if (isValidFunctionName(strValue)) {
-                    return new ElementFunction(strValue);
+                    return new ElementFunction(strValue.substring(1));
                 } else if (isValidOperator(strValue)) {
                     return new ElementOperator(strValue);
                 } else {
