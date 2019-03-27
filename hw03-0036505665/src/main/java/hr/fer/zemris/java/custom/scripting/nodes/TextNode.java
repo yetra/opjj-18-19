@@ -39,6 +39,7 @@ public class TextNode extends Node {
 
     @Override
     public String toString() {
-        return text;
+        String escapedBackslash = text.replace("\\", "\\\\");
+        return escapedBackslash.replace("{", "\\{");
     }
 }

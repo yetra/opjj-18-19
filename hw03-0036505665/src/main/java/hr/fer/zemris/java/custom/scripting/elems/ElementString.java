@@ -38,10 +38,10 @@ public class ElementString extends Element {
 
     @Override
     public String toString() {
-        String escapedQuotes = (value.startsWith("\"") && value.endsWith("\"")) ?
-            value.replace("\"", "\\\"") : value;
-        String escapedBackslashes = escapedQuotes.replace("\\", "\\\\");
-
-        return escapedBackslashes.replace("{", "\\{");
+        String escapedBackslash = value.replace("\\", "\\\\");
+        return  (escapedBackslash.startsWith("\"")
+                && escapedBackslash.endsWith("\"")) ?
+                escapedBackslash.replace("\"", "\\\"") :
+                escapedBackslash;
     }
 }
