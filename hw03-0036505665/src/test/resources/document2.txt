@@ -1,0 +1,7 @@
+Nested for loop:
+{$FOR i 0 12 2 $}
+    {$FOR j 0 78 90 $}
+        {$= m     $} = 8;
+    {$END$}
+{$END$}
+END

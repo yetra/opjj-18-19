@@ -1,0 +1,9 @@
+Text node.
+{$= echo node $}
+{$= echo node 2.0 $}
+{$ FOR i for node 1 $}
+    {$= nested @echo node $}
+    nested \{$ text $} node.
+    {$= nested echo \"2.0\" $}
+{$  END     $}
+Ending text node.
