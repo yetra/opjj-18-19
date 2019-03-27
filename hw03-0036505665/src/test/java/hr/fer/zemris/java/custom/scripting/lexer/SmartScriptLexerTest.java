@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.custom.scripting.SmartScriptLexerTest;
+package hr.fer.zemris.java.custom.scripting.lexer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
