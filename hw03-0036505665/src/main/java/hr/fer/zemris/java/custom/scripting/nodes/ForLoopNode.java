@@ -93,4 +93,11 @@ public class ForLoopNode extends Node {
     public Element getStepExpression() {
         return stepExpression;
     }
+
+    @Override
+    public String toString() {
+        return variable.asText() + " " + startExpression.asText() + " "
+                + endExpression.asText() + " "
+                + (stepExpression == null ? "" : stepExpression.asText() + " ");
+    }
 }

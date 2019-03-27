@@ -1,6 +1,10 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
+import hr.fer.zemris.java.custom.collections.ObjectStack;
 import hr.fer.zemris.java.custom.scripting.elems.Element;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A node that represents a command which generates some textual output dynamically.
@@ -22,6 +26,8 @@ public class EchoNode extends Node {
      * @param elements the elements of the echo node
      */
     public EchoNode(Element[] elements) {
+        Objects.requireNonNull(elements);
+
         this.elements = elements;
     }
 
@@ -32,5 +38,16 @@ public class EchoNode extends Node {
      */
     public Element[] getElements() {
         return elements;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Element element : elements) {
+            sb.append(element.asText()).append(" ");
+        }
+
+        return sb.toString();
     }
 }

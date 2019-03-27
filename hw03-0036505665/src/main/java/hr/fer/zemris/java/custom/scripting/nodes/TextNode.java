@@ -36,4 +36,9 @@ public class TextNode extends Node {
     public String getText() {
         return text;
     }
+
+    @Override
+    public String toString() {
+        return text + " ";
+    }
 }
