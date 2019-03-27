@@ -1,5 +1,12 @@
 package hr.fer.zemris.java.custom.collections;
 
+/**
+ * An extension of the base {@link Collection} interface which provides further
+ * functionality for custom collections.
+ *
+ * @author Bruna Dujmović
+ *
+ */
 public interface List extends Collection {
 
     /**
@@ -12,7 +19,7 @@ public interface List extends Collection {
 
     /**
      * Inserts the specified element at the specified position in this collection.
-     * This method does not overwrite the current element at {@code position}, but
+     * This method does not overwrite the current element at the position, but
      * shifts it and any subsequent elements to the right.
      *
      * @param value the element to be inserted

@@ -26,11 +26,11 @@ public interface ElementsGetter {
     Object getNextElement();
 
     /**
-     * Calls the {@code processor.process} method for each remaining element in the
-     * collection.
+     * Calls the {@link Processor#process(Object)} method for each remaining element
+     * in the collection.
      *
-     * @param p the processor whose {@code process} method will be called
-     *                  for each remaining element
+     * @param p the processor whose {@link Processor#process(Object)} method will be
+     *          called for each remaining element
      */
     void processRemaining(Processor p);
 }

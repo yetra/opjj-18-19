@@ -17,7 +17,7 @@ import java.util.Objects;
 public class LinkedListIndexedCollection implements List {
 
     /**
-     * The {@code ListNode} class represents a node in this collection.
+     * The {@link ListNode} class represents a node in this collection.
      */
     private static class ListNode {
         /**
@@ -37,8 +37,7 @@ public class LinkedListIndexedCollection implements List {
     }
 
     /**
-     * The current size of this collection (the number of elements actually stored
-     * in the {@code elements} array).
+     * The current size of this collection.
      */
     private int size;
 
@@ -58,18 +57,19 @@ public class LinkedListIndexedCollection implements List {
     private long modificationCount = 0L;
 
     /**
-     * Constructs an empty {@code LinkedListIndexedCollection} collection.
-     * This collection's {@code size} is set to zero, and {@code first = last = null}
-     * (the variables are initialized by default).
+     * Constructs an empty {@link LinkedListIndexedCollection} collection.
+     * This collection's {@link #size} is set to zero, and {@link #first} =
+     * {@link #last} = {@code null} (the variables are initialized by default).
      */
     public LinkedListIndexedCollection() {
     }
 
     /**
-     * Constructs a {@code LinkedListIndexedCollection} collection
+     * Constructs a {@link LinkedListIndexedCollection} collection
      * which contains the elements of the specified collection.
      *
-     * @param collection the collection whose elements will be copied into this collection
+     * @param collection the collection whose elements will be copied into this
+     *                   collection
      * @throws NullPointerException if the specified collection is null
      */
     public LinkedListIndexedCollection(Collection collection) {
@@ -167,12 +167,12 @@ public class LinkedListIndexedCollection implements List {
      * The complexity of this method is not greater than n/2+1.
      *
      * @throws IndexOutOfBoundsException if the index is not in range
-     *         [0, {@code size}-1]
+     *         [0, {@link #size}-1]
      */
     public Object get(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
-                    "The given index is not in range [0, " + size + "-1].");
+                    "The given index is not in range [0, " + (size-1) + "].");
         }
 
         ListNode node;
@@ -198,7 +198,7 @@ public class LinkedListIndexedCollection implements List {
      * The average complexity of this method is n.
      *
      * @throws IndexOutOfBoundsException if the specified position is not in range
-     *         [0, {@code size}]
+     *         [0, {@link #size}]
      */
     public void insert(Object value, int position) {
         Objects.requireNonNull(value, "Value parameter cannot be null.");
@@ -255,13 +255,13 @@ public class LinkedListIndexedCollection implements List {
      * {@inheritDoc}
      *
      * @throws IndexOutOfBoundsException if the specified index is not in range
-     *         [0, {@code size}-1]
+     *         [0, {@link #size}-1]
      */
     @Override
     public void remove(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
-                    "The given index is not in range [0, " + size + "-1].");
+                    "The given index is not in range [0, " + (size-1) + "].");
         }
 
         ListNode node = first;
@@ -282,7 +282,7 @@ public class LinkedListIndexedCollection implements List {
     }
 
     /**
-     * An implementation of the {@code ElementsGetter} interface for this collection.
+     * An implementation of the {@link ElementsGetter} interface for this collection.
      */
     private static class LinkedListElementsGetter implements ElementsGetter {
 
@@ -298,7 +298,7 @@ public class LinkedListIndexedCollection implements List {
 
         /**
          * A count of the modifications of the collection at the time of this
-         * {@code LinkedListElementsGetter}'s creation.
+         * {@link LinkedListElementsGetter}'s creation.
          */
         private long savedModificationCount;
 
@@ -349,10 +349,10 @@ public class LinkedListIndexedCollection implements List {
         }
 
         /**
-         * A helper method which compares the {@code collection}'s current modification
-         * count with {@code savedModificationCount}.
+         * A helper method which compares the {@link #collection}'s current
+         * modification count with {@link #savedModificationCount}.
          *
-         * @throws ConcurrentModificationException if the {@code collection} has been
+         * @throws ConcurrentModificationException if the {@link #collection} has been
          *         modified after this getter's creation
          */
         private void checkModifications() {

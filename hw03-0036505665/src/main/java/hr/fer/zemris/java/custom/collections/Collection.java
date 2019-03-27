@@ -3,8 +3,7 @@ package hr.fer.zemris.java.custom.collections;
 import java.util.Objects;
 
 /**
- * This class is a general representation of a collection of objects.
- * It should be inherited by more specific implementations of collections.
+ * The root interface in the custom collection hierarchy.
  *
  * @author Bruna Dujmović
  *
@@ -67,7 +66,7 @@ public interface Collection {
 
     /**
      * Iterates over each element of this collection and calls the
-     * {@code processor.process} method for each element.
+     * {@link Processor#process(Object)} method for each element.
      *
      * @param processor the processor whose {@code process} method will be called
      *                  for each element
@@ -91,7 +90,7 @@ public interface Collection {
     default void addAll(Collection other) {
 
         /**
-         * An implementation of the {@code Processor} generic class which can add an
+         * An implementation of the {@link Processor} generic class which can add an
          * object to a given collection.
          */
         class AddToCollectionProcessor implements Processor {
@@ -115,19 +114,19 @@ public interface Collection {
     void clear();
 
     /**
-     * Creates and returns an {@code ElementsGetter} object.
+     * Creates and returns an {@link ElementsGetter} object.
      *
-     * @return an {@code ElementsGetter} object
+     * @return an {@link ElementsGetter} object
      */
     ElementsGetter createElementsGetter();
 
     /**
-     * Adds all elements of the {@code col} collection which satisfy the given tester
+     * Adds all elements of a specified collection which satisfy the given tester
      * to this collection.
      *
      * @param col the collection whose elements will be added to this collection
      * @param tester the tester that checks if the elements are acceptable
-     * @throws NullPointerException if {@code col} or {@code tester} are {@code null}
+     * @throws NullPointerException if the given collection or tester are {@code null}
      */
     default void addAllSatisfying(Collection col, Tester tester) {
         Objects.requireNonNull(col);

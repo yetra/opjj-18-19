@@ -1,8 +1,8 @@
 package hr.fer.zemris.java.custom.collections;
 
 /**
- * An interface which models objects that can test whether a given object is acceptable
- * or not.
+ * A functional interface which models objects that can test whether a given object is
+ * acceptable or not.
  *
  * @author Bruna Dujmović
  *

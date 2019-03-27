@@ -24,13 +24,12 @@ public class ArrayIndexedCollection implements List {
 
     /**
      * The current size of this collection (the number of elements actually stored in
-     * the {@code elements} array).
+     * the {@link #elements} array).
      */
     private int size;
 
     /**
-     * An array of object references whose length is determined by the
-     * {@code capacity} variable.
+     * An array of object references that form the elements of this collection.
      */
     private Object[] elements;
 
@@ -49,14 +48,15 @@ public class ArrayIndexedCollection implements List {
      */
     public ArrayIndexedCollection(int initialCapacity) {
         if (initialCapacity < 1) {
-            throw new IllegalArgumentException("Array capacity must not be less than 1.");
+            throw new IllegalArgumentException(
+                    "Array capacity must not be less than 1.");
         }
 
         elements = new Object[initialCapacity];
     }
 
     /**
-     * Constructs an empty {@code ArrayIndexedCollection} collection with an initial
+     * Constructs an empty {@link ArrayIndexedCollection} collection with an initial
      * capacity of 16.
      */
     public ArrayIndexedCollection() {
@@ -64,7 +64,7 @@ public class ArrayIndexedCollection implements List {
     }
 
     /**
-     * Constructs an {@code ArrayIndexedCollection} collection of specified initial
+     * Constructs an {@link ArrayIndexedCollection} collection of specified initial
      * capacity which contains the elements
      * of the specified collection.
      *
@@ -89,7 +89,7 @@ public class ArrayIndexedCollection implements List {
     }
 
     /**
-     * Constructs an {@code ArrayIndexedCollection} collection which contains the
+     * Constructs an {@link ArrayIndexedCollection} collection which contains the
      * elements of the specified collection.
      *
      * @param collection the collection whose elements will be copied into this
@@ -107,9 +107,9 @@ public class ArrayIndexedCollection implements List {
 
     /**
      * Adds a given object into this collection into the first empty place.
-     * If this collection is already full, {@code add} will double its capacity.
+     * If this collection is already full, this method will double its capacity.
      *
-     * The average complexity of this method is n.
+     * The average complexity of this method is 1.
      *
      * @param value the object to add to this collection
      * @throws NullPointerException if the given object is {@code null}
@@ -175,13 +175,13 @@ public class ArrayIndexedCollection implements List {
      * The average complexity of this method is 1.
      *
      * @throws IndexOutOfBoundsException if the index is not in range
-     *         [0, {@code size}-1]
+     *         [0, {@link #size}-1]
      */
     @Override
     public Object get(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
-                    "The given index is not in range [0, " + size + "-1].");
+                    "The given index is not in range [0, " + (size-1) + "].");
         }
 
         return elements[index];
@@ -192,7 +192,7 @@ public class ArrayIndexedCollection implements List {
      * The average complexity of this method is n.
      *
      * @throws IndexOutOfBoundsException if the specified position is not in range
-     *         [0, {@code size}]
+     *         [0, {@link #size}]
      */
     @Override
     public void insert(Object value, int position) {
@@ -234,13 +234,13 @@ public class ArrayIndexedCollection implements List {
      * {@inheritDoc}
      *
      * @throws IndexOutOfBoundsException if the specified index is not in range
-     *         [0, {@code size}-1]
+     *         [0, {@link #size}-1]
      */
     @Override
     public void remove(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
-                    "The given index is not in range [0, " + size + "-1].");
+                    "The given index is not in range [0, " + (size-1) + "].");
         }
 
         for (int i = index; i < size-1; i++) {
@@ -268,12 +268,12 @@ public class ArrayIndexedCollection implements List {
     }
 
     /**
-     * An implementation of the {@code ElementsGetter} interface for this collection.
+     * An implementation of the {@link ElementsGetter} interface for this collection.
      */
     private static class ArrayElementsGetter implements ElementsGetter {
 
         /**
-         * The index of the currently observed element of the {@code elements} array.
+         * The index of the currently observed element of the {@link #elements} array.
          */
         private int index;
 
@@ -284,7 +284,7 @@ public class ArrayIndexedCollection implements List {
 
         /**
          * A count of the modifications of the collection at the time of this
-         * {@code ArrayElementsGetter}'s creation.
+         * {@link ArrayElementsGetter}'s creation.
          */
         private long savedModificationCount;
 
@@ -333,10 +333,10 @@ public class ArrayIndexedCollection implements List {
         }
 
         /**
-         * A helper method which compares the {@code collection}'s current modification
-         * count with {@code savedModificationCount}.
+         * A helper method which compares the {@link #collection}'s current
+         * modification count with {@link #savedModificationCount}.
          *
-         * @throws ConcurrentModificationException if the {@code collection} has been
+         * @throws ConcurrentModificationException if the {@link #collection} has been
          *         modified after this getter's creation
          */
         private void checkModifications() {
