@@ -2,6 +2,8 @@ package hr.fer.zemris.java.custom.scripting.nodes;
 
 import hr.fer.zemris.java.custom.collections.ArrayIndexedCollection;
 
+import java.util.Objects;
+
 /**
  * The base class for all graph nodes.
  *
@@ -57,5 +59,18 @@ public class Node {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(nodes.toString(), node.nodes.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nodes);
     }
 }
