@@ -341,4 +341,20 @@ public class ArrayIndexedCollection implements List {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArrayIndexedCollection that = (ArrayIndexedCollection) o;
+        return size == that.size &&
+                Arrays.equals(elements, that.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size);
+        result = 31 * result + Arrays.hashCode(elements);
+        return result;
+    }
 }
