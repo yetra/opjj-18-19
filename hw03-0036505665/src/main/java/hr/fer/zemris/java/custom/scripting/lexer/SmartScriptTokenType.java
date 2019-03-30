@@ -33,7 +33,8 @@ public enum SmartScriptTokenType {
     SYMBOL,
 
     /**
-     * A string which can contain escapings.
+     * A string which can contain escapings. Each {@link SmartScriptToken}
+     * string token must begin and end with a quotation mark.
      */
     STRING,
 

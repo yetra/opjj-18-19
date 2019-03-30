@@ -3,6 +3,7 @@ package hr.fer.zemris.java.custom.scripting.lexer;
 import java.util.Objects;
 
 // TODO throw exceptions for escaping attempts outside of strings?
+// TODO refactor readTokenValueWhile to return new token
 
 /**
  * This class models a lexer that tokenizes a given text.
@@ -206,13 +207,12 @@ public class SmartScriptLexer {
     }
 
     /**
-     * Constructs a string of {@link #data} characters that satisfy a given
-     * tester.
+     * Constructs a string of {@link #data} characters that satisfy a given tester.
      *
      * @param tester the tester that checks if a given character satisfies its
      *               condition
-     * @param canEscape {@code true} if escaping is allowed in the string that
-     *                        will be constructed
+     * @param canEscape {@code true} if escaping is allowed in the string that will
+     *                  be constructed
      * @return the constructed string
      * @throws SmartScriptLexerException if escaping is not valid
      */
@@ -237,8 +237,8 @@ public class SmartScriptLexer {
     }
 
     /**
-     * A helper method that skips all the blanks in the character array
-     * if the lexer is in TAG state.
+     * A helper method that skips all the blanks in the character array if the lexer
+     * is in TAG state.
      */
     private void skipBlanksIfTagState() {
         if (state == SmartScriptLexerState.TAG) {
@@ -261,11 +261,13 @@ public class SmartScriptLexer {
     }
 
     /**
-     * Returns {@code true} if a valid variable name character is on the specified index.
+     * Returns {@code true} if a valid variable name character is on the specified
+     * index.
      * @see SmartScriptTokenType#VARIABLE_NAME
      *
      * @param index the index of the first character to check
-     * @return {@code true} if a valid variable name character is on the specified index
+     * @return {@code true} if a valid variable name character is on the specified
+     *         index
      */
     private boolean variableNameIsOn(int index) {
         if (index == currentIndex) {
@@ -277,11 +279,13 @@ public class SmartScriptLexer {
     }
 
     /**
-     * Returns {@code true} if a valid function name character is on the specified index.
+     * Returns {@code true} if a valid function name character is on the specified
+     * index.
      * @see SmartScriptTokenType#FUNCTION_NAME
      *
      * @param index the index of the first character to check
-     * @return {@code true} if a valid function name character is on the specified index
+     * @return {@code true} if a valid function name character is on the specified
+     *         index
      */
     private boolean functionNameIsOn(int index) {
         if (index == currentIndex) {
