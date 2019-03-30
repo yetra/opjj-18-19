@@ -13,7 +13,7 @@ package hr.fer.zemris.java.custom.collections;
  */
 public class ObjectStack<E> {
 
-    /**c
+    /**
      * The collection that forms the basis of the stack.
      */
     private ArrayIndexedCollection<E> collection;
