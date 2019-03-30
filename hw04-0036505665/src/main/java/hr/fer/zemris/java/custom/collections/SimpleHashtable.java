@@ -217,10 +217,12 @@ public class SimpleHashtable<K, V> {
         int slotIndex = getSlotIndex(key);
         TableEntry<K, V> currentEntry = table[slotIndex];
 
-        while (currentEntry != null && currentEntry.next != null) {
+        while (currentEntry != null) {
             if (currentEntry.key.equals(key)) {
                 return true;
             }
+
+            currentEntry = currentEntry.next;
         }
 
         return false;
@@ -234,13 +236,13 @@ public class SimpleHashtable<K, V> {
      */
     public boolean containsValue(Object value) {
 
-        for (TableEntry<K, V> entry : table) {
-            while (entry != null) {
-                if (entry.value.equals(value)) {
+        for (TableEntry<K, V> currentEntry : table) {
+            while (currentEntry != null) {
+                if (currentEntry.value.equals(value)) {
                     return true;
                 }
 
-                entry = entry.next;
+                currentEntry = currentEntry.next;
             }
         }
 
