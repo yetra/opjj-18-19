@@ -320,7 +320,7 @@ public class SimpleHashtable<K, V>
         }
 
         @Override
-        public TableEntry<K, V> next() {
+        public SimpleHashtable.TableEntry<K, V> next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -391,12 +391,13 @@ public class SimpleHashtable<K, V>
             return;
         }
 
-        while (currentEntry.next != null) {
-            if (currentEntry.key.equals(key)) {
-                currentEntry.value = value;
-                return;
-            }
+        while (currentEntry.key != key && currentEntry.next != null) {
             currentEntry = currentEntry.next;
+        }
+
+        if (currentEntry.key.equals(key)) {
+            currentEntry.value = value;
+            return;
         }
 
         currentEntry.next = new TableEntry<>(key, value);
