@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.custom.collections;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -11,7 +13,8 @@ import java.util.Objects;
  * @author Bruna Dujmović
  *
  */
-public class SimpleHashtable<K, V> {
+public class SimpleHashtable<K, V>
+        implements Iterable<SimpleHashtable.TableEntry<K, V>> {
 
     /**
      * The default number of slots in the hashtable.
@@ -286,6 +289,55 @@ public class SimpleHashtable<K, V> {
         }
 
         return sb.append("]").toString();
+    }
+
+    @Override
+    public Iterator<TableEntry<K, V>> iterator() {
+        return new IteratorImpl();
+    }
+
+    /**
+     * An implementation of the {@link Iterator} interface for this hashtable.
+     */
+    private class IteratorImpl implements
+            Iterator<SimpleHashtable.TableEntry<K,V>> {
+
+        /**
+         * Current table entry (the last value that was returned by
+         * {@link IteratorImpl#next()}.
+         */
+        private SimpleHashtable.TableEntry<K, V> currentEntry;
+
+        /**
+         * The index of the slot of the current table entry.
+         */
+        private int currentSlotIndex;
+
+        @Override
+        public boolean hasNext() {
+            return (currentEntry != null && currentEntry.next != null)
+                    || currentSlotIndex < table.length;
+        }
+
+        @Override
+        public TableEntry<K, V> next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            if (currentEntry == null || currentEntry.next == null) {
+                currentEntry = table[currentSlotIndex++];
+            } else {
+                currentEntry = currentEntry.next;
+            }
+
+            return currentEntry;
+        }
+
+        @Override
+        public void remove() {
+            SimpleHashtable.this.remove(currentEntry.key);
+        }
     }
 
     /*
