@@ -48,6 +48,11 @@ public class SimpleHashtable<K, V> {
         private V value;
 
         /**
+         * A reference to the next table entry in the hashtable slot.
+         */
+        private TableEntry<K, V> next;
+
+        /**
          * Constructs a table entry of a given key and value.
          *
          * @param key the key of the table entry
@@ -59,6 +64,7 @@ public class SimpleHashtable<K, V> {
 
             this.key = key;
             this.value = value;
+            this.next = null;
         }
 
         /**
@@ -90,10 +96,21 @@ public class SimpleHashtable<K, V> {
 
         @Override
         public String toString() {
-            return "TableEntry{" +
-                    "key=" + key +
-                    ", value=" + value +
-                    '}';
+            return key.toString() + "=" + value.toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            TableEntry<?, ?> that = (TableEntry<?, ?>) o;
+            return key.equals(that.key) &&
+                    Objects.equals(value, that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(key, value);
         }
     }
 
