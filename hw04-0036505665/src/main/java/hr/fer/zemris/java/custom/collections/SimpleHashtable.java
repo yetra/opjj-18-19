@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.custom.collections;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -136,12 +137,33 @@ public class SimpleHashtable<K, V> {
      * Adds a new table entry to this hashtable. If an entry with the specified key
      * already exists, this method will not add another pair with the same key.
      *
+     * If the slot that the new entry should be added to already
+     *
      * @param key the key of the table entry
      * @param value the value of the table entry
      * @throws NullPointerException if the given key is {@code null}
      */
     public void put(K key, V value) {
+        Objects.requireNonNull(key);
 
+        int slotIndex = getSlotIndex(key);
+        TableEntry<K, V> currentEntry = table[slotIndex];
+
+        if (currentEntry == null) {
+            table[slotIndex] = new TableEntry<>(key, value);
+            return;
+        }
+
+        while (currentEntry.next != null) {
+            if (currentEntry.key.equals(key)) {
+                currentEntry.value = value;
+                return;
+            }
+            currentEntry = currentEntry.next;
+        }
+
+        currentEntry.next = new TableEntry<>(key, value);
+        size++;
     }
 
     /**
@@ -153,6 +175,19 @@ public class SimpleHashtable<K, V> {
      *         if no such value exists
      */
     public V get(Object key) {
+        if (key == null) {
+            return null;
+        }
+
+        int slotIndex = getSlotIndex(key);
+        TableEntry<K, V> currentEntry = table[slotIndex];
+
+        while (currentEntry != null && currentEntry.next != null) {
+            if (currentEntry.key.equals(key)) {
+                return currentEntry.value;
+            }
+        }
+
         return null;
     }
 
@@ -172,6 +207,19 @@ public class SimpleHashtable<K, V> {
      * @return {@code true} if this hashtable contains an entry with the given key
      */
     public boolean containsKey(Object key) {
+        if (key == null) {
+            return false;
+        }
+
+        int slotIndex = getSlotIndex(key);
+        TableEntry<K, V> currentEntry = table[slotIndex];
+
+        while (currentEntry != null && currentEntry.next != null) {
+            if (currentEntry.key.equals(key)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -182,6 +230,17 @@ public class SimpleHashtable<K, V> {
      * @return {@code true} if this hashtable contains an entry with the given value
      */
     public boolean containsValue(Object value) {
+
+        for (TableEntry<K, V> entry : table) {
+            while (entry != null) {
+                if (entry.value.equals(value)) {
+                    return true;
+                }
+
+                entry = entry.next;
+            }
+        }
+
         return false;
     }
 
@@ -191,7 +250,22 @@ public class SimpleHashtable<K, V> {
      * @param key the key of the entry to remove
      */
     public void remove(Object key) {
+        if (key != null) {
+            int slotIndex = getSlotIndex(key);
+            TableEntry<K, V> currentEntry = table[slotIndex];
 
+            if (currentEntry.key.equals(key)) {
+                table[slotIndex] = currentEntry.next;
+                size--;
+                return;
+            }
+
+            while (currentEntry.next != null) {
+                if (currentEntry.next.key.equals(key)) {
+                    currentEntry.next = currentEntry.next.next;
+                }
+            }
+        }
     }
 
     /**
@@ -205,10 +279,15 @@ public class SimpleHashtable<K, V> {
 
     @Override
     public String toString() {
-        return "SimpleHashtable{" +
-                "table=" + Arrays.toString(table) +
-                ", size=" + size +
-                '}';
+        StringBuilder sb = new StringBuilder("[");
+
+        for (TableEntry<K, V> entry : table) {
+            if (entry != null) {
+                sb.append(entry.toString()).append(", ");
+            }
+        }
+
+        return sb.append("]").toString();
     }
 
     /*
@@ -216,6 +295,16 @@ public class SimpleHashtable<K, V> {
      * ----------------------------- HELPER METHODS -----------------------------
      * --------------------------------------------------------------------------
      */
+
+    /**
+     * Calculates the index of the slot for a given table entry key.
+     *
+     * @param key the table entry key whose slot index is calculated
+     * @return the index of the slot for a given table entry
+     */
+    private int getSlotIndex(Object key) {
+        return Math.abs(key.hashCode()) % 2;
+    }
 
     /**
      * Returns the smallest power of 2 that is greater than or equal to the given
