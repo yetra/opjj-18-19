@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.custom.collections;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -35,6 +36,11 @@ public class SimpleHashtable<K, V>
      * The size of the hashtable (the number of currently stored table entries).
      */
     private int size;
+
+    /**
+     * The number of modifications of this hashtable.
+     */
+    private int modificationCount;
 
     /**
      * This class models an entry (key-value pair) in a {@link SimpleHashtable} object.
@@ -247,12 +253,15 @@ public class SimpleHashtable<K, V>
             if (currentEntry.key.equals(key)) {
                 table[slotIndex] = currentEntry.next;
                 size--;
+                modificationCount++;
                 return;
             }
 
             while (currentEntry.next != null) {
                 if (currentEntry.next.key.equals(key)) {
                     currentEntry.next = currentEntry.next.next;
+                    modificationCount++;
+                    return;
                 }
             }
         }
@@ -313,14 +322,36 @@ public class SimpleHashtable<K, V>
          */
         private int currentSlotIndex;
 
+        /**
+         * The modification count at the time of {@link IteratorImpl} instantiation.
+         */
+        private int savedModificationCount;
+
+        /**
+         * {@code true} if {@link #remove()} can be called for the current entry
+         */
+        private boolean canRemove;
+
+        /**
+         * Sole constructor. Saves the modification count at instantiation time to
+         * {@link #savedModificationCount}.
+         */
+        public IteratorImpl() {
+            savedModificationCount = modificationCount;
+        }
+
         @Override
         public boolean hasNext() {
+            checkModificationCount();
+
             return (currentEntry != null && currentEntry.next != null)
                     || currentSlotIndex < table.length;
         }
 
         @Override
         public SimpleHashtable.TableEntry<K, V> next() {
+            checkModificationCount();
+
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -331,12 +362,33 @@ public class SimpleHashtable<K, V>
                 currentEntry = currentEntry.next;
             }
 
+            canRemove = true;
             return currentEntry;
         }
 
         @Override
         public void remove() {
+            checkModificationCount();
+            if (!canRemove) {
+                throw new IllegalStateException();
+            }
+
             SimpleHashtable.this.remove(currentEntry.key);
+            savedModificationCount++;
+            canRemove = false;
+        }
+
+        /**
+         * Compares the hashtable's current modification count with this iterator's
+         * {@link #savedModificationCount}.
+         *
+         * @throws ConcurrentModificationException if the hashtable has been
+         *         modified after this iterators's creation
+         */
+        private void checkModificationCount() {
+            if (savedModificationCount != modificationCount) {
+                throw new ConcurrentModificationException();
+            }
         }
     }
 
@@ -357,6 +409,7 @@ public class SimpleHashtable<K, V>
             TableEntry<K, V>[] newTable = (TableEntry<K,V>[])
                     new TableEntry[table.length*2];
 
+            int oldModificationCount = modificationCount;
             for (TableEntry<K, V> entry : table) {
                 while (entry != null) {
                     addToTable(newTable, entry.key, entry.value);
@@ -365,6 +418,7 @@ public class SimpleHashtable<K, V>
             }
 
             table = newTable;
+            modificationCount = oldModificationCount + 1;
         }
     }
 
@@ -388,6 +442,7 @@ public class SimpleHashtable<K, V>
         if (currentEntry == null) {
             table[slotIndex] = new TableEntry<>(key, value);
             size++;
+            modificationCount++;
             return;
         }
 
@@ -401,6 +456,7 @@ public class SimpleHashtable<K, V>
         }
 
         currentEntry.next = new TableEntry<>(key, value);
+        modificationCount++;
         size++;
     }
 
