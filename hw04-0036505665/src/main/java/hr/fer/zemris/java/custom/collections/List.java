@@ -4,10 +4,12 @@ package hr.fer.zemris.java.custom.collections;
  * An extension of the base {@link Collection} interface which provides further
  * functionality for custom collections.
  *
+ * @param <E> the type of elements contained in the collection
+ *
  * @author Bruna Dujmović
  *
  */
-public interface List extends Collection {
+public interface List<E> extends Collection<E> {
 
     /**
      * Returns the element that is at the specified index in this collection.
@@ -15,7 +17,7 @@ public interface List extends Collection {
      * @param index the index of the element to return
      * @throws IndexOutOfBoundsException if the position is not in the correct range
      */
-    Object get(int index);
+    E get(int index);
 
     /**
      * Inserts the specified element at the specified position in this collection.
@@ -28,7 +30,7 @@ public interface List extends Collection {
      *         correct range
      * @throws NullPointerException if the specified element is {@code null}
      */
-    void insert(Object value, int position);
+    void insert(E value, int position);
 
     /**
      * Returns the index of the first occurrence of the given element or -1 if

@@ -5,10 +5,12 @@ import java.util.Objects;
 /**
  * The root interface in the custom collection hierarchy.
  *
+ * @param <E> the type of elements contained in the collection
+ *
  * @author Bruna Dujmović
  *
  */
-public interface Collection {
+public interface Collection<E> {
 
     /**
      * Returns {@code true} if this collection contains no elements.
@@ -31,7 +33,7 @@ public interface Collection {
      *
      * @param value value of object to add
      */
-    void add(Object value);
+    void add(E value);
 
     /**
      * Returns {@code true} if this collection contains a given element, as determined
@@ -72,10 +74,10 @@ public interface Collection {
      *                  for each element
      * @throws NullPointerException if the specified processor is {@code null}
      */
-    default void forEach(Processor processor) {
+    default void forEach(Processor<E> processor) {
         Objects.requireNonNull(processor, "Processor cannot be null.");
 
-        ElementsGetter getter = this.createElementsGetter();
+        ElementsGetter<E> getter = this.createElementsGetter();
 
         getter.processRemaining(processor);
     }
@@ -87,21 +89,21 @@ public interface Collection {
      * @param other the collection whose elements will be added into this
      *              collection
      */
-    default void addAll(Collection other) {
+    default void addAll(Collection<E> other) {
 
         /**
          * An implementation of the {@link Processor} generic class which can add an
          * object to a given collection.
          */
-        class AddToCollectionProcessor implements Processor {
+        class AddToCollectionProcessor implements Processor<E> {
             /**
              * Processes a given object so that it is added to the collection.
              *
              * @param value value of the object to process
              */
             @Override
-            public void process(Object value) {
-                Collection.this.add(value);
+            public void process(E value) {
+                add(value);
             }
         }
 
@@ -118,7 +120,7 @@ public interface Collection {
      *
      * @return an {@link ElementsGetter} object
      */
-    ElementsGetter createElementsGetter();
+    ElementsGetter<E> createElementsGetter();
 
     /**
      * Adds all elements of a specified collection which satisfy the given tester
@@ -128,11 +130,11 @@ public interface Collection {
      * @param tester the tester that checks if the elements are acceptable
      * @throws NullPointerException if the given collection or tester are {@code null}
      */
-    default void addAllSatisfying(Collection col, Tester tester) {
+    default void addAllSatisfying(Collection<E> col, Tester<E> tester) {
         Objects.requireNonNull(col);
         Objects.requireNonNull(tester);
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<E> getter = col.createElementsGetter();
 
         getter.processRemaining((value) -> {
             if (tester.test(value)) {

@@ -12,10 +12,12 @@ import java.util.Objects;
  * Duplicate elements are allowed. The storage of {@code null} references is not
  * allowed.
  *
+ * @param <E> the type of elements contained in the collection
+ *
  * @author Bruna Dujmović
  *
  */
-public class ArrayIndexedCollection implements List {
+public class ArrayIndexedCollection<E> implements List<E> {
 
     /**
      * Default initial capacity.
@@ -31,7 +33,7 @@ public class ArrayIndexedCollection implements List {
     /**
      * An array of object references that form the elements of this collection.
      */
-    private Object[] elements;
+    private E[] elements;
 
     /**
      * A count of the modifications of this collection.
@@ -46,13 +48,14 @@ public class ArrayIndexedCollection implements List {
      * @throws IllegalArgumentException if the specified initial capacity is less
      *         than 1
      */
+    @SuppressWarnings("unchecked")
     public ArrayIndexedCollection(int initialCapacity) {
         if (initialCapacity < 1) {
             throw new IllegalArgumentException(
                     "Array capacity must not be less than 1.");
         }
 
-        elements = new Object[initialCapacity];
+        elements = (E[]) new Object[initialCapacity];
     }
 
     /**
@@ -79,13 +82,14 @@ public class ArrayIndexedCollection implements List {
      * @throws IllegalArgumentException if the specified initial capacity is less
      *         than 1
      */
-    public ArrayIndexedCollection(Collection collection, int initialCapacity) {
+    @SuppressWarnings("unchecked")
+    public ArrayIndexedCollection(Collection<E> collection, int initialCapacity) {
         this(initialCapacity);
         Objects.requireNonNull(collection, "Collection parameter cannot be null.");
 
         int capacity = Math.max(initialCapacity, collection.size());
         size = collection.size();
-        elements = Arrays.copyOf(collection.toArray(), capacity);
+        elements = Arrays.copyOf((E[]) collection.toArray(), capacity);
     }
 
     /**
@@ -96,7 +100,7 @@ public class ArrayIndexedCollection implements List {
      *                   collection
      * @throws NullPointerException if the specified collection is null
      */
-    public ArrayIndexedCollection(Collection collection) {
+    public ArrayIndexedCollection(Collection<E> collection) {
         this(collection, collection.size());
     }
 
@@ -115,7 +119,7 @@ public class ArrayIndexedCollection implements List {
      * @throws NullPointerException if the given object is {@code null}
      */
     @Override
-    public void add(Object value) {
+    public void add(E value) {
         Objects.requireNonNull(value, "Cannot add null element to this collection.");
 
         doubleCapacityIfNeeded();
@@ -175,7 +179,7 @@ public class ArrayIndexedCollection implements List {
      *         [0, {@link #size}-1]
      */
     @Override
-    public Object get(int index) {
+    public E get(int index) {
         if (index < 0 || index > size-1) {
             throw new IndexOutOfBoundsException(
                     "The given index is not in range [0, " + (size-1) + "].");
@@ -192,7 +196,7 @@ public class ArrayIndexedCollection implements List {
      *         [0, {@link #size}]
      */
     @Override
-    public void insert(Object value, int position) {
+    public void insert(E value, int position) {
         Objects.requireNonNull(value, "Value parameter cannot be null.");
         if (position < 0 || position > size) {
             throw new IndexOutOfBoundsException(
@@ -259,14 +263,14 @@ public class ArrayIndexedCollection implements List {
     }
 
     @Override
-    public ElementsGetter createElementsGetter() {
+    public ElementsGetter<E> createElementsGetter() {
         return new ArrayElementsGetter(this);
     }
 
     /**
      * An implementation of the {@link ElementsGetter} interface for this collection.
      */
-    private static class ArrayElementsGetter implements ElementsGetter {
+    private static class ArrayElementsGetter<E> implements ElementsGetter<E> {
 
         /**
          * The index of the currently observed element of the {@link #elements} array.
@@ -276,7 +280,7 @@ public class ArrayIndexedCollection implements List {
         /**
          * A reference to the collection whose elements this getter will return.
          */
-        private ArrayIndexedCollection collection;
+        private ArrayIndexedCollection<E> collection;
 
         /**
          * A count of the modifications of the collection at the time of this
@@ -292,7 +296,7 @@ public class ArrayIndexedCollection implements List {
          *                    will return
          * @throws NullPointerException if the given collection is {@code null}
          */
-        public ArrayElementsGetter(ArrayIndexedCollection collection) {
+        public ArrayElementsGetter(ArrayIndexedCollection<E> collection) {
             Objects.requireNonNull(collection);
 
             this.index = 0;
@@ -308,7 +312,7 @@ public class ArrayIndexedCollection implements List {
         }
 
         @Override
-        public Object getNextElement() {
+        public E getNextElement() {
             checkModifications();
 
             if (!hasNextElement()) {
@@ -319,7 +323,7 @@ public class ArrayIndexedCollection implements List {
         }
 
         @Override
-        public void processRemaining(Processor p) {
+        public void processRemaining(Processor<E> p) {
             checkModifications();
 
             while (hasNextElement()) {

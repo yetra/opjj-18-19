@@ -5,10 +5,12 @@ import java.util.NoSuchElementException;
 /**
  * An interface which models an iterator over a collection's elements.
  *
+ * @param <E> the type of elements returned by the {@link ElementsGetter}
+ *
  * @author Bruna Dujmović
  *
  */
-public interface ElementsGetter {
+public interface ElementsGetter<E> {
 
     /**
      * Returns {@code true} if the collection has more elements
@@ -23,7 +25,7 @@ public interface ElementsGetter {
      * @return the next object in the collection
      * @throws NoSuchElementException if no more elements exist in the collection
      */
-    Object getNextElement();
+    E getNextElement();
 
     /**
      * Calls the {@link Processor#process(Object)} method for each remaining element
@@ -32,5 +34,5 @@ public interface ElementsGetter {
      * @param p the processor whose {@link Processor#process(Object)} method will be
      *          called for each remaining element
      */
-    void processRemaining(Processor p);
+    void processRemaining(Processor<E> p);
 }
