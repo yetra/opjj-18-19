@@ -151,6 +151,7 @@ public class SimpleHashtable<K, V> {
 
         if (currentEntry == null) {
             table[slotIndex] = new TableEntry<>(key, value);
+            size++;
             return;
         }
 
@@ -182,10 +183,12 @@ public class SimpleHashtable<K, V> {
         int slotIndex = getSlotIndex(key);
         TableEntry<K, V> currentEntry = table[slotIndex];
 
-        while (currentEntry != null && currentEntry.next != null) {
+        while (currentEntry != null) {
             if (currentEntry.key.equals(key)) {
                 return currentEntry.value;
             }
+
+            currentEntry = currentEntry.next;
         }
 
         return null;
