@@ -291,13 +291,16 @@ public class SimpleHashtable<K, V>
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
 
-        for (TableEntry<K, V> entry : table) {
-            if (entry != null) {
-                sb.append(entry.toString()).append(", ");
+        for (TableEntry<K, V> currentEntry : table) {
+            while (currentEntry != null) {
+                sb.append(currentEntry.toString()).append(", ");
+                currentEntry = currentEntry.next;
             }
         }
 
-        return sb.append("]").toString();
+        sb.replace(sb.length()-2, sb.length(), "]");
+
+        return sb.toString();
     }
 
     @Override
@@ -312,8 +315,7 @@ public class SimpleHashtable<K, V>
             Iterator<SimpleHashtable.TableEntry<K,V>> {
 
         /**
-         * Current table entry (the last value that was returned by
-         * {@link IteratorImpl#next()}.
+         * Current table entry (the last value that was returned by {@link #next()}.
          */
         private SimpleHashtable.TableEntry<K, V> currentEntry;
 
