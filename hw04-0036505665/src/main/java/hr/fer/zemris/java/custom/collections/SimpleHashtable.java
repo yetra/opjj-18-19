@@ -109,8 +109,10 @@ public class SimpleHashtable<K, V> {
      *
      * @param capacity the capacity of the hashtable
      */
+    @SuppressWarnings("unchecked")
     public SimpleHashtable(int capacity) {
-
+        table = (TableEntry<K,V>[]) new TableEntry[nextPowerOfTwo(capacity)];
+        size = 0;
     }
 
     /**
@@ -190,5 +192,29 @@ public class SimpleHashtable<K, V> {
                 "table=" + Arrays.toString(table) +
                 ", size=" + size +
                 '}';
+    }
+
+    /*
+     * --------------------------------------------------------------------------
+     * ----------------------------- HELPER METHODS -----------------------------
+     * --------------------------------------------------------------------------
+     */
+
+    /**
+     * Returns the smallest power of 2 that is greater than or equal to the given
+     * integer.
+     * @param number the number whose power of 2 is returned
+     * @return the smallest power of 2 that is greater than or equal to the given
+     *         integer
+     * @throws IllegalArgumentException if the given number is less than 1
+     */
+    private int nextPowerOfTwo(int number) {
+        if (number < 1) {
+            throw new IllegalArgumentException("Number cannot be less than 1.");
+        }
+
+        int highestOneBit = Integer.highestOneBit(number);
+
+        return number == highestOneBit ? number : highestOneBit << 1;
     }
 }
