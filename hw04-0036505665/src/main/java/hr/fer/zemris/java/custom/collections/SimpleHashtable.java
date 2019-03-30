@@ -1,7 +1,5 @@
 package hr.fer.zemris.java.custom.collections;
 
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -18,7 +16,12 @@ public class SimpleHashtable<K, V> {
     /**
      * The default number of slots in the hashtable.
      */
-    public static int DEFAULT_CAPACITY = 16;
+    private static int DEFAULT_CAPACITY = 16;
+
+    /**
+     * The default load factor for this hashtable.
+     */
+    private static double LOAD_FACTOR = 0.75;
 
     /**
      * An array of slots in the hashtable.
@@ -135,36 +138,15 @@ public class SimpleHashtable<K, V> {
 
     /**
      * Adds a new table entry to this hashtable. If an entry with the specified key
-     * already exists, this method will not add another pair with the same key.
-     *
-     * If the slot that the new entry should be added to already
+     * already exists, this method will not add another pair with the same key but
+     * replace the existing value.
      *
      * @param key the key of the table entry
      * @param value the value of the table entry
      * @throws NullPointerException if the given key is {@code null}
      */
     public void put(K key, V value) {
-        Objects.requireNonNull(key);
-
-        int slotIndex = getSlotIndex(key);
-        TableEntry<K, V> currentEntry = table[slotIndex];
-
-        if (currentEntry == null) {
-            table[slotIndex] = new TableEntry<>(key, value);
-            size++;
-            return;
-        }
-
-        while (currentEntry.next != null) {
-            if (currentEntry.key.equals(key)) {
-                currentEntry.value = value;
-                return;
-            }
-            currentEntry = currentEntry.next;
-        }
-
-        currentEntry.next = new TableEntry<>(key, value);
-        size++;
+        addToTable(table, key, value);
     }
 
     /**
@@ -180,7 +162,7 @@ public class SimpleHashtable<K, V> {
             return null;
         }
 
-        int slotIndex = getSlotIndex(key);
+        int slotIndex = getSlotIndex(key, table.length);
         TableEntry<K, V> currentEntry = table[slotIndex];
 
         while (currentEntry != null) {
@@ -214,7 +196,7 @@ public class SimpleHashtable<K, V> {
             return false;
         }
 
-        int slotIndex = getSlotIndex(key);
+        int slotIndex = getSlotIndex(key, table.length);
         TableEntry<K, V> currentEntry = table[slotIndex];
 
         while (currentEntry != null) {
@@ -256,7 +238,7 @@ public class SimpleHashtable<K, V> {
      */
     public void remove(Object key) {
         if (key != null) {
-            int slotIndex = getSlotIndex(key);
+            int slotIndex = getSlotIndex(key, table.length);
             TableEntry<K, V> currentEntry = table[slotIndex];
 
             if (currentEntry.key.equals(key)) {
@@ -302,13 +284,71 @@ public class SimpleHashtable<K, V> {
      */
 
     /**
+     * Doubles the capacity of this hashtable if its current load is greater than
+     * or equal to 75%.
+     */
+    @SuppressWarnings("unchecked")
+    private void checkLoad() {
+        if ((double) size / table.length >= LOAD_FACTOR) {
+
+            TableEntry<K, V>[] newTable = (TableEntry<K,V>[])
+                    new TableEntry[table.length*2];
+
+            for (TableEntry<K, V> entry : table) {
+                while (entry != null) {
+                    addToTable(newTable, entry.key, entry.value);
+                    entry = entry.next;
+                }
+            }
+
+            table = newTable;
+        }
+    }
+
+    /**
+     * Adds a new table entry to a given table. If an entry with the specified key
+     * already exists, this method will not add another pair with the same key but
+     * replace the existing value.
+     *
+     *
+     * @param table the table of key-value pairs to add to
+     * @param key the key of the new table entry
+     * @param value the value of the new table entry
+     * @throws NullPointerException if the given key is {@code null}
+     */
+    private void addToTable(TableEntry<K, V>[] table, K key, V value) {
+        Objects.requireNonNull(key);
+
+        int slotIndex = getSlotIndex(key, table.length);
+        TableEntry<K, V> currentEntry = table[slotIndex];
+
+        if (currentEntry == null) {
+            table[slotIndex] = new TableEntry<>(key, value);
+            size++;
+            return;
+        }
+
+        while (currentEntry.next != null) {
+            if (currentEntry.key.equals(key)) {
+                currentEntry.value = value;
+                return;
+            }
+            currentEntry = currentEntry.next;
+        }
+
+        currentEntry.next = new TableEntry<>(key, value);
+        size++;
+    }
+
+    /**
      * Calculates the index of the slot for a given table entry key.
      *
      * @param key the table entry key whose slot index is calculated
+     * @param numberOfSlots the total number of slots
      * @return the index of the slot for a given table entry
      */
-    private int getSlotIndex(Object key) {
-        return Math.abs(key.hashCode()) % table.length;
+    private int getSlotIndex(Object key, int numberOfSlots) {
+        return Math.abs(key.hashCode()) % numberOfSlots;
     }
 
     /**
