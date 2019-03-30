@@ -2,6 +2,8 @@ package hr.fer.zemris.java.custom.scripting.lexer;
 
 import java.util.Objects;
 
+// TODO throw exceptions for escaping attempts outside of strings?
+
 /**
  * This class models a lexer that tokenizes a given text.
  *
@@ -136,8 +138,29 @@ public class SmartScriptLexer {
             currentIndex += 2;
             return new SmartScriptToken(SmartScriptTokenType.TAG_END, null);
 
-        } else if (escapingIsOn(currentIndex, '\"')) {
-            return getNextQuotedStringToken();
+        } else if (variableNameIsOn(currentIndex)) {
+            String tokenValue = readTokenValueWhile(this::variableNameIsOn, false);
+            return new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, tokenValue);
+
+        } else if (functionNameIsOn(currentIndex)) {
+            String tokenValue = readTokenValueWhile(this::functionNameIsOn, false);
+            return new SmartScriptToken(SmartScriptTokenType.FUNCTION_NAME,
+                    tokenValue.substring(1));
+
+        } else if (tagNameIsOn(currentIndex)) {
+            String tokenValue = readTokenValueWhile(this::tagNameIsOn, false);
+            return new SmartScriptToken(SmartScriptTokenType.TAG_NAME, tokenValue);
+
+        } else if (quoteIsOn(currentIndex)) {
+            currentIndex++;
+            String tokenValue = readTokenValueWhile(index -> !quoteIsOn(index), true);
+
+            if (currentIndex >= data.length) {
+                throw new SmartScriptLexerException("Quotation was never closed.");
+            }
+            currentIndex++;
+
+            return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
 
         } else if (numberStartsOn(currentIndex)) {
             try {
@@ -147,32 +170,9 @@ public class SmartScriptLexer {
             }
 
         } else {
-            String tokenValue = readTokenValueWhile(this::stringIsOn, true);
-            return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
+            String tokenValue = Character.toString(data[currentIndex++]);
+            return new SmartScriptToken(SmartScriptTokenType.SYMBOL, tokenValue);
         }
-    }
-
-    /**
-     * Returns a string token that is inside escaped quotations.
-     *
-     * @return a string token that is inside escaped quotations
-     * @throws SmartScriptLexerException if the end of the input is reached but the
-     *         quotation is never closed
-     */
-    private SmartScriptToken getNextQuotedStringToken() {
-        String tokenValue = "\"";
-        currentIndex += 2;
-
-        tokenValue += readTokenValueWhile(index -> !escapingIsOn(index, '\"'), true);
-
-        if (currentIndex >= data.length) {
-            throw new SmartScriptLexerException("Quote never closed.");
-        }
-
-        tokenValue += "\"";
-        currentIndex += 2;
-
-        return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
     }
 
     /**
@@ -222,8 +222,7 @@ public class SmartScriptLexer {
 
         while (endIndex < data.length && tester.testCharOn(endIndex)) {
 
-            if (canEscape && (escapingIsOn(endIndex, '\\') ||
-                    (state == SmartScriptLexerState.TEXT && escapingIsOn(endIndex, '{')))) {
+            if (canEscape && escapingIsOn(endIndex)) {
                 tokenValue.append(data[endIndex+1]);
                 endIndex += 2;
 
@@ -248,6 +247,61 @@ public class SmartScriptLexer {
                 currentIndex++;
             }
         }
+    }
+
+    /**
+     * Returns {@code true} if a quote is on the specified index.
+     * @see SmartScriptTokenType#FUNCTION_NAME
+     *
+     * @param index the index of the first character to check
+     * @return {@code true} if a quote is on the specified index
+     */
+    private boolean quoteIsOn(int index) {
+        return data[index] == '"';
+    }
+
+    /**
+     * Returns {@code true} if a valid variable name character is on the specified index.
+     * @see SmartScriptTokenType#VARIABLE_NAME
+     *
+     * @param index the index of the first character to check
+     * @return {@code true} if a valid variable name character is on the specified index
+     */
+    private boolean variableNameIsOn(int index) {
+        if (index == currentIndex) {
+            return Character.isLetter(data[index]);
+        }
+
+        return Character.isLetter(data[index]) || Character.isDigit(data[index])
+                || data[index] == '_';
+    }
+
+    /**
+     * Returns {@code true} if a valid function name character is on the specified index.
+     * @see SmartScriptTokenType#FUNCTION_NAME
+     *
+     * @param index the index of the first character to check
+     * @return {@code true} if a valid function name character is on the specified index
+     */
+    private boolean functionNameIsOn(int index) {
+        if (index == currentIndex) {
+            return index < data.length-1 && data[index] == '@'
+                    && Character.isLetter(data[index+1]);
+        }
+
+        return Character.isLetter(data[index]) || Character.isDigit(data[index])
+                || data[index] == '_';
+    }
+
+    /**
+     * Returns {@code true} if a valid tag name character is on the specified index.
+     * @see SmartScriptTokenType#TAG_NAME
+     *
+     * @param index the index of the first character to check
+     * @return {@code true} if a valid tag name character is on the specified index
+     */
+    private boolean tagNameIsOn(int index) {
+        return data[index] == '=' || variableNameIsOn(index);
     }
 
     /**
@@ -289,7 +343,7 @@ public class SmartScriptLexer {
      * @return {@code true} if a valid escaping begins on the specified index
      * @throws SmartScriptLexerException if escaping is not valid
      */
-    private boolean escapingIsOn(int index, char escaped) {
+    private boolean escapingIsOn(int index) {
         if (data[index] == '\\') {
             if (index + 1 >= data.length) {
                 throw new SmartScriptLexerException(
@@ -306,7 +360,7 @@ public class SmartScriptLexer {
                         "Invalid escaped character \"" + data[index+1] + "\".");
             }
 
-            return data[index+1] == escaped; // TODO return true?
+            return true;
         }
         return false;
     }
@@ -321,12 +375,6 @@ public class SmartScriptLexer {
      */
     private boolean numberStartsOn(int index) {
         return digitIsOn(index) || (data[index] == '-' && digitIsOn(index+1));
-    }
-
-    private boolean stringIsOn(int index) {
-        return currentIndex < data.length && (!digitIsOn(index)
-                && !Character.isWhitespace(data[index]) && !tagEndIsOn(index)
-                || escapingIsOn(index, '\\'));
     }
 
     /**
