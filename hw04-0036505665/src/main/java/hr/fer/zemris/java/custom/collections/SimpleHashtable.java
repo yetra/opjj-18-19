@@ -308,7 +308,7 @@ public class SimpleHashtable<K, V> {
      * @return the index of the slot for a given table entry
      */
     private int getSlotIndex(Object key) {
-        return Math.abs(key.hashCode()) % 2;
+        return Math.abs(key.hashCode()) % table.length;
     }
 
     /**
