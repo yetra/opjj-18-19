@@ -50,6 +50,13 @@ public class Dictionary<K, V> {
     }
 
     /**
+     * Constructs an empty dictionary.
+     */
+    public Dictionary() {
+        this.collection = new ArrayIndexedCollection<>();
+    }
+
+    /**
      * Returns {@code true} if this dictionary contains no entries.
      *
      * @return {@code true} if this dictionary contains no entries
