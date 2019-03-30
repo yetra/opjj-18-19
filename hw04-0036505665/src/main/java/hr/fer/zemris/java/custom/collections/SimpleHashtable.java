@@ -264,6 +264,17 @@ public class SimpleHashtable<K, V> {
         return size == 0;
     }
 
+    /**
+     * Removes all table entries from this hashtable.
+     */
+    public void clear() {
+        for (int i = 0; i < size; i++) {
+            table[i] = null;
+        }
+        
+        size = 0;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
