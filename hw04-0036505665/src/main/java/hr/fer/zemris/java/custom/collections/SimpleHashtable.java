@@ -156,6 +156,7 @@ public class SimpleHashtable<K, V>
      * @throws NullPointerException if the given key is {@code null}
      */
     public void put(K key, V value) {
+        checkLoad();
         addToTable(table, key, value);
     }
 
