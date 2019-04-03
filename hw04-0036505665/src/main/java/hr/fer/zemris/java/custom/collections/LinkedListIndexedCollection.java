@@ -74,7 +74,7 @@ public class LinkedListIndexedCollection<E> implements List<E> {
      *                   collection
      * @throws NullPointerException if the specified collection is null
      */
-    public LinkedListIndexedCollection(Collection<E> collection) {
+    public LinkedListIndexedCollection(Collection<? extends E> collection) {
         Objects.requireNonNull(collection, "Collection parameter cannot be null.");
 
         this.addAll(collection);
@@ -342,7 +342,7 @@ public class LinkedListIndexedCollection<E> implements List<E> {
         }
 
         @Override
-        public void processRemaining(Processor<E> p) {
+        public void processRemaining(Processor<? super E> p) {
             checkModifications();
 
             while (hasNextElement()) {

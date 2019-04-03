@@ -83,7 +83,7 @@ public class ArrayIndexedCollection<E> implements List<E> {
      *         than 1
      */
     @SuppressWarnings("unchecked")
-    public ArrayIndexedCollection(Collection<E> collection, int initialCapacity) {
+    public ArrayIndexedCollection(Collection<? extends E> collection, int initialCapacity) {
         this(initialCapacity);
         Objects.requireNonNull(collection, "Collection parameter cannot be null.");
 
@@ -100,7 +100,7 @@ public class ArrayIndexedCollection<E> implements List<E> {
      *                   collection
      * @throws NullPointerException if the specified collection is null
      */
-    public ArrayIndexedCollection(Collection<E> collection) {
+    public ArrayIndexedCollection(Collection<? extends E> collection) {
         this(collection, collection.size());
     }
 
@@ -264,7 +264,7 @@ public class ArrayIndexedCollection<E> implements List<E> {
 
     @Override
     public ElementsGetter<E> createElementsGetter() {
-        return new ArrayElementsGetter(this);
+        return new ArrayElementsGetter<>(this);
     }
 
     /**
@@ -323,7 +323,7 @@ public class ArrayIndexedCollection<E> implements List<E> {
         }
 
         @Override
-        public void processRemaining(Processor<E> p) {
+        public void processRemaining(Processor<? super E> p) {
             checkModifications();
 
             while (hasNextElement()) {

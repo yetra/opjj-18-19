@@ -74,7 +74,7 @@ public interface Collection<E> {
      *                  for each element
      * @throws NullPointerException if the specified processor is {@code null}
      */
-    default void forEach(Processor<E> processor) {
+    default void forEach(Processor<? super E> processor) {
         Objects.requireNonNull(processor, "Processor cannot be null.");
 
         ElementsGetter<E> getter = this.createElementsGetter();
@@ -89,7 +89,7 @@ public interface Collection<E> {
      * @param other the collection whose elements will be added into this
      *              collection
      */
-    default void addAll(Collection<E> other) {
+    default void addAll(Collection<? extends E> other) {
 
         /**
          * An implementation of the {@link Processor} generic class which can add an
@@ -130,11 +130,11 @@ public interface Collection<E> {
      * @param tester the tester that checks if the elements are acceptable
      * @throws NullPointerException if the given collection or tester are {@code null}
      */
-    default void addAllSatisfying(Collection<E> col, Tester<E> tester) {
+    default void addAllSatisfying(Collection<? extends E> col, Tester<? super E> tester) {
         Objects.requireNonNull(col);
         Objects.requireNonNull(tester);
 
-        ElementsGetter<E> getter = col.createElementsGetter();
+        ElementsGetter<? extends E> getter = col.createElementsGetter();
 
         getter.processRemaining((value) -> {
             if (tester.test(value)) {

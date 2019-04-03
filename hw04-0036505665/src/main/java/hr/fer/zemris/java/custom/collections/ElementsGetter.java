@@ -34,5 +34,5 @@ public interface ElementsGetter<E> {
      * @param p the processor whose {@link Processor#process(Object)} method will be
      *          called for each remaining element
      */
-    void processRemaining(Processor<E> p);
+    void processRemaining(Processor<? super E> p);
 }
