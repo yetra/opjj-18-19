@@ -413,6 +413,7 @@ public class SimpleHashtable<K, V>
                     new TableEntry[table.length*2];
 
             int oldModificationCount = modificationCount;
+            int oldSize = size;
             for (TableEntry<K, V> entry : table) {
                 while (entry != null) {
                     addToTable(newTable, entry.key, entry.value);
@@ -421,6 +422,7 @@ public class SimpleHashtable<K, V>
             }
 
             table = newTable;
+            size = oldSize;
             modificationCount = oldModificationCount + 1;
         }
     }
