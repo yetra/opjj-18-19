@@ -350,7 +350,7 @@ public class ArrayIndexedCollection<E> implements List<E> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ArrayIndexedCollection that = (ArrayIndexedCollection) o;
+        ArrayIndexedCollection<?> that = (ArrayIndexedCollection<?>) o;
         return size == that.size &&
                 Arrays.equals(elements, that.elements);
     }
