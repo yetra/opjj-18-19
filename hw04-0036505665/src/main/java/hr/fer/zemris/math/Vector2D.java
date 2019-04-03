@@ -2,6 +2,7 @@ package hr.fer.zemris.math;
 
 /**
  * This class models a 2D vector with two real coordinates {@link #x} and {@link #y}.
+ * The starting point of the vector is (0, 0) and cannot be changed.
  *
  * @author Bruna Dujmović
  *
@@ -49,6 +50,9 @@ public class Vector2D {
 
     /**
      * Moves this 2D vector by a given offset.
+     * 
+     * NOTE: The starting point of the vector, which is (0, 0), will not be affected
+     * by this translation.
      *
      * @param offset the offset by which to move this 2D vector
      */
@@ -60,6 +64,9 @@ public class Vector2D {
     /**
      * Returns a new 2D vector that is the result of translating this vector by a
      * given offset.
+     *
+     * NOTE: The starting point of the vector, which is (0, 0), will not be affected
+     * by this translation.
      *
      * @param offset the offset by which to move this 2D vector
      * @return a new 2D vector that is the result of the translation
@@ -119,7 +126,7 @@ public class Vector2D {
     /**
      * Returns a new 2D vector object that is the copy of this vector.
      *
-     * @return a new 2D vector object that is the copy of this vecto
+     * @return a new 2D vector object that is the copy of this vector
      */
     public Vector2D copy() {
         return new Vector2D(x, y);
