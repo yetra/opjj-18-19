@@ -342,6 +342,12 @@ public class SimpleHashtable<K, V>
          */
         public IteratorImpl() {
             savedModificationCount = modificationCount;
+
+            currentSlotIndex = 0;
+            while (table[currentSlotIndex] == null) {
+                currentSlotIndex++;
+            }
+            currentEntry = table[currentSlotIndex];
         }
 
         @Override
