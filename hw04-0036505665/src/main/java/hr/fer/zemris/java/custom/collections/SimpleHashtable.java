@@ -344,10 +344,13 @@ public class SimpleHashtable<K, V>
             savedModificationCount = modificationCount;
 
             currentSlotIndex = 0;
-            while (table[currentSlotIndex] == null) {
+            while (currentSlotIndex < table.length && table[currentSlotIndex] == null) {
                 currentSlotIndex++;
             }
-            currentEntry = table[currentSlotIndex];
+
+            if (currentSlotIndex < table.length) {
+                currentEntry = table[currentSlotIndex];
+            }
         }
 
         @Override
