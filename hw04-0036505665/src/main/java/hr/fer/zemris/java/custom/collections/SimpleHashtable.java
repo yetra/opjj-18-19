@@ -135,9 +135,10 @@ public class SimpleHashtable<K, V>
     }
 
     /**
-     * Constructs a hastable of specified capacity.
+     * Constructs a hashtable of specified capacity.
      *
      * @param capacity the capacity of the hashtable
+     * @throws IllegalArgumentException if the given capacity is less than 1
      */
     @SuppressWarnings("unchecked")
     public SimpleHashtable(int capacity) {
@@ -304,7 +305,7 @@ public class SimpleHashtable<K, V>
     }
 
     @Override
-    public Iterator<TableEntry<K, V>> iterator() {
+    public Iterator<SimpleHashtable.TableEntry<K, V>> iterator() {
         return new IteratorImpl();
     }
 
@@ -402,7 +403,7 @@ public class SimpleHashtable<K, V>
 
     /**
      * Doubles the capacity of this hashtable if its current load is greater than
-     * or equal to 75%.
+     * or equal to {@link #LOAD_FACTOR}.
      */
     @SuppressWarnings("unchecked")
     private void checkLoad() {
@@ -433,10 +434,11 @@ public class SimpleHashtable<K, V>
      * @param table the table of key-value pairs to add to
      * @param key the key of the new table entry
      * @param value the value of the new table entry
-     * @throws NullPointerException if the given key is {@code null}
+     * @throws NullPointerException if the given key or table are {@code null}
      */
     private void addToTable(TableEntry<K, V>[] table, K key, V value) {
         Objects.requireNonNull(key);
+        Objects.requireNonNull(table);
 
         int slotIndex = getSlotIndex(key, table.length);
         TableEntry<K, V> currentEntry = table[slotIndex];
@@ -468,14 +470,18 @@ public class SimpleHashtable<K, V>
      * @param key the table entry key whose slot index is calculated
      * @param numberOfSlots the total number of slots
      * @return the index of the slot for a given table entry
+     * @throws NullPointerException if the given key is {@code null}
      */
     private int getSlotIndex(Object key, int numberOfSlots) {
+        Objects.requireNonNull(key);
+
         return Math.abs(key.hashCode()) % numberOfSlots;
     }
 
     /**
      * Returns the smallest power of 2 that is greater than or equal to the given
      * integer.
+     *
      * @param number the number whose power of 2 is returned
      * @return the smallest power of 2 that is greater than or equal to the given
      *         integer
