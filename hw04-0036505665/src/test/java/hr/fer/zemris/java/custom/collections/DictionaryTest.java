@@ -21,7 +21,7 @@ public class DictionaryTest {
     }
 
     @Test
-    public void testEmptySize() {
+    public void testSize() {
         Dictionary<Integer, Integer> dictionary = new Dictionary<>();
 
         assertEquals(0, dictionary.size());
