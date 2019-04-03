@@ -156,6 +156,7 @@ public class SimpleHashtable<K, V>
      * @throws NullPointerException if the given key is {@code null}
      */
     public void put(K key, V value) {
+        checkLoad();
         addToTable(table, key, value);
     }
 
@@ -341,6 +342,15 @@ public class SimpleHashtable<K, V>
          */
         public IteratorImpl() {
             savedModificationCount = modificationCount;
+
+            currentSlotIndex = 0;
+            while (currentSlotIndex < table.length && table[currentSlotIndex] == null) {
+                currentSlotIndex++;
+            }
+
+            if (currentSlotIndex < table.length) {
+                currentEntry = table[currentSlotIndex];
+            }
         }
 
         @Override
@@ -413,6 +423,7 @@ public class SimpleHashtable<K, V>
                     new TableEntry[table.length*2];
 
             int oldModificationCount = modificationCount;
+            int oldSize = size;
             for (TableEntry<K, V> entry : table) {
                 while (entry != null) {
                     addToTable(newTable, entry.key, entry.value);
@@ -421,6 +432,7 @@ public class SimpleHashtable<K, V>
             }
 
             table = newTable;
+            size = oldSize;
             modificationCount = oldModificationCount + 1;
         }
     }
