@@ -71,7 +71,7 @@ public class SmartScriptParserTest {
                 "{$= i 23 sdfj we $} {$ FOR m 9.12 $} test {$END $}",
                 "{$ FOR $} {$END $}",
                 " {$ FOR kk 23 74.3 sf wer 12 ou $} {$END $} test ",
-                "{$ FOR m 0 3 2 text {$END $}"
+                "{$ FOR m 0 3 2 text ii $}"
         };
 
         int[] numberOfArgs = {5, 2, 0, 7, 6};
@@ -103,7 +103,7 @@ public class SmartScriptParserTest {
     @Test
     public void testOpenTags() {
         String[] documentBodies = {
-                "teajdh {$= m 0 3 2 {$ text",
+                "teajdh {$= m 0 3 2 text",
                 "{$= i$} {$= 238 -13.24 "
         };
 
@@ -117,17 +117,17 @@ public class SmartScriptParserTest {
     @Test
     public void testParsedOutputPositiveCases() {
         String[] documentBodies = {
-                "   test \t \\\\ aa  {$ \nFOR m  aaa \\\"-3\\\" 2\n $} \n oweh {$END$} text ",
-                "{$= i 23 o\\\\u we $} \r\r {$FOR m   9.12\t 9 $} \ntext23\n {$END $}",
+                "   test \t \\\\ aa  {$ \nFOR m  aaa \"-3 \t\" 2\n $} \n oweh {$END$} text ",
+                "{$= i 23 ou we $} \r\r {$FOR m   9.12\t 9 $} \ntext23\n {$END $}",
                 "this is \r\t some \\{$text$} \t {$ = i \n45 $}",
-                " \n\r\t {$FOR  \n\r\t  o     23 -12.3 \\\"-0.4\\\"$} {$END $} \n\n ",
+                " \n\r\t {$FOR  \n\r\t  o     23 -12.3 \"\\\"hi\\\"-0.4\"$} {$END $} \n\n ",
         };
 
         String[] expectedOutput = {
-                "   test \t \\\\ aa  {$ FOR m aaa \\\"-3\\\" 2 $} \n oweh {$ END $} text ",
-                "{$= i 23 o\\\\u we $} \r\r {$ FOR m 9.12 9 $} \ntext23\n {$ END $}",
+                "   test \t \\\\ aa  {$ FOR m aaa \"-3 \t\" 2 $} \n oweh {$ END $} text ",
+                "{$= i 23 ou we $} \r\r {$ FOR m 9.12 9 $} \ntext23\n {$ END $}",
                 "this is \r\t some \\{$text$} \t {$= i 45 $}",
-                " \n\r\t {$ FOR o 23 -12.3 \\\"-0.4\\\" $} {$ END $} \n\n ",
+                " \n\r\t {$ FOR o 23 -12.3 \"\\\"hi\\\"-0.4\" $} {$ END $} \n\n ",
         };
 
         for (int i = 0; i < documentBodies.length; i++) {
