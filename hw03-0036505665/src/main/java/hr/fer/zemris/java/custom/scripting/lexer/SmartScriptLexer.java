@@ -2,9 +2,6 @@ package hr.fer.zemris.java.custom.scripting.lexer;
 
 import java.util.Objects;
 
-// TODO throw exceptions for escaping attempts outside of strings?
-// TODO refactor readTokenValueWhile to return new token
-
 /**
  * This class models a lexer that tokenizes a given text.
  *
@@ -139,18 +136,18 @@ public class SmartScriptLexer {
             currentIndex += 2;
             return new SmartScriptToken(SmartScriptTokenType.TAG_END, null);
 
-        } else if (variableNameIsOn(currentIndex)) {
-            String tokenValue = readTokenValueWhile(this::variableNameIsOn, false);
-            return new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, tokenValue);
+        } else if (nameIsOn(currentIndex)) {
+            String tokenValue;
+            if (data[currentIndex] == '=') {
+                tokenValue = Character.toString(data[currentIndex++]);
+            } else {
+                tokenValue = readTokenValueWhile(this::nameIsOn, false);
+                if (tokenValue.startsWith("@")) {
+                    tokenValue = tokenValue.substring(1);
+                }
+            }
 
-        } else if (functionNameIsOn(currentIndex)) {
-            String tokenValue = readTokenValueWhile(this::functionNameIsOn, false);
-            return new SmartScriptToken(SmartScriptTokenType.FUNCTION_NAME,
-                    tokenValue.substring(1));
-
-        } else if (tagNameIsOn(currentIndex)) {
-            String tokenValue = readTokenValueWhile(this::tagNameIsOn, false);
-            return new SmartScriptToken(SmartScriptTokenType.TAG_NAME, tokenValue);
+            return new SmartScriptToken(SmartScriptTokenType.NAME, tokenValue);
 
         } else if (quoteIsOn(currentIndex)) {
             currentIndex++;
@@ -255,7 +252,7 @@ public class SmartScriptLexer {
 
     /**
      * Returns {@code true} if a quote is on the specified index.
-     * @see SmartScriptTokenType#FUNCTION_NAME
+     * @see SmartScriptTokenType#STRING
      *
      * @param index the index of the first character to check
      * @return {@code true} if a quote is on the specified index
@@ -265,51 +262,24 @@ public class SmartScriptLexer {
     }
 
     /**
-     * Returns {@code true} if a valid variable name character is on the specified
-     * index.
-     * @see SmartScriptTokenType#VARIABLE_NAME
-     *
-     * @param index the index of the first character to check
-     * @return {@code true} if a valid variable name character is on the specified
-     *         index
-     */
-    private boolean variableNameIsOn(int index) {
-        if (index == currentIndex) {
-            return Character.isLetter(data[index]);
-        }
-
-        return Character.isLetter(data[index]) || Character.isDigit(data[index])
-                || data[index] == '_';
-    }
-
-    /**
      * Returns {@code true} if a valid function name character is on the specified
      * index.
-     * @see SmartScriptTokenType#FUNCTION_NAME
+     * @see SmartScriptTokenType#NAME
      *
      * @param index the index of the first character to check
      * @return {@code true} if a valid function name character is on the specified
      *         index
      */
-    private boolean functionNameIsOn(int index) {
+    private boolean nameIsOn(int index) {
         if (index == currentIndex) {
-            return index < data.length-1 && data[index] == '@'
-                    && Character.isLetter(data[index+1]);
+            return Character.isLetter(data[index])
+                    || (index < data.length-1 && data[index] == '@'
+                        && Character.isLetter(data[index+1]))
+                    || data[index] == '=';
         }
 
         return Character.isLetter(data[index]) || Character.isDigit(data[index])
                 || data[index] == '_';
-    }
-
-    /**
-     * Returns {@code true} if a valid tag name character is on the specified index.
-     * @see SmartScriptTokenType#TAG_NAME
-     *
-     * @param index the index of the first character to check
-     * @return {@code true} if a valid tag name character is on the specified index
-     */
-    private boolean tagNameIsOn(int index) {
-        return data[index] == '=' || variableNameIsOn(index);
     }
 
     /**

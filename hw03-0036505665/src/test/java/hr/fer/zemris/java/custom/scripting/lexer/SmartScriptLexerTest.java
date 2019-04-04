@@ -183,7 +183,7 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
 
         SmartScriptToken[] expectedTagStateTokens = {
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "This"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "This"),
                 new SmartScriptToken(SmartScriptTokenType.STRING, "\\is    \"correct\" escaping!"),
                 new SmartScriptToken(SmartScriptTokenType.TAG_END, null),
                 new SmartScriptToken(SmartScriptTokenType.EOF, null),
@@ -218,9 +218,9 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
 
         SmartScriptToken[] expectedTagStateTokens = {
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "String"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "String"),
                 new SmartScriptToken(SmartScriptTokenType.STRING, "-123.0"),
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "Double"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "Double"),
                 new SmartScriptToken(SmartScriptTokenType.DECIMAL, -123.0),
                 new SmartScriptToken(SmartScriptTokenType.TAG_END, null),
                 new SmartScriptToken(SmartScriptTokenType.EOF, null),
@@ -235,7 +235,7 @@ public class SmartScriptLexerTest {
 
         lexer.setState(SmartScriptLexerState.TAG);
 
-        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "String"));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "String"));
         Exception exc = assertThrows(SmartScriptLexerException.class, lexer::nextToken);
         assertEquals("Quotation was never closed.", exc.getMessage());
     }
@@ -247,9 +247,9 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
 
         SmartScriptToken[] expectedTagStateTokens = {
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "Symbol"),
-                new SmartScriptToken(SmartScriptTokenType.FUNCTION_NAME, "and"),
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "number"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "Symbol"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "and"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "number"),
         };
         checkTokenStream(lexer, expectedTagStateTokens);
 
@@ -268,10 +268,10 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
         SmartScriptToken[] expectedTagStateTokens = {
                 new SmartScriptToken(SmartScriptTokenType.INTEGER, 3),
-                new SmartScriptToken(SmartScriptTokenType.FUNCTION_NAME, "sin"),
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "Jasmina"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "sin"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "Jasmina"),
                 new SmartScriptToken(SmartScriptTokenType.DECIMAL, 5.32),
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "m"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "m"),
                 new SmartScriptToken(SmartScriptTokenType.OPERATOR, "-"),
                 new SmartScriptToken(SmartScriptTokenType.INTEGER, -24),
                 new SmartScriptToken(SmartScriptTokenType.TAG_END, null),
@@ -316,11 +316,11 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
 
         SmartScriptToken[] expectedTagStateTokens = {
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "ab"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "ab"),
                 new SmartScriptToken(SmartScriptTokenType.STRING, "23.\\cd \n\t@f0 \\a"),
-                new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "b"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "b"),
                 new SmartScriptToken(SmartScriptTokenType.DECIMAL, -2.34),
-                new SmartScriptToken(SmartScriptTokenType.FUNCTION_NAME, "f1"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "f1"),
                 new SmartScriptToken(SmartScriptTokenType.TAG_END, null),
                 new SmartScriptToken(SmartScriptTokenType.EOF, null)
         };
@@ -366,7 +366,7 @@ public class SmartScriptLexerTest {
 
         lexer.setState(SmartScriptLexerState.TAG);
         SmartScriptToken[] expectedTagStateTokens = {
-                new SmartScriptToken(SmartScriptTokenType.TAG_NAME, "="),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "="),
                 new SmartScriptToken(SmartScriptTokenType.STRING, "Joe \"Long\" Smith"),
                 new SmartScriptToken(SmartScriptTokenType.STRING, "Some \\ test X"),
                 new SmartScriptToken(SmartScriptTokenType.TAG_END, null),
@@ -380,7 +380,7 @@ public class SmartScriptLexerTest {
 
     @Test
     public void testNotVariableNames() {
-        // Tests that _a21, 32a_, 3s_ee are not parsed into single VARIABLE_NAME tokens
+        // Tests that _a21, 32a_, 3s_ee are not parsed into single NAME tokens
         SmartScriptLexer lexer = new SmartScriptLexer("\r\t\n _a21");
         lexer.setState(SmartScriptLexerState.TAG);
 
@@ -391,27 +391,51 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
 
         checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.INTEGER, 32));
-        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "a_"));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "a_"));
 
         lexer = new SmartScriptLexer("\n3s_ee\t");
         lexer.setState(SmartScriptLexerState.TAG);
 
         checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.INTEGER, 3));
-        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.VARIABLE_NAME, "s_ee"));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "s_ee"));
     }
 
     @Test
     public void testNotFunctionNames() {
-        // Tests that @7_abc, @_func, @32 are not parsed into single FUNCTION_NAME tokens
-        String[] invalidFunctionsNames = {"@7_abc", "@_func", "@32"};
+        // Tests that @7_abc, @_func, @32 are not parsed into single NAME tokens
+        String[] invalidFunctionNames = {"@7_abc", "@_func", "@32"};
 
-        for (String invalidFunctionsName : invalidFunctionsNames) {
-            SmartScriptLexer lexer = new SmartScriptLexer("@7_abc");
+        for (String invalidFunctionName : invalidFunctionNames) {
+            SmartScriptLexer lexer = new SmartScriptLexer(invalidFunctionName);
             lexer.setState(SmartScriptLexerState.TAG);
 
             Exception exc = assertThrows(SmartScriptLexerException.class, lexer::nextToken);
             assertEquals("Invalid character: \"@\".", exc.getMessage());
         }
+    }
+
+    @Test
+    public void testNotTagNames() {
+        // Tests that =i, FOR=i, a1_10== are not parsed into single NAME tokens
+        SmartScriptLexer lexer = new SmartScriptLexer("=i\r\t\n");
+        lexer.setState(SmartScriptLexerState.TAG);
+
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "="));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "i"));
+
+        lexer = new SmartScriptLexer("   FOR=i\t  ");
+        lexer.setState(SmartScriptLexerState.TAG);
+
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "FOR"));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "="));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "i"));
+
+        lexer = new SmartScriptLexer("\na1__10==\t");
+        lexer.setState(SmartScriptLexerState.TAG);
+
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "a1__10"));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "="));
+        checkToken(lexer.nextToken(), new SmartScriptToken(SmartScriptTokenType.NAME, "="));
     }
 
     // Helper method for checking if lexer generates the same stream of tokens

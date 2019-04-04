@@ -11,21 +11,9 @@ public enum SmartScriptTokenType {
     EOF,
 
     /**
-     * A valid variable name starts with a letter after which follows
-     * zero or more letters, digits or underscores.
+     * A name is a valid variable, function or tag name.
      */
-    VARIABLE_NAME,
-
-    /**
-     * A valid function name starts with "@" after which follows a letter
-     * and after than can follow zero or more letters, digits or underscores.
-     */
-    FUNCTION_NAME,
-
-    /**
-     * A valid tag name is "=", or a valid variable name.
-     */
-    TAG_NAME,
+    NAME,
 
     /**
      * A mathematical operator: "+" (plus), "-" (minus), "*" (multiplication), "/"
