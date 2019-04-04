@@ -170,9 +170,13 @@ public class SmartScriptLexer {
                 throw new SmartScriptLexerException("Invalid number format.");
             }
 
-        } else {
+        } else if (operatorIsOn(currentIndex)) {
             String tokenValue = Character.toString(data[currentIndex++]);
-            return new SmartScriptToken(SmartScriptTokenType.SYMBOL, tokenValue);
+            return new SmartScriptToken(SmartScriptTokenType.OPERATOR, tokenValue);
+
+        } else {
+            throw new SmartScriptLexerException("Invalid character: \""
+                    + data[currentIndex] + "\".");
         }
     }
 
@@ -336,6 +340,17 @@ public class SmartScriptLexer {
      */
     private boolean digitIsOn(int index) {
         return index < data.length && Character.isDigit(data[index]);
+    }
+
+    /**
+     * Returns {@code true} if an operator is on the specified index.
+     *
+     * @param index the index of the character to check
+     * @return {@code true} if an operator is on the specified index
+     */
+    private boolean operatorIsOn(int index) {
+        return data[index] == '+' || data[index] == '-' || data[index] == '*'
+                || data[index] == '/' || data[index] == '^';
     }
 
     /**

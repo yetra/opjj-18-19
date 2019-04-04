@@ -28,13 +28,14 @@ public enum SmartScriptTokenType {
     TAG_NAME,
 
     /**
-     * A symbol such as "*", "-", "@", "$" etc.
+     * A mathematical operator: "+" (plus), "-" (minus), "*" (multiplication), "/"
+     * (division), "^" (power).
      */
-    SYMBOL,
+    OPERATOR,
 
     /**
-     * A string which can contain escapings. Each {@link SmartScriptToken}
-     * string token must begin and end with a quotation mark.
+     * A string which can contain escapings. Each {@link SmartScriptToken} string
+     * token must begin and end with a quotation mark.
      */
     STRING,
 
