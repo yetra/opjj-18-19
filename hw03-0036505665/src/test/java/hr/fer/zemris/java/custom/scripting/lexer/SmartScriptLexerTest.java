@@ -248,7 +248,7 @@ public class SmartScriptLexerTest {
 
         SmartScriptToken[] expectedTagStateTokens = {
                 new SmartScriptToken(SmartScriptTokenType.NAME, "Symbol"),
-                new SmartScriptToken(SmartScriptTokenType.NAME, "and"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "@and"),
                 new SmartScriptToken(SmartScriptTokenType.NAME, "number"),
         };
         checkTokenStream(lexer, expectedTagStateTokens);
@@ -268,7 +268,7 @@ public class SmartScriptLexerTest {
         lexer.setState(SmartScriptLexerState.TAG);
         SmartScriptToken[] expectedTagStateTokens = {
                 new SmartScriptToken(SmartScriptTokenType.INTEGER, 3),
-                new SmartScriptToken(SmartScriptTokenType.NAME, "sin"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "@sin"),
                 new SmartScriptToken(SmartScriptTokenType.NAME, "Jasmina"),
                 new SmartScriptToken(SmartScriptTokenType.DECIMAL, 5.32),
                 new SmartScriptToken(SmartScriptTokenType.NAME, "m"),
@@ -320,7 +320,7 @@ public class SmartScriptLexerTest {
                 new SmartScriptToken(SmartScriptTokenType.STRING, "23.\\cd \n\t@f0 \\a"),
                 new SmartScriptToken(SmartScriptTokenType.NAME, "b"),
                 new SmartScriptToken(SmartScriptTokenType.DECIMAL, -2.34),
-                new SmartScriptToken(SmartScriptTokenType.NAME, "f1"),
+                new SmartScriptToken(SmartScriptTokenType.NAME, "@f1"),
                 new SmartScriptToken(SmartScriptTokenType.TAG_END, null),
                 new SmartScriptToken(SmartScriptTokenType.EOF, null)
         };
