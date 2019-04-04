@@ -138,7 +138,7 @@ public class SmartScriptParser {
             throw new SmartScriptParserException("Invalid token tag name.");
         }
 
-        switch (tagName) {
+        switch (tagName.toUpperCase()) {
             case "FOR":
                 parseForTag();
                 break;
