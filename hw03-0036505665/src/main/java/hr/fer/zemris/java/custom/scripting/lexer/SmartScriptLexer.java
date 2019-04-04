@@ -142,9 +142,6 @@ public class SmartScriptLexer {
                 tokenValue = Character.toString(data[currentIndex++]);
             } else {
                 tokenValue = readTokenValueWhile(this::nameIsOn, false);
-                if (tokenValue.startsWith("@")) {
-                    tokenValue = tokenValue.substring(1);
-                }
             }
 
             return new SmartScriptToken(SmartScriptTokenType.NAME, tokenValue);

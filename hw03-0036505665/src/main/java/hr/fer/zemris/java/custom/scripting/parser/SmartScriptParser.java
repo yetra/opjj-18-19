@@ -266,7 +266,7 @@ public class SmartScriptParser {
                 if (isValidVariableName(nameValue)) {
                     return new ElementVariable(nameValue);
                 } else if (isValidFunctionName(nameValue)) {
-                    return new ElementFunction(nameValue);
+                    return new ElementFunction(nameValue.substring(1));
                 } else {
                     throw new SmartScriptLexerException(
                             "Invalid name value: \"" + nameValue + "\"");
