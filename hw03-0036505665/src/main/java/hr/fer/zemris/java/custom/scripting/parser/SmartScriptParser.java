@@ -129,7 +129,7 @@ public class SmartScriptParser {
     private void parseTag() {
         SmartScriptToken token = lexer.getToken();
 
-        if (token.getType() != SmartScriptTokenType.STRING) {
+        if (token.getType() != SmartScriptTokenType.NAME) {
             throw new SmartScriptParserException("Invalid token type for tag start.");
         }
 
@@ -258,16 +258,23 @@ public class SmartScriptParser {
         switch (token.getType()) {
             case STRING:
                 String strValue = (String) token.getValue();
+                return new ElementString(strValue);
 
-                if (isValidVariableName(strValue)) {
-                    return new ElementVariable(strValue);
-                } else if (isValidFunctionName(strValue)) {
-                    return new ElementFunction(strValue.substring(1));
-                } else if (isValidOperator(strValue)) {
-                    return new ElementOperator(strValue);
+            case NAME:
+                String nameValue = (String) token.getValue();
+
+                if (isValidVariableName(nameValue)) {
+                    return new ElementVariable(nameValue);
+                } else if (isValidFunctionName(nameValue)) {
+                    return new ElementFunction(nameValue);
                 } else {
-                     return new ElementString(strValue);
+                    throw new SmartScriptLexerException(
+                            "Invalid name value: \"" + nameValue + "\"");
                 }
+
+            case OPERATOR:
+                String operatorValue = (String) token.getValue();
+                return new ElementOperator(operatorValue);
 
             case INTEGER:
                 int intValue = (int) token.getValue();
@@ -312,15 +319,5 @@ public class SmartScriptParser {
     private boolean isValidTagName(String text) {
         return lexer.getState() == SmartScriptLexerState.TAG
                 && (text.equals("=") || isValidVariableName(text));
-    }
-
-    /**
-     * Returns {@code true} if the given text is a valid operator.
-     *
-     * @param text the character to check
-     * @return {@code true} if the given text is a valid operator
-     */
-    private boolean isValidOperator(String text) {
-        return text.matches("^[+\\-*/^]$");
     }
 }
