@@ -69,7 +69,7 @@ public class SmartScriptLexerTest {
             // will obtain EOF
             lexer.nextToken();
             // will throw!
-            assertThrows(SmartScriptLexerException.class, () -> lexer.nextToken());
+            assertThrows(SmartScriptLexerException.class, lexer::nextToken);
         }
     }
 
@@ -160,7 +160,7 @@ public class SmartScriptLexerTest {
 
             lexer.setState(SmartScriptLexerState.TEXT);
 
-            Exception exc = assertThrows(SmartScriptLexerException.class, () -> lexer.nextToken());
+            Exception exc = assertThrows(SmartScriptLexerException.class, lexer::nextToken);
             assertEquals("Invalid escaped character \"" + invalidChars[i] + "\".", exc.getMessage());
         }
     }
@@ -172,7 +172,7 @@ public class SmartScriptLexerTest {
 
         lexer.setState(SmartScriptLexerState.TEXT);
 
-        Exception exc = assertThrows(SmartScriptLexerException.class, () -> lexer.nextToken());
+        Exception exc = assertThrows(SmartScriptLexerException.class, lexer::nextToken);
         assertEquals("Reached end of data, nothing to escape.", exc.getMessage());
     }
 
@@ -206,7 +206,7 @@ public class SmartScriptLexerTest {
 
             lexer.setState(SmartScriptLexerState.TAG);
 
-            Exception exc = assertThrows(SmartScriptLexerException.class, () -> lexer.nextToken());
+            Exception exc = assertThrows(SmartScriptLexerException.class, lexer::nextToken);
             assertEquals("Invalid escaped character \"" + invalidChars[i] + "\".", exc.getMessage());
         }
     }
@@ -241,7 +241,7 @@ public class SmartScriptLexerTest {
         };
         checkTokenStream(lexer, expectedTagStateTokens);
 
-        Exception exc = assertThrows(SmartScriptLexerException.class, () -> lexer.nextToken());
+        Exception exc = assertThrows(SmartScriptLexerException.class, lexer::nextToken);
         assertEquals("Quotation was never closed.", exc.getMessage());
     }
 
