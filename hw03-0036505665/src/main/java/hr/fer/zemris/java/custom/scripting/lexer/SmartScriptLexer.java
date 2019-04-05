@@ -136,8 +136,26 @@ public class SmartScriptLexer {
             currentIndex += 2;
             return new SmartScriptToken(SmartScriptTokenType.TAG_END, null);
 
-        } else if (escapingIsOn(currentIndex, '\"')) {
-            return getNextQuotedStringToken();
+        } else if (nameIsOn(currentIndex)) {
+            String tokenValue;
+            if (data[currentIndex] == '=') {
+                tokenValue = Character.toString(data[currentIndex++]);
+            } else {
+                tokenValue = readTokenValueWhile(this::nameIsOn, false);
+            }
+
+            return new SmartScriptToken(SmartScriptTokenType.NAME, tokenValue);
+
+        } else if (quoteIsOn(currentIndex)) {
+            currentIndex++;
+            String tokenValue = readTokenValueWhile(index -> !quoteIsOn(index), true);
+
+            if (currentIndex >= data.length) {
+                throw new SmartScriptLexerException("Quotation was never closed.");
+            }
+            currentIndex++;
+
+            return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
 
         } else if (numberStartsOn(currentIndex)) {
             try {
@@ -146,33 +164,14 @@ public class SmartScriptLexer {
                 throw new SmartScriptLexerException("Invalid number format.");
             }
 
+        } else if (operatorIsOn(currentIndex)) {
+            String tokenValue = Character.toString(data[currentIndex++]);
+            return new SmartScriptToken(SmartScriptTokenType.OPERATOR, tokenValue);
+
         } else {
-            String tokenValue = readTokenValueWhile(this::stringIsOn, true);
-            return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
+            throw new SmartScriptLexerException("Invalid character: \""
+                    + data[currentIndex] + "\".");
         }
-    }
-
-    /**
-     * Returns a string token that is inside escaped quotations.
-     *
-     * @return a string token that is inside escaped quotations
-     * @throws SmartScriptLexerException if the end of the input is reached but the
-     *         quotation is never closed
-     */
-    private SmartScriptToken getNextQuotedStringToken() {
-        String tokenValue = "\"";
-        currentIndex += 2;
-
-        tokenValue += readTokenValueWhile(index -> !escapingIsOn(index, '\"'), true);
-
-        if (currentIndex >= data.length) {
-            throw new SmartScriptLexerException("Quote never closed.");
-        }
-
-        tokenValue += "\"";
-        currentIndex += 2;
-
-        return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
     }
 
     /**
@@ -206,13 +205,12 @@ public class SmartScriptLexer {
     }
 
     /**
-     * Constructs a string of {@link #data} characters that satisfy a given
-     * tester.
+     * Constructs a string of {@link #data} characters that satisfy a given tester.
      *
      * @param tester the tester that checks if a given character satisfies its
      *               condition
-     * @param canEscape {@code true} if escaping is allowed in the string that
-     *                        will be constructed
+     * @param canEscape {@code true} if escaping is allowed in the string that will
+     *                  be constructed
      * @return the constructed string
      * @throws SmartScriptLexerException if escaping is not valid
      */
@@ -222,8 +220,7 @@ public class SmartScriptLexer {
 
         while (endIndex < data.length && tester.testCharOn(endIndex)) {
 
-            if (canEscape && (escapingIsOn(endIndex, '\\') ||
-                    (state == SmartScriptLexerState.TEXT && escapingIsOn(endIndex, '{')))) {
+            if (canEscape && escapingIsOn(endIndex)) {
                 tokenValue.append(data[endIndex+1]);
                 endIndex += 2;
 
@@ -238,8 +235,8 @@ public class SmartScriptLexer {
     }
 
     /**
-     * A helper method that skips all the blanks in the character array
-     * if the lexer is in TAG state.
+     * A helper method that skips all the blanks in the character array if the lexer
+     * is in TAG state.
      */
     private void skipBlanksIfTagState() {
         if (state == SmartScriptLexerState.TAG) {
@@ -248,6 +245,38 @@ public class SmartScriptLexer {
                 currentIndex++;
             }
         }
+    }
+
+    /**
+     * Returns {@code true} if a quote is on the specified index.
+     * @see SmartScriptTokenType#STRING
+     *
+     * @param index the index of the first character to check
+     * @return {@code true} if a quote is on the specified index
+     */
+    private boolean quoteIsOn(int index) {
+        return data[index] == '"';
+    }
+
+    /**
+     * Returns {@code true} if a valid function name character is on the specified
+     * index.
+     * @see SmartScriptTokenType#NAME
+     *
+     * @param index the index of the first character to check
+     * @return {@code true} if a valid function name character is on the specified
+     *         index
+     */
+    private boolean nameIsOn(int index) {
+        if (index == currentIndex) {
+            return Character.isLetter(data[index])
+                    || (index < data.length-1 && data[index] == '@'
+                        && Character.isLetter(data[index+1]))
+                    || data[index] == '=';
+        }
+
+        return Character.isLetter(data[index]) || Character.isDigit(data[index])
+                || data[index] == '_';
     }
 
     /**
@@ -281,6 +310,17 @@ public class SmartScriptLexer {
     }
 
     /**
+     * Returns {@code true} if an operator is on the specified index.
+     *
+     * @param index the index of the character to check
+     * @return {@code true} if an operator is on the specified index
+     */
+    private boolean operatorIsOn(int index) {
+        return data[index] == '+' || data[index] == '-' || data[index] == '*'
+                || data[index] == '/' || data[index] == '^';
+    }
+
+    /**
      * Returns {@code true} if a valid escaping begins on the specified index.
      * A valid escaping begins on a specified index if the character on that index
      * is a backslash and the character on the next index can be escaped.
@@ -289,7 +329,7 @@ public class SmartScriptLexer {
      * @return {@code true} if a valid escaping begins on the specified index
      * @throws SmartScriptLexerException if escaping is not valid
      */
-    private boolean escapingIsOn(int index, char escaped) {
+    private boolean escapingIsOn(int index) {
         if (data[index] == '\\') {
             if (index + 1 >= data.length) {
                 throw new SmartScriptLexerException(
@@ -306,7 +346,7 @@ public class SmartScriptLexer {
                         "Invalid escaped character \"" + data[index+1] + "\".");
             }
 
-            return data[index+1] == escaped; // TODO return true?
+            return true;
         }
         return false;
     }
@@ -321,12 +361,6 @@ public class SmartScriptLexer {
      */
     private boolean numberStartsOn(int index) {
         return digitIsOn(index) || (data[index] == '-' && digitIsOn(index+1));
-    }
-
-    private boolean stringIsOn(int index) {
-        return currentIndex < data.length && (!digitIsOn(index)
-                && !Character.isWhitespace(data[index]) && !tagEndIsOn(index)
-                || escapingIsOn(index, '\\'));
     }
 
     /**
