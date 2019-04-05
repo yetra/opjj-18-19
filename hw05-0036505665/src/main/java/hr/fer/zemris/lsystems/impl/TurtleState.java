@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * This class represents a given turtle's current state - its position, direction,
- * shift length, and the color in which it draws.
+ * effective move length, and the color in which it draws.
  *
  * @author Bruna Dujmović
  *
@@ -30,10 +30,10 @@ public class TurtleState {
     private Color color;
 
     /**
-     * The effective shift length is equal to the distance that the turtle will cross
-     * if it is given a unit shift.
+     * The effective move length is equal to the distance that the turtle will cross
+     * if it is given a unit move length.
      */
-    private double effectiveShiftLength;
+    private double effectiveMoveLength;
 
     /**
      * Constructs a {@link TurtleState} object given all its attributes.
@@ -41,15 +41,15 @@ public class TurtleState {
      * @param currentPostition the current position of the turtle
      * @param direction the current direction of the turtle
      * @param color the color in which the turtle draws
-     * @param effectiveShiftLength the distance that the turtle will cross if it is
-     *                             given a unit shift
+     * @param effectiveMoveLength the distance that the turtle will cross if it is
+     *                             given a unit move length
      */
     public TurtleState(Vector2D currentPostition, Vector2D direction, Color color,
-                       double effectiveShiftLength) {
+                       double effectiveMoveLength) {
         this.currentPostition = currentPostition;
         this.direction = direction;
         this.color = color;
-        this.effectiveShiftLength = effectiveShiftLength;
+        this.effectiveMoveLength = effectiveMoveLength;
     }
 
     /**
@@ -109,26 +109,26 @@ public class TurtleState {
     }
 
     /**
-     * Returns the current effective shift length of the turtle.
+     * Returns the current effective move length of the turtle.
      *
-     * @return the current effective shift length of the turtle
+     * @return the current effective move length of the turtle
      */
-    public double getEffectiveShiftLength() {
-        return effectiveShiftLength;
+    public double getEffectiveMoveLength() {
+        return effectiveMoveLength;
     }
 
     // TODO check IllegalArgExc
     /**
-     * Sets the effective shift length to a given value.
+     * Sets the effective move length to a given value.
      *
-     * @throws IllegalArgumentException if the given shift length is less than 1
+     * @throws IllegalArgumentException if the given move length is less than 1
      */
-    public void setEffectiveShiftLength(double effectiveShiftLength) {
-        if (effectiveShiftLength < 1) {
+    public void setEffectiveMoveLength(double effectiveMoveLength) {
+        if (effectiveMoveLength < 1) {
             throw new IllegalArgumentException(
                     "Effective shift length cannot be less than 1.");
         }
-        this.effectiveShiftLength = effectiveShiftLength;
+        this.effectiveMoveLength = effectiveMoveLength;
     }
 
     /**
@@ -140,7 +140,7 @@ public class TurtleState {
      */
     public TurtleState copy() {
         return new TurtleState(currentPostition.copy(), direction.copy(),
-                new Color(color.getRGB()), effectiveShiftLength);
+                new Color(color.getRGB()), effectiveMoveLength);
     }
 
 }
