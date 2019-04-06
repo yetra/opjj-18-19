@@ -37,8 +37,9 @@ public class SkipCommand implements Command {
         Vector2D currentDirection = currentState.getDirection();
 
         double moveLength = step * currentState.getEffectiveMoveLength();
-        Vector2D nextPosition = currentDirection.scaled(moveLength);
+        Vector2D nextPosition = currentPosition.translated(
+                currentDirection.scaled(moveLength));
 
-        currentPosition.translate(nextPosition);
+        currentState.setCurrentPostition(nextPosition);
     }
 }

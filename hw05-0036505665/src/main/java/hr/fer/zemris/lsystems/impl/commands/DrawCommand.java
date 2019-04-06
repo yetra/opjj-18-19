@@ -37,13 +37,14 @@ public class DrawCommand implements Command {
         Vector2D currentDirection = currentState.getDirection();
 
         double moveLength = step * currentState.getEffectiveMoveLength();
-        Vector2D nextPosition = currentDirection.scaled(moveLength);
+        Vector2D nextPosition = currentPosition.translated(
+                currentDirection.scaled(moveLength));
 
         painter.drawLine(
-                currentPosition.getX(), currentPosition.getX(),
+                currentPosition.getX(), currentPosition.getY(),
                 nextPosition.getX(), nextPosition.getY(),
                 currentState.getColor(), 1
         );
-        currentPosition.translate(nextPosition);
+        currentState.setCurrentPostition(nextPosition);
     }
 }
