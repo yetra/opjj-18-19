@@ -30,6 +30,43 @@ public class StudentRecord {
      */
     private int finalGrade;
 
+
+    /**
+     * Returns the he JMBAG of the student.
+     *
+     * @return the JMBAG of the student
+     */
+    public String getJmbag() {
+        return jmbag;
+    }
+
+    /**
+     * Returns the last name of the student.
+     *
+     * @return the last name of the student.
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Returns the first name of the student.
+     *
+     * @return the first name of the student.
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Returns the final grade of the student.
+     *
+     * @return the final grade of the student.
+     */
+    public int getFinalGrade() {
+        return finalGrade;
+    }
+
     /**
      * Constructs a student record with the given data.
      *
