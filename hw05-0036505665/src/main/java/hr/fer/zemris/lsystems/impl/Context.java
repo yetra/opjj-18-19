@@ -16,7 +16,7 @@ public class Context {
      * A stack of turtle states. The currently active state is the one that's on the
      * top of this stack.
      */
-    private ObjectStack<TurtleState> stateStack;
+    private ObjectStack<TurtleState> stateStack = new ObjectStack<>();
 
     /**
      * Returns the currently active turtle state (the one that's on the top of this
