@@ -6,6 +6,7 @@ package hr.fer.zemris.java.hw05.db;
  * @author Bruna Dujmović
  * 
  */
+@FunctionalInterface
 public interface IComparisonOperator {
 
     /**
