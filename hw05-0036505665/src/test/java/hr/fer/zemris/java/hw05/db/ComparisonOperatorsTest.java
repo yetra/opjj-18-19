@@ -96,4 +96,14 @@ public class ComparisonOperatorsTest {
             assertEquals(expected[i], oper.satisfied(firstString[i], secondString[i]));
         }
     }
+
+    @Test
+    void testInvalidLike() {
+        IComparisonOperator oper = ComparisonOperators.LIKE;
+
+        assertThrows(IllegalArgumentException.class, () -> oper.satisfied("Zagreb", "Aba**"));
+        assertThrows(IllegalArgumentException.class, () -> oper.satisfied("AAA", "*AA*AA"));
+        assertThrows(IllegalArgumentException.class, () -> oper.satisfied("Text", "***Text"));
+        assertThrows(IllegalArgumentException.class, () -> oper.satisfied("=", "**"));
+    }
 }
