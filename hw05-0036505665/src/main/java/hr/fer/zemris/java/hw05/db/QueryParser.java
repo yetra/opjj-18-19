@@ -17,6 +17,8 @@ public class QueryParser {
     public QueryParser(String queryExpression) {
         this.queryExpression = queryExpression;
         this.conditionalExpressions = new ArrayList<>();
+
+        parseQuery();
     }
 
     private void parseQuery() {
