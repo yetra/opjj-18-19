@@ -3,8 +3,11 @@ package hr.fer.zemris.java.hw05.db;
 import java.util.*;
 
 /**
- * This class models a database of student records. It accepts a list of String objects in its
- * constructor. Each string in the given list represents one row of the database.
+ * This class models a database of student records. It accepts a list of String objects
+ * in its constructor. Each string in the given list represents one row of the database.
+ *
+ * @author Bruna Dujmović
+ *
  */
 public class StudentDatabase {
 
@@ -23,8 +26,8 @@ public class StudentDatabase {
      *
      * @param rows a list of rows which contain student record data
      * @throws NullPointerException if the given list of rows is {@code null}
-     * @throws IllegalArgumentException if the given data is invalid or if it already exists in
-     *         the database
+     * @throws IllegalArgumentException if the given data is invalid or if it already
+     *         exists in the database
      */
     public StudentDatabase(List<String> rows) {
         Objects.requireNonNull(rows);
@@ -37,9 +40,10 @@ public class StudentDatabase {
                         "Student record must have 4 parts, " + data.length + " were given.");
             }
 
-            int finalGrade = Integer.parseInt(data[3]); // TODO try-catch
+            int finalGrade = Integer.parseInt(data[3]);
             if (finalGrade < 1 || finalGrade > 5) {
-                throw new IllegalArgumentException("Final grade is not in range [1, 5].");
+                throw new IllegalArgumentException(
+                        "Final grade is not in range [1, 5].");
             }
 
             String jmbag = data[0];
@@ -55,12 +59,12 @@ public class StudentDatabase {
     }
 
     /**
-     * Returns a student record specified by the given jmbag in O(1). If such a record does not
-     * exist in the database, this method will return {@code null}.
+     * Returns a student record specified by the given jmbag in O(1). If such a record
+     * does not exist in the database, this method will return {@code null}.
      *
      * @param jmbag the jmbag of the student
-     * @return a student record specified by the given jmbag or {@code null} if no such record
-     * exists
+     * @return a student record specified by the given jmbag or {@code null} if no
+     *         such record exists
      * @throws NullPointerException if the given jmbag is {@code null}
      */
     public StudentRecord forJMBAG(String jmbag) {
