@@ -333,7 +333,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             case "pop":
                 checkArgumentNumberIs(1, parts);
-                return new PushCommand();
+                return new PopCommand();
 
             case "color":
                 checkArgumentNumberIs(2, parts);
