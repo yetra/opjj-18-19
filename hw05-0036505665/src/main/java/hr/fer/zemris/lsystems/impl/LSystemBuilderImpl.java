@@ -9,9 +9,27 @@ import hr.fer.zemris.math.Vector2D;
 
 import java.awt.*;
 
+/**
+ * This class is an implementation of the {@link LSystemBuilder} interface which
+ * models objects that can be configured either by calling individual configuration
+ * methods or by parsing a text file using {@link #configureFromText(String[])}.
+ *
+ * Calling the {@link #build()} method returns a Lindermayer system created out of
+ * the given configuration.
+ *
+ * @author Bruna Dujmović
+ *
+ */
 public class LSystemBuilderImpl implements LSystemBuilder {
 
+    /**
+     * A dictionary of {@link Command} objects.
+     */
     private Dictionary<Character, Command> commands = new Dictionary<>();
+
+    /**
+     * A dictionary of {@link String} objects that represent productions.
+     */
     private Dictionary<Character, String> productions = new Dictionary<>();
 
     /**
@@ -50,7 +68,8 @@ public class LSystemBuilderImpl implements LSystemBuilder {
     @Override
     public LSystemBuilder setOrigin(double x, double y) {
         if (x < 0 || x > 1 || y < 0 || y > 1) { // TODO ?
-            throw new IllegalArgumentException("Origin coordinates are not in range [0, 1]");
+            throw new IllegalArgumentException(
+                    "Origin coordinates are not in range [0, 1]");
         }
         this.origin = new Vector2D(x, y);
 
@@ -124,6 +143,13 @@ public class LSystemBuilderImpl implements LSystemBuilder {
         return new LSystemImpl();
     }
 
+    /**
+     * This class implements the {@link LSystem} interface which models a Lindermayer
+     * system. Its {@link LSystemImpl#generate(int)} method returns a string created
+     * after applying productions on the {@link #axiom}, and its
+     * {@link LSystemImpl#draw(int, Painter)} method draws the final fractal using
+     * the {@link Painter} object.
+     */
     private class LSystemImpl implements LSystem {
 
         @Override
@@ -176,22 +202,42 @@ public class LSystemBuilderImpl implements LSystemBuilder {
         }
     }
 
-    private void checkIfNumberOfArgumnetsIs(int number, String[] parts) {
+    /* ----------------------------------------------------------------------------
+     * ------------------------------ HELPER METHODS ------------------------------
+     * ----------------------------------------------------------------------------
+     */
+
+    /**
+     * Checks if the given string array has the required number of elements.
+     *
+     * @param number the required number of string array elements
+     * @param parts the string array to check
+     * @throws IllegalArgumentException if the given string array doesn't have the
+     *         required number of arguments
+     */
+    private void checkArgumentNumberIs(int number, String[] parts) {
         if (parts.length != number) {
             throw new IllegalArgumentException(
                     "Invalid number of directive arguments.");
         }
     }
 
+    /**
+     * Parses a line of text into the appropriate value, production or command.
+     *
+     * @param line the line of text to parse
+     * @throws IllegalArgumentException if the given line of text cannot be
+     *         appropriately parsed
+     */
     private void parseTextLine(String line) {
         String[] parts = line.split("\\s+", 2);
 
-        checkIfNumberOfArgumnetsIs(2, parts);
+        checkArgumentNumberIs(2, parts);
 
         switch (parts[0]) {
             case "origin":
                 String[] coordinates = parts[1].split("\\s+");
-                checkIfNumberOfArgumnetsIs(2, coordinates);
+                checkArgumentNumberIs(2, coordinates);
 
                 double x = Double.parseDouble(coordinates[0]);
                 double y = Double.parseDouble(coordinates[1]);
@@ -215,7 +261,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             case "command":
                 String[] commandParts = parts[1].split("\\s+", 2);
-                checkIfNumberOfArgumnetsIs(2, commandParts);
+                checkArgumentNumberIs(2, commandParts);
 
                 if (commandParts[0].length() != 1) {
                     throw new IllegalArgumentException(
@@ -231,11 +277,12 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             case "production":
                 String[] productionParts = parts[1].split("\\s+", 2);
-                checkIfNumberOfArgumnetsIs(2, productionParts);
+                checkArgumentNumberIs(2, productionParts);
 
                 if (productionParts[0].length() != 1) {
                     throw new IllegalArgumentException(
-                            "Illegal production character \"" + productionParts[0] + "\".");
+                            "Illegal production character \"" + productionParts[0]
+                                    + "\".");
                 }
 
                 registerProduction(productionParts[0].charAt(0), productionParts[1]);
@@ -247,42 +294,49 @@ public class LSystemBuilderImpl implements LSystemBuilder {
         }
     }
 
+    /**
+     * Parses a given string to a {@link Command} object.
+     *
+     * @param commandString the string to parse
+     * @return the {@link Command} object parsed from a given string
+     * @throws IllegalArgumentException if the string is not a valid command string
+     */
     private Command parseToCommand(String commandString) {
         String[] parts = commandString.split("\\s+");
 
         String commandName = parts[0];
         switch (commandName) {
             case "draw":
-                checkIfNumberOfArgumnetsIs(2, parts);
+                checkArgumentNumberIs(2, parts);
                 double drawStep = Double.parseDouble(parts[1]);
                 return new DrawCommand(drawStep);
 
             case "skip":
-                checkIfNumberOfArgumnetsIs(2, parts);
+                checkArgumentNumberIs(2, parts);
                 double skipStep = Double.parseDouble(parts[1]);
                 return new SkipCommand(skipStep);
 
             case "scale":
-                checkIfNumberOfArgumnetsIs(2, parts);
+                checkArgumentNumberIs(2, parts);
                 double factor = Double.parseDouble(parts[1]);
                 return new ScaleCommand(factor);
 
             case "rotate":
-                checkIfNumberOfArgumnetsIs(2, parts);
+                checkArgumentNumberIs(2, parts);
                 double degrees = Double.parseDouble(parts[1]);
                 double radians = Math.toRadians(degrees);
                 return new RotateCommand(radians);
 
             case "push":
-                checkIfNumberOfArgumnetsIs(1, parts);
+                checkArgumentNumberIs(1, parts);
                 return new PushCommand();
 
             case "pop":
-                checkIfNumberOfArgumnetsIs(1, parts);
+                checkArgumentNumberIs(1, parts);
                 return new PushCommand();
 
             case "color":
-                checkIfNumberOfArgumnetsIs(2, parts);
+                checkArgumentNumberIs(2, parts);
                 return new ColorCommand(Color.decode("0x" + parts[1]));
 
             default:
@@ -291,6 +345,13 @@ public class LSystemBuilderImpl implements LSystemBuilder {
         }
     }
 
+    /**
+     * Parses a scaler string to an integer.
+     *
+     * @param scalerString the string to parse
+     * @return the integer representation of a given scaler string
+     * @throws IllegalArgumentException if the string is not a valid scaler string
+     */
     private double parseScaler(String scalerString) {
         String[] parts = scalerString.split("\\s*\\/\\s*");
 
