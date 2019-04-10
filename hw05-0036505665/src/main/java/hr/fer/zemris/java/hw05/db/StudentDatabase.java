@@ -33,7 +33,7 @@ public class StudentDatabase {
         Objects.requireNonNull(rows);
 
         for (String row : rows) {
-            String[] data = row.split("\\s+");
+            String[] data = row.split("\t+");
 
             if (data.length != 4) {
                 throw new IllegalArgumentException(
