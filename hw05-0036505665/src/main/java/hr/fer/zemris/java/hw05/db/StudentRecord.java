@@ -74,10 +74,13 @@ public class StudentRecord {
      * @param lastName the last name of the student
      * @param firstName the first name of the student
      * @param finalGrade the final grade of the student
-     * @throws NumberFormatException if the given jmbag, last name or first name are {@code null}
-     * @throws IllegalArgumentException if the given final grade is not in range [1, 5]
+     * @throws NumberFormatException if the given jmbag, last name or first name
+     *         are {@code null}
+     * @throws IllegalArgumentException if the given final grade is not in range
+     *         [1, 5]
      */
-    public StudentRecord(String jmbag, String lastName, String firstName, int finalGrade) {
+    public StudentRecord(String jmbag, String lastName, String firstName,
+                         int finalGrade) {
         Objects.requireNonNull(jmbag);
         Objects.requireNonNull(lastName);
         Objects.requireNonNull(firstName);
