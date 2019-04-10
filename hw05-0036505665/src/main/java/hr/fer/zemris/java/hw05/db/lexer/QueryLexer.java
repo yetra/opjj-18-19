@@ -111,14 +111,11 @@ public class QueryLexer {
      */
     private String readTokenStringWhile(CharacterTester tester) {
         StringBuilder sb = new StringBuilder();
-        int endIndex = currentIndex; // TODO remove?
 
-        while (endIndex < data.length && tester.testCharOn(endIndex)) {
-            sb.append(data[endIndex]);
-            endIndex++;
+        while (currentIndex < data.length && tester.testCharOn(currentIndex)) {
+            sb.append(data[currentIndex++]);
         }
 
-        currentIndex = endIndex;
         return sb.toString();
     }
 
