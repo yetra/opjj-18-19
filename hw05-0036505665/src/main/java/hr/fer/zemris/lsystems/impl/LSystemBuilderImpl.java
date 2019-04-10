@@ -194,7 +194,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             case "angle":
                 double angle = Double.parseDouble(parts[1]);
-                setAngle(angle);
+                setAngle(Math.toRadians(angle));
                 break;
 
             case "unitLength":
@@ -297,10 +297,5 @@ public class LSystemBuilderImpl implements LSystemBuilder {
             throw new IllegalArgumentException(
                     "Invalid scaler: \"" + scalerString + "\".");
         }
-    }
-
-    private double length(Vector2D vector) {
-        return Math.sqrt(vector.getX()*vector.getX()
-                + vector.getY()*vector.getY());
     }
 }
