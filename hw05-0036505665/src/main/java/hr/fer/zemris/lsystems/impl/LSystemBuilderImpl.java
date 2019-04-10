@@ -277,7 +277,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             case "color":
                 checkIfNumberOfArgumnetsIs(2, parts);
-                return new ColorCommand(Color.getColor(parts[1]));
+                return new ColorCommand(Color.decode("0x" + parts[1]));
 
             default:
                 throw new IllegalArgumentException(
