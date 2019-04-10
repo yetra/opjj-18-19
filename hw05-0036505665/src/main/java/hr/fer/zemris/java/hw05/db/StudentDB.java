@@ -65,6 +65,7 @@ public class StudentDB {
                 }
 
                 String[] queryParts = line.split("\\s+", 2);
+
                 if (!(queryParts[0].equals("query"))) {
                     System.out.println("Invalid commad \"" + queryParts[0] + "\".");
                     System.out.format("> ");
@@ -76,6 +77,7 @@ public class StudentDB {
                     printFilteredDatabase(db, parser);
                 } catch (IllegalArgumentException | QueryLexerException e) {
                     System.out.println(e.getMessage());
+                    System.out.format("> ");
                     continue;
                 }
 
