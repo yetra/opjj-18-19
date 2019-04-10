@@ -73,4 +73,19 @@ public class ConditionalExpression {
     public IComparisonOperator getComparisonOperator() {
         return comparisonOperator;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConditionalExpression that = (ConditionalExpression) o;
+        return fieldGetter.equals(that.fieldGetter) &&
+                stringLiteral.equals(that.stringLiteral) &&
+                comparisonOperator.equals(that.comparisonOperator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fieldGetter, stringLiteral, comparisonOperator);
+    }
 }
