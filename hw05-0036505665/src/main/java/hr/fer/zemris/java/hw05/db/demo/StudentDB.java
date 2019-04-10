@@ -1,5 +1,6 @@
-package hr.fer.zemris.java.hw05.db;
+package hr.fer.zemris.java.hw05.db.demo;
 
+import hr.fer.zemris.java.hw05.db.*;
 import hr.fer.zemris.java.hw05.db.lexer.QueryLexerException;
 
 import java.io.IOException;
@@ -28,8 +29,6 @@ import java.util.Scanner;
  *
  */
 public class StudentDB {
-
-    StudentDatabase db;
 
     /**
      * Main method. Creates a {@link StudentDatabase} object and handles user-input
@@ -94,6 +93,7 @@ public class StudentDB {
      */
     private static void printFilteredDatabase(StudentDatabase db, QueryParser parser) {
         List<StudentRecord> filtered;
+
         if (parser.isDirectQuery()) {
             filtered = new ArrayList<>();
             filtered.add(db.forJMBAG(parser.getQueriedJMBAG()));
