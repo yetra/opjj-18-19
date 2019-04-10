@@ -46,7 +46,7 @@ public class QueryParser {
         return conditionalExpressions.get(0).getStringLiteral();
     }
 
-    public List<ConditionalExpression> getQueryExpression() {
+    public List<ConditionalExpression> getQuery() {
         return conditionalExpressions;
     }
 
@@ -67,7 +67,7 @@ public class QueryParser {
             }
 
             Token stringToken = lexer.nextToken();
-            if (operatorToken.getType() != TokenType.STRING) {
+            if (stringToken.getType() != TokenType.STRING) {
                 throw new IllegalArgumentException(
                         "Invalid string literal \"" + stringToken.getValue() + "\"");
             }
