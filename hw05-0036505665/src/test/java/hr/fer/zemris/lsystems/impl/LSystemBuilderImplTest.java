@@ -1,6 +1,7 @@
+package hr.fer.zemris.lsystems.impl;
+
 import hr.fer.zemris.lsystems.LSystem;
 import hr.fer.zemris.lsystems.LSystemBuilder;
-import hr.fer.zemris.lsystems.impl.LSystemBuilderImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
