@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw05.db;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is an implementation of the {@link IFilter} interface which filters a
@@ -22,8 +23,11 @@ public class QueryFilter implements IFilter {
      * {@link ConditionalExpression} objects.
      *
      * @param expressions the list of conditional expressions to use for filtering
+     * @throws NullPointerException if the given list is {@code null}
      */
     public QueryFilter(List<ConditionalExpression> expressions) {
+        Objects.requireNonNull(expressions);
+
         this.expressions = expressions;
     }
 
