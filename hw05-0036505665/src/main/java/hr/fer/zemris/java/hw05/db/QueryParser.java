@@ -1,7 +1,6 @@
 package hr.fer.zemris.java.hw05.db;
 
 import hr.fer.zemris.java.hw05.db.lexer.QueryLexer;
-import hr.fer.zemris.java.hw05.db.lexer.QueryLexerException;
 import hr.fer.zemris.java.hw05.db.lexer.Token;
 import hr.fer.zemris.java.hw05.db.lexer.TokenType;
 
@@ -53,7 +52,7 @@ public class QueryParser {
         if (conditionalExpressions.size() == 1) {
             ConditionalExpression expression = conditionalExpressions.get(0);
 
-            return expression.getFieldGetter() == FieldValueGetters.JMBAG // TODO ==?
+            return expression.getFieldGetter() == FieldValueGetters.JMBAG
                     && expression.getComparisonOperator() == ComparisonOperators.EQUALS;
         }
 
@@ -92,24 +91,12 @@ public class QueryParser {
      */
 
     /**
-     * Parses a given query string.
-     */
-    private void parseQuery() {
-        try {
-            addExpressionsToList();
-        } catch (QueryLexerException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
-        }
-    }
-
-    /**
      * Separates a given query into {@link ConditionalExpression} objects and adds
      * them to the {@link #conditionalExpressions} list.
      *
      * @throws IllegalArgumentException if the given query is invalid
      */
-    private void addExpressionsToList() {
+    private void parseQuery() {
         QueryLexer lexer = new QueryLexer(query);
 
         do {
