@@ -74,7 +74,9 @@ public class QueryLexer {
      */
     private Token getNextToken() {
         if (stringIsOn(currentIndex)) {
+            currentIndex++;
             String tokenValue = readTokenStringWhile(index -> !stringIsOn(index));
+            currentIndex++;
             return new Token(TokenType.STRING, tokenValue);
 
         } else if (twoCharComparisonOperatorIsOn(currentIndex)) {
