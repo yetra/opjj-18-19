@@ -15,8 +15,8 @@ public class StudentDatabaseTest {
     @Test
     void testForJmbagExisting() {
         List<String> rows = new ArrayList<>();
-        rows.add("0000000003\tBosnić\tAndrea\t4\n");
-        rows.add("0000000004\tBožić\tMarin\t5\n");
+        rows.add("0000000003\tBosnić\tAndrea\t4");
+        rows.add("0000000004\tBožić\tMarin\t5");
         rows.add("0000000024\tKarlović\tĐive\t5");
 
         StudentDatabase db = new StudentDatabase(rows);
@@ -31,7 +31,7 @@ public class StudentDatabaseTest {
     @Test
     void testForJmbagNotExisting() {
         List<String> rows = new ArrayList<>();
-        rows.add("0000000003\tBosnić\tAndrea\t4\n");
+        rows.add("0000000003\tBosnić\tAndrea\t4");
         rows.add("0000000024\tKarlović\tĐive\t5");
 
         StudentDatabase db = new StudentDatabase(rows);
@@ -53,8 +53,8 @@ public class StudentDatabaseTest {
     @Test
     void testFilterAll() {
         List<String> rows = new ArrayList<>();
-        rows.add("0000000003\tBosnić\tAndrea\t4\n");
-        rows.add("0000000004\tBožić\tMarin\t5\n");
+        rows.add("0000000003\tBosnić\tAndrea\t4");
+        rows.add("0000000004\tBožić\tMarin\t5");
         rows.add("0000000024\tKarlović\tĐive\t5");
 
         StudentDatabase db = new StudentDatabase(rows);
@@ -70,8 +70,8 @@ public class StudentDatabaseTest {
     @Test
     void testFilterNone() {
         List<String> rows = new ArrayList<>();
-        rows.add("0000000003\tBosnić\tAndrea\t4\n");
-        rows.add("0000000004\tBožić\tMarin\t5\n");
+        rows.add("0000000003\tBosnić\tAndrea\t4");
+        rows.add("0000000004\tBožić\tMarin\t5");
         rows.add("0000000024\tKarlović\tĐive\t5");
 
         StudentDatabase db = new StudentDatabase(rows);
