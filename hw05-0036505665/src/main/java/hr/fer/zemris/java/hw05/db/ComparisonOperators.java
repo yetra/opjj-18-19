@@ -56,20 +56,19 @@ public class ComparisonOperators {
                     "Too many wildcards in LIKE comparison.");
         }
 
-        boolean hasMinimumSize = v1.length() >= v2.length()-1;
-        boolean condition;
+        if (v1.length() < v2.length()-1) {
+            return false;
+        }
         
         if (v2.equals("*")) {
-            condition = true;
+            return true;
         } else if (v2.startsWith("*")) {
-            condition = v1.endsWith(v2.substring(1));
+            return v1.endsWith(v2.substring(1));
         } else if (v2.endsWith("*")) {
-            condition = v1.startsWith(v2.substring(0, v2.length()-1));
+            return v1.startsWith(v2.substring(0, v2.length()-1));
         } else {
             String[] parts = v2.split("\\*");
-            condition = v1.startsWith(parts[0]) && v1.endsWith(parts[1]);
+            return v1.startsWith(parts[0]) && v1.endsWith(parts[1]);
         }
-
-        return hasMinimumSize && condition;
     };
 }
