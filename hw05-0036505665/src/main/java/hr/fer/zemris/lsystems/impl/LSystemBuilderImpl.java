@@ -89,8 +89,13 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
     @Override
     public LSystemBuilder registerCommand(char c, String s) {
-        if (commands.get(c) == null) {    // TODO throw exc if entry for c already exists?
-            commands.put(c, parseToCommand(s));
+        try {
+            if (commands.get(c) == null) {    // TODO throw exc if entry for c already exists?
+                commands.put(c, parseToCommand(s));
+            }
+        } catch (IllegalArgumentException e) { // TODO how to handle?
+            System.out.println(e.getMessage());
+            System.exit(1);
         }
 
         return this;
@@ -105,8 +110,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             try {
                 parseTextLine(line);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) { // TODO how to handle?
                 System.out.println(e.getMessage());
+                System.exit(1);
             }
         }
 
