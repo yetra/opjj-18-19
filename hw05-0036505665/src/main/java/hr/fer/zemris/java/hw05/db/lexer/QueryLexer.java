@@ -168,8 +168,7 @@ public class QueryLexer {
     private boolean fieldNameIsOn(int index) {
         return !Character.isWhitespace(data[index])
                 && !singleCharComparisonOperatorIsOn(index)
-                && !twoCharComparisonOperatorIsOn(index)
-                && !LIKEIsOn(index);
+                && !twoCharComparisonOperatorIsOn(index);
     }
 
     /**
