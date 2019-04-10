@@ -185,7 +185,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
             TurtleState state = new TurtleState(
                     origin,
-                    new Vector2D(1.0, 0.0), // TODO wat
+                    new Vector2D(1.0, 0.0).rotated(angle), // TODO wat
                     Color.BLACK,
                     unitLength * (Math.pow(unitLengthDegreeScaler, depth))
             );
