@@ -52,8 +52,8 @@ public class QueryParser {
         if (conditionalExpressions.size() == 1) {
             ConditionalExpression expression = conditionalExpressions.get(0);
 
-            return expression.getFieldGetter() == FieldValueGetters.JMBAG
-                    && expression.getComparisonOperator() == ComparisonOperators.EQUALS;
+            return expression.getFieldGetter().equals(FieldValueGetters.JMBAG)
+                    && expression.getComparisonOperator().equals(ComparisonOperators.EQUALS);
         }
 
         return false;
@@ -103,7 +103,7 @@ public class QueryParser {
             Token fieldToken = lexer.nextToken();
             if (fieldToken.getType() != TokenType.FIELD_NAME) {
                 throw new IllegalArgumentException(
-                        "Invalid field token \"" + fieldToken.getValue() + "\"");
+                        "Invalid field name \"" + fieldToken.getValue() + "\"");
             }
 
             Token operatorToken = lexer.nextToken();
