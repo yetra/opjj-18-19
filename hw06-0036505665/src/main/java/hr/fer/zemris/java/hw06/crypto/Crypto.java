@@ -1,5 +1,12 @@
 package hr.fer.zemris.java.hw06.crypto;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class Crypto {
@@ -49,7 +56,43 @@ public class Crypto {
     }
 
     private static void checksha(String fileName, String expectedSha) {
+        String actualSha = getDigestOf(fileName, "SHA-256");
 
+        System.out.print("Digesting completed. Digest of " + fileName);
+        if (actualSha.equals(expectedSha)) {
+            System.out.println(" matches expected digest.");
+        } else {
+            System.out.println(" does not match the expected digest. " +
+                    "Digest was: " + actualSha);
+        }
+    }
+
+    private static String getDigestOf(String fileName, String algorithm) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+
+            try (InputStream is = new BufferedInputStream(
+                    Files.newInputStream(Paths.get(fileName)))) {
+                byte[] buff = new byte[1024];
+                int bytesRead;
+
+                while((bytesRead = is.read(buff)) > 0) {
+                    messageDigest.update(buff, 0, bytesRead);
+                }
+            }
+
+            return Util.byteToString(messageDigest.digest());
+
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Invalid algorithm \"" + algorithm + "\".");
+            System.exit(1);
+
+        } catch (IOException e) {
+            System.out.println("Cannot read file " + fileName+ " .");
+            System.exit(1);
+        }
+
+        return null;
     }
 
     private static void encrypt(String srcPath, String destPath) {
