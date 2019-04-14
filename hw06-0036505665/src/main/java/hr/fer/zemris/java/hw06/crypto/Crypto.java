@@ -1,12 +1,20 @@
 package hr.fer.zemris.java.hw06.crypto;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -71,11 +79,9 @@ public class Crypto {
                             "hex-encoded text (32 hex-digits):\n> ");
                     String vector = sc.nextLine();
 
-                    if (args[0].equalsIgnoreCase("encrypt")) {
-                        encrypt(args[1], args[2]);
-                    } else {
-                        decrypt(args[1], args[2]);
-                    }
+                    encryptDecrypt(args[1], args[2], password, vector,
+                            args[0].equalsIgnoreCase("encrypt"));
+
                     break;
 
                 default:
@@ -141,11 +147,62 @@ public class Crypto {
         return null;
     }
 
-    private static void encrypt(String srcPath, String destPath) {
+    /**
+     * Encrypts or decrypts a given file to the specified destination using the
+     * given key and initialization vector.
+     *
+     * @param srcPath the path of the source file
+     * @param destPath the path of the destination file
+     * @param key the encryption/decryption key
+     * @param vector the initialization vector for the encryption/decryption
+     * @param encrypt {@code true} if encryption should be performed, {@code false}
+     *                if decryption should be perfomed
+     * @throws NullPointerException if the given paths, key or vector are {@code null}
+     * @throws IllegalArgumentException if the given key or vector cannot be parsed
+     *         to a byte array
+     */
+    private static void encryptDecrypt(String srcPath, String destPath, String key,
+                                       String vector, boolean encrypt) {
+        Objects.requireNonNull(srcPath);
+        Objects.requireNonNull(destPath);
 
-    }
+        try {
+            SecretKeySpec keySpec = new SecretKeySpec(Util.hexToByte(key), "AES");
+            AlgorithmParameterSpec paramSpec = new
+                    IvParameterSpec(Util.hexToByte(vector));
 
-    private static void decrypt(String srcPath, String destPath) {
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE,
+                    keySpec, paramSpec);
 
+            // TODO extract to separate method?
+            try (InputStream is = new BufferedInputStream(
+                    Files.newInputStream(Paths.get(srcPath)));
+                 OutputStream os = new BufferedOutputStream(
+                         Files.newOutputStream(Paths.get(destPath)))) {
+
+                byte[] buff = new byte[DEFAULT_BUFFER_SIZE];
+                int bytesRead;
+
+                while ((bytesRead = is.read(buff)) > 0) {
+                    byte[] output = cipher.update(buff, 0, bytesRead);
+                    os.write(output);
+                }
+
+                os.write(cipher.doFinal());
+            }
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException
+                | BadPaddingException | IllegalBlockSizeException
+                | InvalidAlgorithmParameterException | InvalidKeyException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        } catch (IOException e) {
+            System.out.println("Issue with file " + e.getMessage() + ".");
+            System.exit(1);
+        }
+
+        System.out.format("%s completed. Generated file %s based on file %s.",
+                encrypt ? "Encryption" : "Decryption", destPath, srcPath);
     }
 }
