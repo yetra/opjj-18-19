@@ -21,7 +21,7 @@ public class Crypto {
                                 "Unknown command \"" + args[0] + "\".");
                     }
 
-                    System.out.println("Please provide expected sha-256 digest for "
+                    System.out.print("Please provide expected sha-256 digest for "
                             + args[1] + ":\n> ");
                     checksha(args[1], sc.nextLine()); // TODO validate expected sha?
                     break;
@@ -33,10 +33,10 @@ public class Crypto {
                                 "Unknown command \"" + args[0] + "\".");
                     }
 
-                    System.out.println("Please provide password as hex-encoded text " +
+                    System.out.print("Please provide password as hex-encoded text " +
                             "(16 bytes, i.e. 32 hex-digits):\n> ");
                     String password = sc.nextLine();
-                    System.out.println("Please provide initialization vector as " +
+                    System.out.print("Please provide initialization vector as " +
                             "hex-encoded text (32 hex-digits):\n> ");
                     String vector = sc.nextLine();
 
