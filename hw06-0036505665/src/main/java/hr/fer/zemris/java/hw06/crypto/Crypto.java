@@ -11,6 +11,16 @@ import java.util.Scanner;
 
 public class Crypto {
 
+    /**
+     * The default size of the byte array for reading binary files.
+     */
+    private static final int DEFAULT_BUFFER_SIZE = 4096;
+
+    /**
+     * The default algorithm for calculating a file's digest.
+     */
+    private static final String ALGORITHM = "SHA-256";
+
     public static void main(String[] args) {
 
         try (Scanner sc = new Scanner(System.in)) {
@@ -56,7 +66,7 @@ public class Crypto {
     }
 
     private static void checksha(String fileName, String expectedSha) {
-        String actualSha = getDigestOf(fileName, "SHA-256");
+        String actualSha = getDigestOf(fileName);
 
         System.out.print("Digesting completed. Digest of " + fileName);
         if (actualSha.equals(expectedSha)) {
@@ -67,13 +77,13 @@ public class Crypto {
         }
     }
 
-    private static String getDigestOf(String fileName, String algorithm) {
+    private static String getDigestOf(String fileName) {
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+            MessageDigest messageDigest = MessageDigest.getInstance(ALGORITHM);
 
             try (InputStream is = new BufferedInputStream(
                     Files.newInputStream(Paths.get(fileName)))) {
-                byte[] buff = new byte[1024];
+                byte[] buff = new byte[DEFAULT_BUFFER_SIZE];
                 int bytesRead;
 
                 while((bytesRead = is.read(buff)) > 0) {
@@ -84,7 +94,7 @@ public class Crypto {
             return Util.byteToString(messageDigest.digest());
 
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Invalid algorithm \"" + algorithm + "\".");
+            System.out.println("Invalid algorithm \"" + ALGORITHM + "\".");
             System.exit(1);
 
         } catch (IOException e) {
