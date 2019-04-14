@@ -151,8 +151,8 @@ public class Crypto {
      * Encrypts or decrypts a given file to the specified destination using the
      * given key and initialization vector.
      *
-     * @param srcPath the path of the source file
-     * @param destPath the path of the destination file
+     * @param src the path of the source file
+     * @param dest the path of the destination file
      * @param key the encryption/decryption key
      * @param vector the initialization vector for the encryption/decryption
      * @param encrypt {@code true} if encryption should be performed, {@code false}
@@ -161,10 +161,10 @@ public class Crypto {
      * @throws IllegalArgumentException if the given key or vector cannot be parsed
      *         to a byte array
      */
-    private static void encryptDecrypt(String srcPath, String destPath, String key,
+    private static void encryptDecrypt(String src, String dest, String key,
                                        String vector, boolean encrypt) {
-        Objects.requireNonNull(srcPath);
-        Objects.requireNonNull(destPath);
+        Objects.requireNonNull(src);
+        Objects.requireNonNull(dest);
 
         try {
             SecretKeySpec keySpec = new SecretKeySpec(Util.hexToByte(key), "AES");
@@ -175,34 +175,47 @@ public class Crypto {
             cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE,
                     keySpec, paramSpec);
 
-            // TODO extract to separate method?
-            try (InputStream is = new BufferedInputStream(
-                    Files.newInputStream(Paths.get(srcPath)));
-                 OutputStream os = new BufferedOutputStream(
-                         Files.newOutputStream(Paths.get(destPath)))) {
-
-                byte[] buff = new byte[DEFAULT_BUFFER_SIZE];
-                int bytesRead;
-
-                while ((bytesRead = is.read(buff)) > 0) {
-                    byte[] output = cipher.update(buff, 0, bytesRead);
-                    os.write(output);
-                }
-
-                os.write(cipher.doFinal());
-            }
+            readWriteCipherText(cipher, src, dest);
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException
-                | BadPaddingException | IllegalBlockSizeException
                 | InvalidAlgorithmParameterException | InvalidKeyException e) {
             System.out.println(e.getMessage());
-            System.exit(1);
-        } catch (IOException e) {
-            System.out.println("Issue with file " + e.getMessage() + ".");
             System.exit(1);
         }
 
         System.out.format("%s completed. Generated file %s based on file %s.",
-                encrypt ? "Encryption" : "Decryption", destPath, srcPath);
+                encrypt ? "Encryption" : "Decryption", dest, src);
+    }
+
+    /**
+     * Reads the file specified by src, passes the data to the given {@link Cipher}
+     * object, and writes the output to dest.
+     *
+     * @param cipher the {@link Cipher} object that wil process the data
+     * @param src the source file
+     * @param dest the destination file
+     */
+    private static void readWriteCipherText(Cipher cipher, String src, String dest) {
+        try (InputStream is = new BufferedInputStream(
+                Files.newInputStream(Paths.get(src)));
+             OutputStream os = new BufferedOutputStream(
+                     Files.newOutputStream(Paths.get(dest)))) {
+
+            byte[] buff = new byte[DEFAULT_BUFFER_SIZE];
+            int bytesRead;
+
+            while ((bytesRead = is.read(buff)) > 0) {
+                byte[] output = cipher.update(buff, 0, bytesRead);
+                os.write(output);
+            }
+
+            os.write(cipher.doFinal());
+        } catch (IOException e) {
+            System.out.println("Issue with file " + e.getMessage() + ".");
+            System.exit(1);
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
     }
 }
