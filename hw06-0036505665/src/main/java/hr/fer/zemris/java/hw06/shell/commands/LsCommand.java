@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class LsCommand implements ShellCommand {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
 
     @Override
