@@ -20,27 +20,27 @@ package hr.fer.zemris.java.hw06.shell;
  *         - if charset_name is given, the file be interpreted using that charset
  *           instead of the default platform charset
  *
- *     ls directory_path
+ *     ls dir_path
  *         - prints a non-recursive listing of the specified directory
  *
- *     tree directory_path
- *         - prints a tree-like listing of the specified directory
+ *     tree dir_path
+ *         - prints a recursive, tree-like listing of the specified directory
  *
- *     copy source_file_path destination_file_path
+ *     copy src_file_path dest_file_path
  *         - copies the specified source file to the destination file
  *         - if the destination file already exists, the user will be asked if they
  *           want to overwrite it
  *
- *     mkdir directory_path
- *         - creates the appropriate directory structure on the location specified by
- *           directory_path
+ *     mkdir dir_path
+ *         - creates the appropriate directory structure at the location specified by
+ *           dir_path
  *
  *     hexdump file_path
- *         - produces a hex representation of the specified file
+ *         - prints a hex representation of the specified file
  *
  *     help [command_name]
- *         - prints the name and description of the specified command, or lists all
- *           supported commands if command_name is not given
+ *         - prints the name and description of the specified command, or a list of
+ *           all supported commands if command_name is not given
  *
  *     exit
  *         - terminates the program
@@ -51,7 +51,7 @@ package hr.fer.zemris.java.hw06.shell;
  *
  * @author Bruna Dujmović
  *
- */
+ */ 
 public class MyShell {
     /*
      *   build environment
