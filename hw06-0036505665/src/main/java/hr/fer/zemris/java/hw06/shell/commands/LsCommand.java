@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This class represents the ls command prints the non-recursive listing of a given
- * directory to the console. It accepts one argument - the path to the directory.
+ * This class represents the ls command that prints a non-recursive listing of a
+ * given directory to the console. It accepts one argument - the path to the directory.
  *
  * @author Bruna Dujmović
  *
@@ -125,8 +125,8 @@ public class LsCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of("ls directory_path",
-                "directory_path -- path to the directory to be listed",
+        return List.of("ls dir_path",
+                "dir_path -- path to the directory to be listed",
                 "Prints a non-recursive listing of the specified directory."
         );
     }
