@@ -51,17 +51,63 @@ package hr.fer.zemris.java.hw06.shell;
  *
  * @author Bruna Dujmović
  *
- */ 
+ */
 public class MyShell {
-    /*
-     *   build environment
-     *   repeat {
+
+    /**
+     * The main method. Reads user input from the console using an {@link Environment}
+     * object and executes the given shell commands.
      *
-     *      l = readLineOrLines
-     *      String commandName = extract from l
-     *      String arguments = extract from l
-     *      command = commands.get(commandName)
-     *      status = command.executeCommand(environment, arguments)
-     *   } until status!=TERMINATE
+     * @param args the command-line arguments, not used
      */
+    public static void main(String[] args) {
+        Environment environment = new EnvironmentImpl();
+        environment.writeln("Welcome to MyShell v 1.0");
+        ShellStatus status = ShellStatus.CONTINUE;
+
+        do {
+            environment.write(environment.getPromptSymbol().toString());
+            String line = readLineOrLines(environment);
+
+            String[] lineParts = line.split("\\s+", 2);
+            String commandName = lineParts[0];
+            String arguments = lineParts[1];
+
+            ShellCommand command = environment.commands().get(commandName);
+            if (command == null) {
+                environment.writeln("Unknown command \"" + commandName + "\".");
+                continue;
+            }
+            status = command.executeCommand(environment, arguments);
+
+        } while (status != ShellStatus.TERMINATE);
+    }
+
+    /**
+     * A helper function that reads a line from the console. If the line ends with
+     * a multiline symbol, the method will read the multi-line command and concatenate
+     * it into a single string.
+     *
+     * @param env the {@link Environment} object that reads from the console
+     * @return a string containing the line(s) read from the console
+     */
+    private static String readLineOrLines(Environment env) {
+        String morelinesSymbol = env.getMorelinesSymbol().toString();
+        String multilineSymbolSymbol = env.getMultilineSymbol().toString();
+
+        String line = env.readLine().trim();
+        if (!line.endsWith(morelinesSymbol)) {
+            return line;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (line.endsWith(morelinesSymbol)) {
+            sb.append(line, 0, line.length() - 1);
+
+            env.write(multilineSymbolSymbol);
+            line = env.readLine().trim();
+        }
+
+        return sb.toString();
+    }
 }
