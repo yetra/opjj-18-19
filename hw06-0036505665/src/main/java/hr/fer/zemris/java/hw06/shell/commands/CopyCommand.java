@@ -41,11 +41,11 @@ public class CopyCommand implements ShellCommand {
             File srcFile = Paths.get(parsed[0]).toFile();
             File destFile = Paths.get(parsed[1]).toFile();
 
-            if (destFile.exists()) {
-                overwriteIfAllowed(srcFile, destFile, env);
-            } else if (destFile.isDirectory()) {
+            if (destFile.isDirectory()) {
                 Path destFilePath = Paths.get(parsed[1] + "/" + srcFile.getName());
                 copyFile(srcFile, destFilePath.toFile());
+            } else if (destFile.exists()) {
+                    overwriteIfAllowed(srcFile, destFile, env);
             } else {
                 copyFile(srcFile, destFile);
             }
