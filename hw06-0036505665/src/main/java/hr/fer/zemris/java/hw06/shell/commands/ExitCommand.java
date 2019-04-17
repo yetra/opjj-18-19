@@ -32,7 +32,8 @@ public class ExitCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of("exit",
+        return List.of(
+                "exit\n",
                 "Terminates the program."
         );
     }

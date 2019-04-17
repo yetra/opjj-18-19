@@ -52,8 +52,8 @@ public class HelpCommand implements ShellCommand {
     public List<String> getCommandDescription() {
         return List.of(
                 "help [command_name]",
-                "command_name (optional) -- name of the command whose info should be" +
-                        "printed",
+                "\tcommand_name (optional) -- name of the command whose info should " +
+                        "be printed\n",
                 "Prints the name and description of the specified command.",
                 "If a command name is not specified, prints a list of all supported " +
                         "commands"

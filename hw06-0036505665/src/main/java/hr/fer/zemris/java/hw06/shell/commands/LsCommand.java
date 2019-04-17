@@ -125,8 +125,9 @@ public class LsCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of("ls dir_path",
-                "dir_path -- path to the directory to be listed",
+        return List.of(
+                "ls dir_path",
+                "\tdir_path -- path to the directory to be listed\n",
                 "Prints a non-recursive listing of the specified directory."
         );
     }

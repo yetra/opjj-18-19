@@ -102,9 +102,11 @@ public class HexdumpCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of("hexdump file_path",
-                "file_path -- the path of the file to print",
+        return List.of(
+                "hexdump file_path",
+                "\tfile_path -- the path of the file to print\n",
                 "Prints a hexadecimal representation of the contents of the " +
-                        "specified file.");
+                        "specified file."
+        );
     }
 }

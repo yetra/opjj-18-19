@@ -55,8 +55,9 @@ public class TreeCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of("tree dir_path",
-                "dir_path -- path to the directory to be listed",
+        return List.of(
+                "tree dir_path",
+                "\tdir_path -- path to the directory to be listed\n",
                 "Prints a recursive, tree-like listing of the specified directory."
         );
     }

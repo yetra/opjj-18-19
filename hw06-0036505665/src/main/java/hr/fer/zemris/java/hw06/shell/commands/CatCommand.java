@@ -84,9 +84,11 @@ public class CatCommand implements ShellCommand {
     public List<String> getCommandDescription() {
         return List.of(
                 "cat file_path [charset_name]",
-                "file_path -- the path to the file that will be printed to the console",
-                "charset_name -- the charset that will be used to interpret the file",
-                "Opens the given file and writes its content to the console."
+                "\tfile_path -- the path to the file that will be printed to " +
+                        "the console",
+                "\tcharset_name (optional) -- the charset that will be used to " +
+                        "interpret the file\n",
+                "Opens the given file and writes its contents to the console."
         );
     }
 }

@@ -88,9 +88,10 @@ public class SymbolCommand implements ShellCommand {
     public List<String> getCommandDescription() {
         return List.of(
                 "symbol symbol_type [new_symbol]",
-                "symbol_type -- the type of the symbol i.e. PROMPT, MULTILINE, or " +
-                        "MORELINES",
-                "new_symbol (optional) -- the symbol that will replace the current one",
+                "\tsymbol_type -- the type of the symbol i.e. PROMPT, MULTILINE, " +
+                        "or MORELINES",
+                "\tnew_symbol (optional) -- the symbol that will replace the " +
+                        "current one\n",
                 "Prints the current symbol for the given symbol_type.",
                 "If new_symbol is given, the current symbol for symbol_type will be " +
                         "replaced by it."

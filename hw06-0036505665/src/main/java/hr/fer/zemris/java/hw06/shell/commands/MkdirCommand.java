@@ -52,9 +52,10 @@ public class MkdirCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of("mkdir dir_path",
-                "dir_path -- the location (path) of the directory structure that " +
-                        "will be created",
+        return List.of(
+                "mkdir dir_path",
+                "\tdir_path -- the location (path) of the directory structure that " +
+                        "will be created\n",
                 "Creates the appropriate directory structure at the specified location.");
     }
 }

@@ -42,7 +42,7 @@ public class CharsetsCommand implements ShellCommand {
     @Override
     public List<String> getCommandDescription() {
         return List.of(
-                "charsets",
+                "charsets\n",
                 "Lists the names of the supported charsets for the user's Java platform."
         );
     }
