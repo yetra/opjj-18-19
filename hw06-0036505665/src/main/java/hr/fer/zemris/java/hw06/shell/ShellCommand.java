@@ -35,6 +35,24 @@ public interface ShellCommand {
      * @return a description (usage instructions) of this command in a read-only list
      */
     List<String> getCommandDescription();
+
+    /**
+     * Returns the string representation of this command.
+     *
+     * @return the string representation of this command
+     */
+    default String getCommandAsString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("NAME\n\t").append(getCommandName());
+        builder.append("\n\nDESCRIPTION");
+
+        getCommandDescription().forEach(
+                (line) -> builder.append("\n\t").append(line)
+        );
+
+        return builder.toString();
+    }
 }
 
 
