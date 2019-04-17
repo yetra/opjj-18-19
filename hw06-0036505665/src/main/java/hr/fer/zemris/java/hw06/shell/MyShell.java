@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw06.shell;
 
+import java.util.SortedMap;
+
 /**
  * {@link MyShell} is a command-line program that models a shell.
  *
@@ -62,6 +64,8 @@ public class MyShell {
      */
     public static void main(String[] args) {
         Environment environment = new EnvironmentImpl();
+        SortedMap<String, ShellCommand> commandMap = environment.commands();
+
         environment.writeln("Welcome to MyShell v 1.0");
         ShellStatus status = ShellStatus.CONTINUE;
 
@@ -73,7 +77,7 @@ public class MyShell {
             String commandName = lineParts[0];
             String arguments = lineParts[1];
 
-            ShellCommand command = environment.commands().get(commandName);
+            ShellCommand command = commandMap.get(commandName);
             if (command == null) {
                 environment.writeln("Unknown command \"" + commandName + "\".");
                 continue;
