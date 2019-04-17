@@ -23,6 +23,11 @@ import java.util.List;
  */
 public class CopyCommand implements ShellCommand {
 
+    /**
+     * The default input/output stream buffer size.
+     */
+    private static final int DEFAULT_BUFFER_SIZE = 4096;
+
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         String[] parsed = Utility.parseArguments(arguments);
@@ -87,18 +92,16 @@ public class CopyCommand implements ShellCommand {
      *                     files
      */
     private void copyFile(File src, File dest) throws IOException {
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new BufferedInputStream(
-                                new FileInputStream(src))));
-             BufferedWriter writer = new BufferedWriter(
-                     new OutputStreamWriter(
-                             new BufferedOutputStream(
-                                     new FileOutputStream(dest))))) {
+        try (InputStream is = new BufferedInputStream(
+                new FileInputStream(src));
+             OutputStream os = new BufferedOutputStream(
+                     new FileOutputStream(dest))) {
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
+            byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+            int bytesRead;
+
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
             }
         }
     }
