@@ -47,6 +47,7 @@ import java.util.SortedMap;
  *     exit
  *         - terminates the program
  *
+ * Command names are case-insensitive.
  *
  * Commands can span across multiple lines if each line that is not the last ends with
  * the appropriate MORELINES symbol.
@@ -74,7 +75,7 @@ public class MyShell {
             String line = readLineOrLines(environment);
 
             String[] lineParts = line.split("\\s+", 2);
-            String commandName = lineParts[0];
+            String commandName = lineParts[0].toLowerCase();
             String arguments = lineParts.length == 2 ? lineParts[1] : "";
 
             ShellCommand command = commandMap.get(commandName);
