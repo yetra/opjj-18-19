@@ -73,8 +73,8 @@ public interface Environment {
     void setPromptSymbol(Character symbol);
 
     /**
-     * Returns the symbol must be at the end of each line (except the last) of a
-     * multi-line command to inform the shell that more lines as expected.
+     * Returns the symbol that must be at the end of each line (except the last) of a
+     * multi-line command to inform the shell that more lines are expected.
      *
      * @return the current more lines symbol
      */
