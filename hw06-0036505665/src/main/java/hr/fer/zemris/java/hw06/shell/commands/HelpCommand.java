@@ -23,7 +23,7 @@ public class HelpCommand implements ShellCommand {
 
         if (parsed.length == 0) {
             env.commands().forEach(
-                    (name, command) -> env.writeln(command.getCommandAsString())
+                    (name, command) -> env.writeln(name)
             );
 
         } else if (parsed.length == 1) {
