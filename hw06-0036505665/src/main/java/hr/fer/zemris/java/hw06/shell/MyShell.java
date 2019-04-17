@@ -75,7 +75,7 @@ public class MyShell {
 
             String[] lineParts = line.split("\\s+", 2);
             String commandName = lineParts[0];
-            String arguments = lineParts[1];
+            String arguments = lineParts.length == 2 ? lineParts[1] : "";
 
             ShellCommand command = commandMap.get(commandName);
             if (command == null) {
