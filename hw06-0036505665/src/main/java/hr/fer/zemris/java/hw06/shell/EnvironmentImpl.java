@@ -49,6 +49,7 @@ public class EnvironmentImpl implements Environment {
         scanner = new Scanner(System.in);
 
         commands = new TreeMap<>();
+        commands.put("symbol", new SymbolCommand());
         commands.put("charsets", new CharsetsCommand());
         commands.put("cat", new CatCommand());
         commands.put("ls", new LsCommand());
