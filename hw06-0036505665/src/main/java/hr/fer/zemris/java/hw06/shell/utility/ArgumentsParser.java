@@ -20,11 +20,6 @@ class ArgumentsParser {
     private char[] chars;
 
     /**
-     * The current argument.
-     */
-    private String argument;
-
-    /**
      * The index of the first unparsed character.
      */
     private int currentIndex;
@@ -63,7 +58,7 @@ class ArgumentsParser {
         if (quoteIsOn(currentIndex)) {
             inQuotation = true;
             currentIndex++;
-            argument = buildStringWhile(index -> !quoteIsOn(index));
+            String argument = buildStringWhile(index -> !quoteIsOn(index));
 
             if (!quoteIsOn(currentIndex)) {
                 throw new IllegalArgumentException("Quote is never closed!");
@@ -71,12 +66,11 @@ class ArgumentsParser {
 
             currentIndex++;
             inQuotation = false;
+            return argument;
 
         } else {
-            argument = buildStringWhile(index -> !whitespaceIsOn(index));
+            return buildStringWhile(index -> !whitespaceIsOn(index));
         }
-
-        return argument;
     }
 
     /**
