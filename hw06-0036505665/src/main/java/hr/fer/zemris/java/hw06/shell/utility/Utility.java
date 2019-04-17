@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw06.shell.utility;
 
+import hr.fer.zemris.java.hw06.shell.Environment;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,5 +31,33 @@ public class Utility {
         }
 
         return (String[]) arguments.toArray();
+    }
+
+    /**
+     * A helper method that reads a line using an {@link Environment} object. If the
+     * line ends with a multiline symbol, the method will read the entire multi-line
+     * input and concatenate it into a single string.
+     *
+     * @param env the {@link Environment} object that is used for reading
+     * @return a string containing the line(s) read from the {@link Environment}
+     */
+    public static String readLineOrLines(Environment env) {
+        String morelinesSymbol = env.getMorelinesSymbol().toString();
+        String multilineSymbolSymbol = env.getMultilineSymbol().toString();
+
+        String line = env.readLine().trim();
+        if (!line.endsWith(morelinesSymbol)) {
+            return line;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (line.endsWith(morelinesSymbol)) {
+            sb.append(line, 0, line.length() - 1).append(" ");
+
+            env.write(multilineSymbolSymbol);
+            line = env.readLine().trim();
+        }
+
+        return sb.toString();
     }
 }

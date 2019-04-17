@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw06.shell;
 
+import hr.fer.zemris.java.hw06.shell.utility.Utility;
+
 import java.util.SortedMap;
 
 /**
@@ -72,7 +74,7 @@ public class MyShell {
 
         do {
             environment.write(environment.getPromptSymbol().toString());
-            String line = readLineOrLines(environment);
+            String line = Utility.readLineOrLines(environment);
 
             String[] lineParts = line.split("\\s+", 2);
             String commandName = lineParts[0].toLowerCase();
@@ -86,33 +88,5 @@ public class MyShell {
             status = command.executeCommand(environment, arguments);
 
         } while (status != ShellStatus.TERMINATE);
-    }
-
-    /**
-     * A helper function that reads a line from the console. If the line ends with
-     * a multiline symbol, the method will read the multi-line command and concatenate
-     * it into a single string.
-     *
-     * @param env the {@link Environment} object that reads from the console
-     * @return a string containing the line(s) read from the console
-     */
-    private static String readLineOrLines(Environment env) {
-        String morelinesSymbol = env.getMorelinesSymbol().toString();
-        String multilineSymbolSymbol = env.getMultilineSymbol().toString();
-
-        String line = env.readLine().trim();
-        if (!line.endsWith(morelinesSymbol)) {
-            return line;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        while (line.endsWith(morelinesSymbol)) {
-            sb.append(line, 0, line.length() - 1).append(" ");
-
-            env.write(multilineSymbolSymbol);
-            line = env.readLine().trim();
-        }
-
-        return sb.toString();
     }
 }

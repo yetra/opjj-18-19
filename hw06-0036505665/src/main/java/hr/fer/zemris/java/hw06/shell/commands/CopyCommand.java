@@ -3,7 +3,7 @@ package hr.fer.zemris.java.hw06.shell.commands;
 import hr.fer.zemris.java.hw06.shell.Environment;
 import hr.fer.zemris.java.hw06.shell.ShellCommand;
 import hr.fer.zemris.java.hw06.shell.ShellStatus;
-import hr.fer.zemris.java.hw06.shell.Utility;
+import hr.fer.zemris.java.hw06.shell.utility.Utility;
 
 import java.io.*;
 import java.nio.file.InvalidPathException;
