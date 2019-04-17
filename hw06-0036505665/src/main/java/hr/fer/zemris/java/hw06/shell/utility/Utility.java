@@ -54,10 +54,10 @@ public class Utility {
         while (line.endsWith(morelinesSymbol)) {
             sb.append(line, 0, line.length() - 1).append(" ");
 
-            env.write(multilineSymbolSymbol);
+            env.write(multilineSymbolSymbol + " ");
             line = env.readLine().trim();
         }
 
-        return sb.toString();
+        return sb.append(line).toString();
     }
 }

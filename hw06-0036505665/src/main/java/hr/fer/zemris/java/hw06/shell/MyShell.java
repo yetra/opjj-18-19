@@ -73,7 +73,7 @@ public class MyShell {
         ShellStatus status = ShellStatus.CONTINUE;
 
         do {
-            environment.write(environment.getPromptSymbol().toString());
+            environment.write(environment.getPromptSymbol().toString() + " ");
             String line = Utility.readLineOrLines(environment);
 
             String[] lineParts = line.split("\\s+", 2);
