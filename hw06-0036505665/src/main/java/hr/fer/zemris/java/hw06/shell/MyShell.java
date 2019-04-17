@@ -69,24 +69,29 @@ public class MyShell {
         Environment environment = new EnvironmentImpl();
         SortedMap<String, ShellCommand> commandMap = environment.commands();
 
-        environment.writeln("Welcome to MyShell v 1.0");
-        ShellStatus status = ShellStatus.CONTINUE;
+        try {
+            environment.writeln("Welcome to MyShell v 1.0");
+            ShellStatus status = ShellStatus.CONTINUE;
 
-        do {
-            environment.write(environment.getPromptSymbol().toString() + " ");
-            String line = Utility.readLineOrLines(environment);
+            do {
+                environment.write(environment.getPromptSymbol().toString() + " ");
+                String line = Utility.readLineOrLines(environment);
 
-            String[] lineParts = line.split("\\s+", 2);
-            String commandName = lineParts[0].toLowerCase();
-            String arguments = lineParts.length == 2 ? lineParts[1] : "";
+                String[] lineParts = line.split("\\s+", 2);
+                String commandName = lineParts[0].toLowerCase();
+                String arguments = lineParts.length == 2 ? lineParts[1] : "";
 
-            ShellCommand command = commandMap.get(commandName);
-            if (command == null) {
-                environment.writeln("Unknown command \"" + commandName + "\".");
-                continue;
-            }
-            status = command.executeCommand(environment, arguments);
+                ShellCommand command = commandMap.get(commandName);
+                if (command == null) {
+                    environment.writeln("Unknown command \"" + commandName + "\".");
+                    continue;
+                }
+                status = command.executeCommand(environment, arguments);
 
-        } while (status != ShellStatus.TERMINATE);
+            } while (status != ShellStatus.TERMINATE);
+            
+        } catch (ShellIOException e) {
+            System.exit(1);
+        }
     }
 }
