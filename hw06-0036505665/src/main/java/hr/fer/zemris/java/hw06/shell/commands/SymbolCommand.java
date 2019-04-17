@@ -52,23 +52,24 @@ public class SymbolCommand implements ShellCommand {
         } else {
             if (parsed[1].length() != 1) {
                 env.writeln("Invalid symbol \"" + parsed[1] + "\"");
+                return ShellStatus.CONTINUE;
             }
 
             switch (parsed[0].toUpperCase()) {
                 case "PROMPT":
-                    env.setPromptSymbol(parsed[1].charAt(0));
                     env.writeln("Symbol for PROMPT changed from '"
                             + env.getPromptSymbol() + "' to '" + parsed[1] + "'");
+                    env.setPromptSymbol(parsed[1].charAt(0));
                     break;
                 case "MORELINES":
+                    env.writeln("Symbol for MORELINES changed from '"
+                            + env.getMorelinesSymbol() + "' to '" + parsed[1] + "'");
                     env.setMorelinesSymbol(parsed[1].charAt(0));
-                    env.writeln("Symbol for PROMPT changed from '"
-                            + env.getPromptSymbol() + "' to '" + parsed[1] + "'");
                     break;
                 case "MULTILINE":
-                    env.setMorelinesSymbol(parsed[1].charAt(0));
-                    env.writeln("Symbol for PROMPT changed from '"
-                            + env.getPromptSymbol() + "' to '" + parsed[1] + "'");
+                    env.writeln("Symbol for MULTILINE changed from '"
+                            + env.getMultilineSymbol() + "' to '" + parsed[1] + "'");
+                    env.setMultilineSymbol(parsed[1].charAt(0));
                     break;
                 default:
                     env.writeln("Unknown symbol type \"" + parsed[0] + "\"");
