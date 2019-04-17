@@ -56,8 +56,8 @@ class ArgumentsParser {
     String nextArgument() {
         skipBlanks();
 
-        if (currentIndex >= chars.length) {
-            return argument = null;
+        if (!hasNextArgument()) {
+            return null;
         }
 
         if (quoteIsOn(currentIndex)) {
@@ -85,7 +85,7 @@ class ArgumentsParser {
      * @return {@code true} if the end of the arguments string has not been reached
      */
     boolean hasNextArgument() {
-        return argument == null;
+        return currentIndex < chars.length;
     }
 
     /*

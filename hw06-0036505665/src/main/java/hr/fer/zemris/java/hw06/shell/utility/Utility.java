@@ -30,7 +30,7 @@ public class Utility {
             arguments.add(parser.nextArgument());
         }
 
-        return (String[]) arguments.toArray();
+        return arguments.toArray(new String[0]);
     }
 
     /**
