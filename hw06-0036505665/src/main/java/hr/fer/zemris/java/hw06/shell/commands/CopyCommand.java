@@ -57,7 +57,7 @@ public class CopyCommand implements ShellCommand {
         } catch (InvalidPathException e) {
             env.writeln("Illegal path string \"" + parsed[0] + "\".");
         } catch (IOException e) {
-            env.writeln("I/O exception occurred.");
+            env.writeln("Cannot perform copy on the given arguments.");
         }
 
         return ShellStatus.CONTINUE;
