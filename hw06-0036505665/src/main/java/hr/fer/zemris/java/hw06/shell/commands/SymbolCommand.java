@@ -32,51 +32,71 @@ public class SymbolCommand implements ShellCommand {
         }
 
         if (parsed.length == 1) {
-            switch (parsed[0].toUpperCase()) {
-                case "PROMPT":
-                    env.writeln("Symbol for PROMPT is '"
-                            + env.getPromptSymbol() + "'");
-                    break;
-                case "MORELINES":
-                    env.writeln("Symbol for MORELINES is '"
-                            + env.getMorelinesSymbol() + "'");
-                    break;
-                case "MULTILINE":
-                    env.writeln("Symbol for MULTILINE is '"
-                            + env.getMultilineSymbol() + "'");
-                    break;
-                default:
-                    env.writeln("Unknown symbol type \"" + parsed[0] + "\"");
-            }
-
+            getSymbol(parsed[0], env);
         } else {
-            if (parsed[1].length() != 1) {
-                env.writeln("Invalid symbol \"" + parsed[1] + "\"");
-                return ShellStatus.CONTINUE;
-            }
-
-            switch (parsed[0].toUpperCase()) {
-                case "PROMPT":
-                    env.writeln("Symbol for PROMPT changed from '"
-                            + env.getPromptSymbol() + "' to '" + parsed[1] + "'");
-                    env.setPromptSymbol(parsed[1].charAt(0));
-                    break;
-                case "MORELINES":
-                    env.writeln("Symbol for MORELINES changed from '"
-                            + env.getMorelinesSymbol() + "' to '" + parsed[1] + "'");
-                    env.setMorelinesSymbol(parsed[1].charAt(0));
-                    break;
-                case "MULTILINE":
-                    env.writeln("Symbol for MULTILINE changed from '"
-                            + env.getMultilineSymbol() + "' to '" + parsed[1] + "'");
-                    env.setMultilineSymbol(parsed[1].charAt(0));
-                    break;
-                default:
-                    env.writeln("Unknown symbol type \"" + parsed[0] + "\"");
-            }
+            setSymbol(parsed[0], parsed[1], env);
         }
 
         return ShellStatus.CONTINUE;
+    }
+
+    /**
+     * A helper method that prints the current symbol for a given symbol type.
+     *
+     * @param symbolType the type of the symbol to print
+     * @param env the {@link Environment} on which to print the symbol
+     */
+    private void getSymbol(String symbolType, Environment env) {
+        switch (symbolType.toUpperCase()) {
+            case "PROMPT":
+                env.writeln("Symbol for PROMPT is '" + env.getPromptSymbol()
+                        + "'");
+                break;
+            case "MORELINES":
+                env.writeln("Symbol for MORELINES is '" + env.getMorelinesSymbol()
+                        + "'");
+                break;
+            case "MULTILINE":
+                env.writeln("Symbol for MULTILINE is '" + env.getMultilineSymbol()
+                        + "'");
+                break;
+            default:
+                env.writeln("Unknown symbol type \"" + symbolType + "\"");
+        }
+    }
+
+    /**
+     * A helper method that changes the current symbol to a given new symbol.
+     *
+     * @param symbolType the type of the symbol to set
+     * @param newSymbol the new symbol to set
+     * @param env the {@link Environment} on which to print the results
+     */
+    private void setSymbol(String symbolType, String newSymbol, Environment env) {
+        if (newSymbol.length() != 1) {
+            env.writeln("Invalid symbol \"" + newSymbol + "\"");
+            return;
+        }
+
+        switch (symbolType.toUpperCase()) {
+            case "PROMPT":
+                env.writeln("Symbol for PROMPT changed from '"
+                        + env.getPromptSymbol() + "' to '" + newSymbol + "'");
+                env.setPromptSymbol(newSymbol.charAt(0));
+                break;
+            case "MORELINES":
+                env.writeln("Symbol for MORELINES changed from '"
+                        + env.getMorelinesSymbol() + "' to '" + newSymbol + "'");
+                env.setMorelinesSymbol(newSymbol.charAt(0));
+                break;
+            case "MULTILINE":
+                env.writeln("Symbol for MULTILINE changed from '"
+                        + env.getMultilineSymbol() + "' to '" + newSymbol + "'");
+                env.setMultilineSymbol(newSymbol.charAt(0));
+                break;
+            default:
+                env.writeln("Unknown symbol type \"" + symbolType + "\"");
+        }
     }
 
     @Override
