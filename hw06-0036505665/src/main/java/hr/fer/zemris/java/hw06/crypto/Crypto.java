@@ -63,8 +63,8 @@ public class Crypto {
             switch (args.length) {
                 case 2:
                     if (!args[0].equalsIgnoreCase("checksha")) {
-                        throw new IllegalArgumentException(
-                                "Unknown command \"" + args[0] + "\".");
+                        System.out.println("Unknown command \"" + args[0] + "\".");
+                        System.exit(1);
                     }
 
                     System.out.print("Please provide expected sha-256 digest for "
@@ -75,8 +75,8 @@ public class Crypto {
                 case 3:
                     if (!args[0].equalsIgnoreCase("encrypt") &&
                             !args[0].equalsIgnoreCase("decrypt")) {
-                        throw new IllegalArgumentException(
-                                "Unknown command \"" + args[0] + "\".");
+                        System.out.println("Unknown command \"" + args[0] + "\".");
+                        System.exit(1);
                     }
 
                     System.out.print("Please provide password as hex-encoded text " +
@@ -147,7 +147,7 @@ public class Crypto {
             System.exit(1);
 
         } catch (IOException e) {
-            System.out.println("Cannot read file " + fileName + " .");
+            System.out.println("Cannot read file " + fileName + ".");
             System.exit(1);
         }
 
