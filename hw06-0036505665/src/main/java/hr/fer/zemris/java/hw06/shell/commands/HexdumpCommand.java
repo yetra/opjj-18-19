@@ -74,26 +74,25 @@ public class HexdumpCommand implements ShellCommand {
 
             int lineCount = 0x0;
             while ((bytesRead = stream.read(buffer)) != -1) {
-                env.write(String.format("%08X: ", lineCount));
+                StringBuilder sb = new StringBuilder(String.format("%08X: ", lineCount));
 
                 for (int i = 1, lineLength = bytesRead/2; i <= lineLength; i++) {
-                    env.write(String.format("%02X ", buffer[i]));
+                    sb.append(String.format("%02X ", buffer[i]));
 
                     if (buffer[i] < 32 || buffer[i] > 127) {
                         buffer[i] = '.';
                     }
                     if (i % 8 == 0) {
-                        env.write("| ");
+                        sb.append("| ");
                     }
                     if (i % 16 == 0) {
-                        env.writeln(new String(buffer));
+                        sb.append(new String(buffer));
                     }
                 }
 
                 lineCount += 0x10;
+                env.writeln(sb.toString());
             }
-
-            env.write("\n");
         }
     }
 
