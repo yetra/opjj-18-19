@@ -18,15 +18,22 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /**
- * This is a program that allows the user to encrypt/decrypt a given file using the
- * AES crypto-algorithm and a 128-bit encryption key, or calculate and check the
- * SHA-256 file digest.
+ * {@link Crypto} is a program that allows the user to encrypt/decrypt a given file
+ * using the AES crypto-algorithm and a 128-bit encryption key, or calculate and
+ * check the file's SHA-256 file digest.
  *
  * The desired command is given through the command-line arguments. Valid commands
  * are:
- * checksha file_path - checks the SHA-256 digest of the file specified by file_path
- * encrypt src_file_path dest_file_path - encrypts the given file to dest_file_path
- * decrypt src_file_path dest_file_path - decrypts the given file to dest_file_path
+ *
+ * checksha file_path
+ *     - checks the SHA-256 digest of the file specified by file_path
+ *
+ * encrypt src_file_path dest_file_path
+ *     - encrypts the given file and stores it to dest_file_path
+ *
+ * decrypt src_file_path dest_file_path
+ *     - decrypts the given file and stores it to dest_file_path
+ *
  *
  * @author Bruna Dujmović
  * 
@@ -55,14 +62,14 @@ public class Crypto {
         try (Scanner sc = new Scanner(System.in)) {
             switch (args.length) {
                 case 2:
-                    if (!(args[0].equalsIgnoreCase("checksha"))) {
+                    if (!args[0].equalsIgnoreCase("checksha")) {
                         throw new IllegalArgumentException(
                                 "Unknown command \"" + args[0] + "\".");
                     }
 
                     System.out.print("Please provide expected sha-256 digest for "
                             + args[1] + ":\n> ");
-                    checksha(args[1], sc.nextLine()); // TODO validate expected sha?
+                    checksha(args[1], sc.nextLine());
                     break;
 
                 case 3:
@@ -93,7 +100,7 @@ public class Crypto {
     }
 
     /**
-     * Checks if the calculated SHA-256 file digest matches the given digest and
+     * Checks if the calculated SHA-256 file digest matches the given string and
      * prints the results to the console.
      *
      * @param fileName the file whose SHA-256 digest will be checked
@@ -133,14 +140,14 @@ public class Crypto {
                 }
             }
 
-            return Util.byteToString(messageDigest.digest());
+            return  Util.byteToString(messageDigest.digest());
 
         } catch (NoSuchAlgorithmException e) {
             System.out.println("Invalid algorithm \"" + ALGORITHM + "\".");
             System.exit(1);
 
         } catch (IOException e) {
-            System.out.println("Cannot read file " + fileName+ " .");
+            System.out.println("Cannot read file " + fileName + " .");
             System.exit(1);
         }
 
@@ -157,16 +164,13 @@ public class Crypto {
      * @param vector the initialization vector for the encryption/decryption
      * @param encrypt {@code true} if encryption should be performed, {@code false}
      *                if decryption should be perfomed
-     * @throws NullPointerException if the given paths, key or vector are {@code null}
-     * @throws IllegalArgumentException if the given key or vector cannot be parsed
-     *         to a byte array
      */
     private static void encryptDecrypt(String src, String dest, String key,
                                        String vector, boolean encrypt) {
-        Objects.requireNonNull(src);
-        Objects.requireNonNull(dest);
-
         try {
+            Objects.requireNonNull(src);
+            Objects.requireNonNull(dest);
+
             SecretKeySpec keySpec = new SecretKeySpec(Util.hexToByte(key), "AES");
             AlgorithmParameterSpec paramSpec = new
                     IvParameterSpec(Util.hexToByte(vector));
@@ -178,7 +182,8 @@ public class Crypto {
             readWriteCipherText(cipher, src, dest);
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException
-                | InvalidAlgorithmParameterException | InvalidKeyException e) {
+                | InvalidAlgorithmParameterException | InvalidKeyException
+                | IllegalArgumentException | NullPointerException e) {
             System.out.println(e.getMessage());
             System.exit(1);
         }
@@ -210,6 +215,7 @@ public class Crypto {
             }
 
             os.write(cipher.doFinal());
+
         } catch (IOException e) {
             System.out.println("Issue with file " + e.getMessage() + ".");
             System.exit(1);
