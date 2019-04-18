@@ -41,6 +41,11 @@ public class CopyCommand implements ShellCommand {
             File srcFile = Paths.get(parsed[0]).toFile();
             File destFile = Paths.get(parsed[1]).toFile();
 
+            if (srcFile.isDirectory()) {
+                env.writeln("The source file cannot be a directory.");
+                return ShellStatus.CONTINUE;
+            }
+
             if (destFile.isDirectory()) {
                 Path destFilePath = Paths.get(parsed[1] + "/" + srcFile.getName());
                 copyFile(srcFile, destFilePath.toFile());
@@ -72,7 +77,7 @@ public class CopyCommand implements ShellCommand {
     private void overwriteIfAllowed(File src, File dest, Environment env)
             throws IOException {
         env.writeln("The specified destination file already exists." +
-                "Do you wish to overwrite it [y/n]?");
+                " Do you wish to overwrite it [y/n]?");
         String response = env.readLine();
 
         if (response.equalsIgnoreCase("y")) {
