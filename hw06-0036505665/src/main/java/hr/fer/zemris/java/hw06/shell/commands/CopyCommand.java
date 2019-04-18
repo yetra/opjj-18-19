@@ -47,10 +47,9 @@ public class CopyCommand implements ShellCommand {
             }
 
             if (destFile.isDirectory()) {
-                Path destFilePath = Paths.get(parsed[1] + "/" + srcFile.getName());
-                copyFile(srcFile, destFilePath.toFile());
+                copyToDirectory(srcFile, destFile, env);
             } else if (destFile.exists()) {
-                    overwriteIfAllowed(srcFile, destFile, env);
+                overwriteIfAllowed(srcFile, destFile, env);
             } else {
                 copyFile(srcFile, destFile);
             }
@@ -62,6 +61,32 @@ public class CopyCommand implements ShellCommand {
         }
 
         return ShellStatus.CONTINUE;
+    }
+
+    /**
+     * Reads from the given source file and copies its content to the destination
+     * directory. If a file with the same name already exists in the directory, this
+     * method will ask if the user if they wish to overwrite it.
+     *
+     * @param src the source file to read from
+     * @param dest the destination directory to copy to
+     * @param env the {@link Environment} used for communicating with the user
+     * @throws IOException if and I/O error occurs during the reading/writing of the
+     *                     files
+     */
+    private void copyToDirectory(File src, File dest, Environment env)
+            throws IOException {
+        if (!dest.exists()) {
+            env.writeln("The given destination directory does not exist.");
+            return;
+        }
+
+        Path destFilePath = Paths.get(dest.getAbsolutePath() + "/" + src.getName());
+        if (destFilePath.toFile().exists()) {
+            overwriteIfAllowed(src, destFilePath.toFile(), env);
+        } else {
+            copyFile(src, destFilePath.toFile());
+        }
     }
 
     /**
