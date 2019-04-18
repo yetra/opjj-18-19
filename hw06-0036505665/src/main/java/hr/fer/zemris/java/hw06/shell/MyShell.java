@@ -86,7 +86,12 @@ public class MyShell {
                     environment.writeln("Unknown command \"" + commandName + "\".");
                     continue;
                 }
-                status = command.executeCommand(environment, arguments);
+
+                try {
+                    status = command.executeCommand(environment, arguments);
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    environment.writeln(e.getMessage());
+                }
 
             } while (status != ShellStatus.TERMINATE);
             
