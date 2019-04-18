@@ -89,7 +89,7 @@ public class MyShell {
 
                 try {
                     status = command.executeCommand(environment, arguments);
-                } catch (IllegalArgumentException | NullPointerException e) {
+                } catch (IllegalArgumentException e) {
                     environment.writeln(e.getMessage());
                 }
 
