@@ -19,6 +19,7 @@ public interface ShellCommand {
      * @param arguments the arguments of the command (everything that the user entered
      *                  after the command name)
      * @return the status that the shell should be in after performing this command
+     * @throws IllegalArgumentException if the given arguments cannot be properly parsed
      */
     ShellStatus executeCommand(Environment env, String arguments);
 

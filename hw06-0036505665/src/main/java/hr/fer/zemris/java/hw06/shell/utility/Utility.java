@@ -19,6 +19,7 @@ public class Utility {
      *
      * @param argumentsString the string of arguments to parse
      * @return an array of arguments parsed from a given arguments string
+     * @throws IllegalArgumentException if the given arguments cannot be properly parsed
      */
     public static String[] parseArguments(String argumentsString) {
         Objects.requireNonNull(argumentsString);

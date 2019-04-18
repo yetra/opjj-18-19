@@ -47,6 +47,7 @@ class ArgumentsParser {
      * Parses and returns the next argument.
      *
      * @return the next argument
+     * @throws IllegalArgumentException if the argument cannot be properly parsed
      */
     String nextArgument() {
         skipBlanks();
