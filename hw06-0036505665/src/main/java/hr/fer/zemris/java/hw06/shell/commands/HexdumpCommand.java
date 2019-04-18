@@ -27,7 +27,7 @@ public class HexdumpCommand implements ShellCommand {
     /**
      * The default size of the byte array used for reading the contents of a given file.
      */
-    private static final int DEFAULT_BUFFER_SIZE = 32;
+    private static final int DEFAULT_BUFFER_SIZE = 16;
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -76,20 +76,19 @@ public class HexdumpCommand implements ShellCommand {
             while ((bytesRead = stream.read(buffer)) != -1) {
                 StringBuilder sb = new StringBuilder(String.format("%08X: ", lineCount));
 
-                for (int i = 1; i <= DEFAULT_BUFFER_SIZE / 2; i++) {
+                for (int i = 0; i < DEFAULT_BUFFER_SIZE; i++) {
                     sb.append(i < bytesRead ? String.format("%02X ", buffer[i])
                                             : "   ");
 
                     if (buffer[i] < 32 || buffer[i] > 127) {
                         buffer[i] = '.';
                     }
-                    if (i % 8 == 0) {
+                    if (i == 7) {
                         sb.append("| ");
                     }
-                    if (i % 16 == 0) {
-                        sb.append(new String(buffer, 0, bytesRead));
-                    }
                 }
+
+                sb.append("| ").append(new String(buffer, 0, bytesRead));
 
                 lineCount += 0x10;
                 env.writeln(sb.toString());
