@@ -36,5 +36,6 @@ public class DoubleValue implements IntegerStorageObserver {
         }
 
         System.out.println("Double value: " + istorage.getValue() * 2);
+        timeUntilDeregistration--;
     }
 }
