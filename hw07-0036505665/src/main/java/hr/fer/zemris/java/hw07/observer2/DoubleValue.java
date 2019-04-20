@@ -30,12 +30,12 @@ public class DoubleValue implements IntegerStorageObserver {
     }
 
     @Override
-    public void valueChanged(IntegerStorage istorage) {
+    public void valueChanged(IntegerStorageChange change) {
         if (timeUntilDeregistration < 1) {
-            istorage.removeObserver(this);
+            change.getIntegerStorage().removeObserver(this);
         }
 
-        System.out.println("Double value: " + istorage.getValue() * 2);
+        System.out.println("Double value: " + change.getNewValue() * 2);
         timeUntilDeregistration--;
     }
 }

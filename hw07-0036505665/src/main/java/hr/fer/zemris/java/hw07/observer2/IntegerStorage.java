@@ -83,9 +83,12 @@ public class IntegerStorage {
      */
     public void setValue(int value) {
         if (this.value != value) {
+            IntegerStorageChange change = new IntegerStorageChange(
+                    this, this.value, value
+            );
             this.value = value;
 
-            observers.forEach((observer) -> observer.valueChanged(this));
+            observers.forEach((observer) -> observer.valueChanged(change));
         }
     }
 }

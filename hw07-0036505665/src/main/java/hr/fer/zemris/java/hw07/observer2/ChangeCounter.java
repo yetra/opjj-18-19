@@ -16,7 +16,7 @@ public class ChangeCounter implements IntegerStorageObserver {
     private int changeCounter = 0;
 
     @Override
-    public void valueChanged(IntegerStorage istorage) {
+    public void valueChanged(IntegerStorageChange change) {
         changeCounter++;
         
         System.out.println("Number of value changes since tracking: " + changeCounter);

@@ -10,10 +10,9 @@ package hr.fer.zemris.java.hw07.observer2;
 public interface IntegerStorageObserver {
 
     /**
-     * The method to execute when a given {@link IntegerStorage} object's stored
-     * value changes.
+     * The method to execute when a given {@link IntegerStorageChange} occurs.
      *
-     * @param istorage the {@link IntegerStorage} object whose stored value changed
+     * @param change a reference to the {@link IntegerStorageChange} object
      */
-    public void valueChanged(IntegerStorage istorage);
+     void valueChanged(IntegerStorageChange change);
 }
