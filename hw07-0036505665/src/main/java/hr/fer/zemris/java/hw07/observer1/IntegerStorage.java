@@ -54,7 +54,9 @@ public class IntegerStorage {
      * @param observer the observer to remove
      */
     public void removeObserver(IntegerStorageObserver observer) {
-        observers.remove(observer);
+        List<IntegerStorageObserver> observersCopy = new ArrayList<>(observers);
+        observersCopy.remove(observer);
+        observers = observersCopy;
     }
 
     /**
