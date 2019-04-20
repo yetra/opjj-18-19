@@ -67,4 +67,12 @@ public class StudentRecord {
         this.labScore = labScore;
         this.grade = grade;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "%s\t%s\t%s\t%d\t%d\t%d\t%s",
+                jmbag, lastName, firstName, midtermScore, finalScore, labScore, grade
+        );
+    }
 }
