@@ -82,4 +82,32 @@ public class StudentRecord {
                 jmbag, lastName, firstName, midtermScore, finalScore, labScore, grade
         );
     }
+
+    /**
+     * Returns the jmbag of the student.
+     *
+     * @return the jmbag of the student
+     */
+    public String getJmbag() {
+        return jmbag;
+    }
+
+    /**
+     * Returns the grade of the student.
+     *
+     * @return the grade of the student
+     */
+    public int getGrade() {
+        return grade;
+    }
+
+    /**
+     * Returns the calculated total score of the student - the sum of their midterm,
+     * final, and lab scores.
+     *
+     * @return the calculated total score of the student
+     */
+    public double getTotalScore() {
+        return midtermScore + finalScore + labScore;
+    }
 }
