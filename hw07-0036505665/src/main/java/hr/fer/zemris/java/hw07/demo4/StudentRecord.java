@@ -2,6 +2,12 @@ package hr.fer.zemris.java.hw07.demo4;
 
 import java.util.Objects;
 
+/**
+ * This class represents a student record.
+ *
+ * @author Bruna Dujmović
+ * 
+ */
 public class StudentRecord {
 
     /**
