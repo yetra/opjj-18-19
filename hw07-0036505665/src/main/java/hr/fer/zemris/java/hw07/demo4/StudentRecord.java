@@ -28,17 +28,17 @@ public class StudentRecord {
     /**
      * The midterm exam score of the student.
      */
-    private int midtermScore;
+    private double midtermScore;
 
     /**
      * The final exam score of the student.
      */
-    private int finalScore;
+    private double finalScore;
 
     /**
      * The lab score of the student.
      */
-    private int labScore;
+    private double labScore;
 
     /**
      * The grade of the student.
@@ -60,8 +60,9 @@ public class StudentRecord {
      * @throws IllegalArgumentException if the given scores or grade are negative
      */
     public StudentRecord(String jmbag, String lastName, String firstName,
-                         int midtermScore, int finalScore, int labScore, int grade) {
-        if (midtermScore < 0 || finalScore < 0 || labScore < 0 || grade < 0) {
+                         double midtermScore, double finalScore, double labScore,
+                         int grade) {
+        if (midtermScore < 0.0 || finalScore < 0.0 || labScore < 0.0 || grade < 0) {
             throw new IllegalArgumentException("Scores and grade cannot be negative.");
         }
 
@@ -77,7 +78,7 @@ public class StudentRecord {
     @Override
     public String toString() {
         return String.format(
-                "%s\t%s\t%s\t%d\t%d\t%d\t%s",
+                "%s\t%s\t%s\t%f\t%f\t%f\t%d",
                 jmbag, lastName, firstName, midtermScore, finalScore, labScore, grade
         );
     }
