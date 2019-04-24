@@ -203,7 +203,7 @@ public class StudentDemo {
     /**
      * Returns a map of students partitioned into two lists - student records of
      * students who have passes the class (the key is {@code true}), and of those
-     * who have not passed the class (the key is {@code fale}).
+     * who have not passed the class (the key is {@code false}).
      *
      * @param records the list of student records to filter
      * @return a map of students partitioned into two lists of students who have and
