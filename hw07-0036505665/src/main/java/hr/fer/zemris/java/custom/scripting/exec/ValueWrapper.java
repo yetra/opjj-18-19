@@ -14,6 +14,16 @@ import static hr.fer.zemris.java.custom.scripting.exec.OperandType.*;
 public class ValueWrapper {
 
     /**
+     * A regular expression to match a valid Integer value.
+     */
+    private static final String INTEGER_REGEX = "^[+-]?\\d+$";
+
+    /**
+     * A regular expression to match a valid Double value.
+     */
+    private static final String DOUBLE_REGEX = "^[+-]?\\d+(\\.\\d+)?(E-?\\d+)?$";
+
+    /**
      * The value object that is wrapped by this {@link ValueWrapper}.
      */
     private Object value;
@@ -171,9 +181,9 @@ public class ValueWrapper {
         } else if (value instanceof String) {
             String valueString = (String) value;
 
-            if (valueString.matches("^[+-]?\\d+$")) {
+            if (valueString.matches(INTEGER_REGEX)) {
                 return INTEGER;
-            } else if (valueString.matches("^[+-]?\\d+(\\.\\d+)?(E-?\\d+)?$")) {
+            } else if (valueString.matches(DOUBLE_REGEX)) {
                 return DOUBLE;
             } else {
                 return INVALID;
