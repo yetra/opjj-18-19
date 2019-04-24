@@ -33,14 +33,7 @@ public class ObjectMultistack {
         // TODO Objects.requireNonNull(valueWrapper); ?
 
         MultistackEntry newEntry = new MultistackEntry(valueWrapper);
-        MultistackEntry topOfStack = entryMap.get(keyName);
-
-        if (topOfStack == null) {
-            entryMap.put(keyName, newEntry);
-        } else {
-            newEntry.next = topOfStack;
-            topOfStack = newEntry;
-        }
+        entryMap.merge(keyName, newEntry, (oldEntry, entry) -> entry);
     }
 
     /**
