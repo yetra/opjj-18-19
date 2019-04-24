@@ -49,11 +49,10 @@ public class ObjectMultistack {
     public ValueWrapper pop(String keyName) {
         Objects.requireNonNull(keyName);
 
-        MultistackEntry topOfStack = entryMap.get(keyName);
-        ValueWrapper poppedValue = topOfStack.value;
-        topOfStack = topOfStack.next;
+        MultistackEntry oldTopOfStack = entryMap.get(keyName);
+        entryMap.merge(keyName, oldTopOfStack.next, (oldEntry, entry) -> entry);
 
-        return poppedValue;
+        return oldTopOfStack.value;
     }
 
     /**
