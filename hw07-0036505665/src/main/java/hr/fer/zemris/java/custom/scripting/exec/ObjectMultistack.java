@@ -35,7 +35,7 @@ public class ObjectMultistack {
         MultistackEntry newEntry = new MultistackEntry(valueWrapper);
         newEntry.next = entryMap.get(keyName);
 
-        entryMap.merge(keyName, newEntry, (oldEntry, entry) -> entry);
+        entryMap.put(keyName, newEntry);
     }
 
     /**
@@ -49,8 +49,10 @@ public class ObjectMultistack {
     public ValueWrapper pop(String keyName) {
         Objects.requireNonNull(keyName);
 
-        MultistackEntry oldTopOfStack = entryMap.get(keyName);
-        entryMap.merge(keyName, oldTopOfStack.next, (oldEntry, entry) -> entry);
+        MultistackEntry oldTopOfStack = entryMap.remove(keyName);
+        if (oldTopOfStack.next != null) {
+            entryMap.put(keyName, oldTopOfStack.next);
+        }
 
         return oldTopOfStack.value;
     }
