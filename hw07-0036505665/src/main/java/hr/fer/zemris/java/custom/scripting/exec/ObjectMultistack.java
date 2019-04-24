@@ -42,12 +42,20 @@ public class ObjectMultistack {
      * Removes the entry that is at the top of a given key name's stack in O(1), and
      * returns the value of the popped entry.
      *
+     * If no more elements are left in the stack after popping, this method will also
+     * remove the given key from the underlying entry map.
+     *
      * @param keyName the key name that specifies which stack to pop from
      * @return the value of the popped entry
      * @throws NullPointerException if the given key name is {@code null}
+     * @throws EmptyStackException if pop is attempted on a non-existent stack
      */
     public ValueWrapper pop(String keyName) {
         Objects.requireNonNull(keyName);
+
+        if (isEmpty(keyName)) {
+            throw new EmptyStackException();
+        }
 
         MultistackEntry oldTopOfStack = entryMap.remove(keyName);
         if (oldTopOfStack.next != null) {
@@ -64,9 +72,14 @@ public class ObjectMultistack {
      * @param keyName the key name that specifies which stack to peek from
      * @return the value of the entry that is at the top of a given key name's stack
      * @throws NullPointerException if the given key name is {@code null}
+     * @throws EmptyStackException if peek is attempted on a non-existent stack
      */
     public ValueWrapper peek(String keyName) {
         Objects.requireNonNull(keyName);
+
+        if (isEmpty(keyName)) {
+            throw new EmptyStackException();
+        }
 
         return entryMap.get(keyName).value;
     }
