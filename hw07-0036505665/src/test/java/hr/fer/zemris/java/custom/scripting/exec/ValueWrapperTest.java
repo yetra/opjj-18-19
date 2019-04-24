@@ -139,8 +139,8 @@ public class ValueWrapperTest {
 
     @Test
     void testInvalidOperands() {
-        Object[] first = {"a10.23", "12", null, "-12.", "4..5", "150.E-2", "1,2"};
-        Object[] second = {-1.0, ".12p", "10e2", "90", 0.0, "1E0.1", 0};
+        Object[] first = {"a10.23", "12", null, "-12.", "4..5", "150.E-2", "1,2", true, 1};
+        Object[] second = {-1.0, ".12p", "10e2", "90", 0.0, "1E0.1", 0, -1.0, new Object()};
 
         for (int i = 0; i < first.length; i++) {
             ValueWrapper firstWrapper = new ValueWrapper(first[i]);
