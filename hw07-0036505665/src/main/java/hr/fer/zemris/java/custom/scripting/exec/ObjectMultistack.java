@@ -26,11 +26,11 @@ public class ObjectMultistack {
      *
      * @param keyName the key name that specifies which stack to push to
      * @param valueWrapper the value of the new stack entry
-     * @throws NullPointerException if the given key name is {@code null}
+     * @throws NullPointerException if the given key name or value is {@code null}
      */
     public void push(String keyName, ValueWrapper valueWrapper) {
         Objects.requireNonNull(keyName);
-        // TODO Objects.requireNonNull(valueWrapper); ?
+        Objects.requireNonNull(valueWrapper);
 
         MultistackEntry newEntry = new MultistackEntry(valueWrapper);
         newEntry.next = entryMap.get(keyName);
@@ -106,9 +106,8 @@ public class ObjectMultistack {
          *
          * @param value the value of the new entry.
          */
-        public MultistackEntry(ValueWrapper value) {
+        MultistackEntry(ValueWrapper value) {
             this.value = value;
-            // TODO this.value = Objects.requireNonNull(value); ?
             this.next = null;
         }
     }
