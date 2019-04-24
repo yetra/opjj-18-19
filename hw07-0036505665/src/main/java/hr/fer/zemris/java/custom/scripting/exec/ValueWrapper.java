@@ -2,6 +2,8 @@ package hr.fer.zemris.java.custom.scripting.exec;
 
 import java.util.function.BinaryOperator;
 
+import static hr.fer.zemris.java.custom.scripting.exec.OperandType.*;
+
 /**
  * This class represents a wrapper of a given object value. It supports arithmetic
  * operations on values that can be parsed to {@link Double} or {@link Integer}.
@@ -96,13 +98,17 @@ public class ValueWrapper {
      * @throws RuntimeException if the operation cannot be performed on the given operands
      */
     public int numCompare(Object withValue) {
-        if (typeOf(this.value) == OperandType.INTEGER
-                && typeOf(withValue) == OperandType.INTEGER) {
-            // 2 ints, 1 null & 1 int, 2 nulls
-            return Integer.compare(toDouble(this.value).intValue(), toDouble(this.value).intValue());
+        if (typeOf(this.value) == INVALID || typeOf(withValue) == INVALID) {
+            throw new RuntimeException("Cannot perform operation on the given values.");
+        }
+
+        Double first = toDouble(this.value);
+        Double second = toDouble(withValue);
+
+        if (typeOf(this.value) == INTEGER && typeOf(withValue) == INTEGER) {
+            return Integer.compare(first.intValue(), second.intValue());
         } else {
-             // 2 doubles
-            return Double.compare(toDouble(this.value), toDouble(withValue));
+            return Double.compare(first, second);
         }
     }
 
@@ -115,10 +121,13 @@ public class ValueWrapper {
      * @throws RuntimeException if the operation cannot be performed on the given operands
      */
     private void performOperation(Object value, BinaryOperator<Double> operation) {
+        if (typeOf(this.value) == INVALID || typeOf(value) == INVALID) {
+            throw new RuntimeException("Cannot perform operation on the given values.");
+        }
+
         Double result = operation.apply(toDouble(this.value), toDouble(value));
 
-        if (typeOf(this.value) == OperandType.INTEGER
-                && typeOf(value) == OperandType.INTEGER) {
+        if (typeOf(this.value) == INTEGER && typeOf(value) == INTEGER) {
             this.value = result.intValue();
         } else {
             this.value = result;
@@ -144,7 +153,7 @@ public class ValueWrapper {
         } else if (value instanceof String) {
             return Double.parseDouble((String) value);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid object type for conversion!");
         }
     }
 
@@ -156,23 +165,21 @@ public class ValueWrapper {
      */
     private OperandType typeOf(Object value) {
         if (value == null || value instanceof Integer) {
-            return OperandType.INTEGER;
-        }
-        if (value instanceof Double) {
-            return OperandType.DOUBLE;
-        }
-
-        if (value instanceof String) {
+            return INTEGER;
+        } else if (value instanceof Double) {
+            return DOUBLE;
+        } else if (value instanceof String) {
             String valueString = (String) value;
-            if (valueString.matches("^\\d+$")) {
-                return OperandType.INTEGER;
+
+            if (valueString.matches("^[+-]?\\d+$")) {
+                return INTEGER;
             } else if (valueString.matches("^[+-]?\\d+(\\.\\d+)?(E-?\\d+)?$")) {
-                return OperandType.DOUBLE;
+                return DOUBLE;
             } else {
-                throw new IllegalArgumentException("Invalid string format!");
+                return INVALID;
             }
         } else {
-            throw new IllegalArgumentException("Invalid value type!");
+            return INVALID;
         }
     }
 }
