@@ -60,13 +60,13 @@ public class ValueWrapper {
     }
 
     public int numCompare(Object withValue) {
-        if (typeOf(this.value) == OperatorType.DOUBLE
+        if (typeOf(this.value) == OperatorType.INTEGER
                 && typeOf(withValue) == OperatorType.INTEGER) {
-            // 2 doubles
-            return Double.compare(toDouble(this.value), toDouble(withValue));
-        } else {
-            // 2 ints, 1 null & 1 int/double, 2 nulls // TODO null will be equal to 0.0
+            // 2 ints, 1 null & 1 int, 2 nulls
             return Integer.compare(toDouble(this.value).intValue(), toDouble(this.value).intValue());
+        } else {
+             // 2 doubles
+            return Double.compare(toDouble(this.value), toDouble(withValue));
         }
     }
 
