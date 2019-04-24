@@ -35,7 +35,7 @@ public class ObjectMultistackTest {
     void testPopEmptyStack() {
         ObjectMultistack multistack = new ObjectMultistack();
 
-        assertThrows(EmptyStackException.class, () -> multistack.pop("key"));
+        assertThrows(NoStackException.class, () -> multistack.pop("key"));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ObjectMultistackTest {
     void testPeekEmptyStack() {
         ObjectMultistack multistack = new ObjectMultistack();
 
-        assertThrows(EmptyStackException.class, () -> multistack.peek("key"));
+        assertThrows(NoStackException.class, () -> multistack.peek("key"));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class ObjectMultistackTest {
         multistack.push("key", new ValueWrapper("value"));
         multistack.pop("key");
         assertTrue(multistack.isEmpty("key"));
-        assertThrows(EmptyStackException.class, () -> multistack.pop("key"));
+        assertThrows(NoStackException.class, () -> multistack.pop("key"));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ObjectMultistackTest {
         assertEquals(1, multistack.pop("key").getValue());
         assertEquals("value", multistack.pop("key").getValue());
 
-        assertThrows(EmptyStackException.class, () -> multistack.pop("key"));
+        assertThrows(NoStackException.class, () -> multistack.pop("key"));
         assertTrue(multistack.isEmpty("key"));
     }
 
