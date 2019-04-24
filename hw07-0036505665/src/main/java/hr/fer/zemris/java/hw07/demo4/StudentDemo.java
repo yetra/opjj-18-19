@@ -66,17 +66,32 @@ public class StudentDemo {
         }
     }
 
+    /**
+     * Converts a given list of lines to a list of {@link StudentRecord} objects.
+     *
+     * @param lines the list of lines to convert
+     * @return a list of {@link StudentRecord} objects
+     * @throws IllegalArgumentException if the string argument cannot be properly parsed
+     *         or if the value of the string is invalid
+     * @throws ArrayIndexOutOfBoundsException if the given string does not contain the
+     *         appropriate amount of data
+     */
     private static List<StudentRecord> convert(List<String> lines) {
         List<StudentRecord> records = new ArrayList<>(lines.size());
 
-        for (String line : lines) {
-            String[] parts = line.split("\t");
+        try {
+            for (String line : lines) {
+                String[] parts = line.split("\t");
 
-            records.add(new StudentRecord(
-                    parts[0], parts[1], parts[2],
-                    Double.parseDouble(parts[3]), Double.parseDouble(parts[4]),
-                    Double.parseDouble(parts[5]), Integer.parseInt(parts[6])
-            ));
+                records.add(new StudentRecord(
+                        parts[0], parts[1], parts[2],
+                        Double.parseDouble(parts[3]), Double.parseDouble(parts[4]),
+                        Double.parseDouble(parts[5]), Integer.parseInt(parts[6])
+                ));
+            }
+        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
+            System.out.println("Invalid record input.");
+            System.exit(1);
         }
 
         return records;
