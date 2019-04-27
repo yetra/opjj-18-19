@@ -55,7 +55,7 @@ public class HexdumpCommand implements ShellCommand {
         }
 
         try {
-            Path filePath = Paths.get(parsed[0]);
+            Path filePath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
 
             if (filePath.toFile().isFile()) {
                 printHexOutput(filePath, env);

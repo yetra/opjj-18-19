@@ -46,7 +46,7 @@ public class TreeCommand implements ShellCommand {
         }
 
         try {
-            Path directoryPath = Paths.get(parsed[0]);
+            Path directoryPath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
 
             if (directoryPath.toFile().isDirectory()) {
                 Files.walkFileTree(directoryPath, new TreeFileVisitor(env));

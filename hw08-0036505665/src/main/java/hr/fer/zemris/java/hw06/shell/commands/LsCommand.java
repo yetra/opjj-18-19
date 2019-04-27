@@ -55,7 +55,7 @@ public class LsCommand implements ShellCommand {
         }
 
         try {
-            File directory = Paths.get(parsed[0]).toFile();
+            File directory = Paths.get(parsed[0]).relativize(env.getCurrentDirectory()).toFile();
 
             if (directory.isDirectory()) {
                 printDirectoryListing(directory, env);

@@ -59,8 +59,8 @@ public class CopyCommand implements ShellCommand {
         }
 
         try {
-            File srcFile = Paths.get(parsed[0]).toFile();
-            File destFile = Paths.get(parsed[1]).toFile();
+            File srcFile = Paths.get(parsed[0]).relativize(env.getCurrentDirectory()).toFile();
+            File destFile = Paths.get(parsed[1]).relativize(env.getCurrentDirectory()).toFile();
 
             if (srcFile.isDirectory()) {
                 env.writeln("The source file cannot be a directory.");
