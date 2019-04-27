@@ -2,6 +2,10 @@ package hr.fer.zemris.java.hw06.shell;
 
 import hr.fer.zemris.java.hw06.shell.commands.*;
 
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -37,7 +41,12 @@ public class EnvironmentImpl implements Environment {
     /**
      * The {@link Scanner} object used for communicating with the user.
      */
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
+
+    /**
+     * The path to the current directory.
+     */
+    private Path currentDirectory;
 
     static {
         COMMANDS = new TreeMap<>();
@@ -58,7 +67,8 @@ public class EnvironmentImpl implements Environment {
      * Default constructior for the {@link EnvironmentImpl} class.
      */
     public EnvironmentImpl() {
-
+        scanner = new Scanner(System.in);
+        currentDirectory = Paths.get(".");
     }
 
     @Override
@@ -113,5 +123,20 @@ public class EnvironmentImpl implements Environment {
     @Override
     public void setMorelinesSymbol(Character symbol) {
         moreLinesSymbol = symbol;
+    }
+
+    @Override
+    public Path getCurrentDirectory() {
+        return currentDirectory.toAbsolutePath().normalize();
+    }
+
+    @Override
+    public void setCurrentDirectory(Path path) {
+        if (!Files.exists(path) || !Files.isDirectory(path)) {
+            throw new IllegalArgumentException(
+                    "The given path does not point to an existing directory.");
+        }
+
+        currentDirectory = path;
     }
 }
