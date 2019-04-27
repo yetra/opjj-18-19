@@ -55,9 +55,9 @@ public class LsCommand implements ShellCommand {
         }
 
         try {
-            File directory = Paths.get(parsed[0]).relativize(env.getCurrentDirectory()).toFile();
+            Path directory = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
 
-            if (directory.isDirectory()) {
+            if (Files.isDirectory(directory)) {
                 printDirectoryListing(directory, env);
             } else {
                 env.writeln("The given file is not a directory.");
@@ -77,8 +77,8 @@ public class LsCommand implements ShellCommand {
      * @param directory the directory whose listing should be printed
      * @param env the {@link Environment} to print the file to
      */
-    private void printDirectoryListing(File directory, Environment env) {
-        File[] files = directory.listFiles();
+    private void printDirectoryListing(Path directory, Environment env) {
+        File[] files = directory.toFile().listFiles();
 
         if (files != null) {
             for (File file : files) {

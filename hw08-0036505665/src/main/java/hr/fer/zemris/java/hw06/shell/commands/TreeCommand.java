@@ -48,7 +48,7 @@ public class TreeCommand implements ShellCommand {
         try {
             Path directoryPath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
 
-            if (directoryPath.toFile().isDirectory()) {
+            if (Files.isDirectory(directoryPath)) {
                 Files.walkFileTree(directoryPath, new TreeFileVisitor(env));
             } else {
                 env.writeln("The given file is not a directory.");
@@ -101,8 +101,7 @@ public class TreeCommand implements ShellCommand {
         }
 
         @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                throws IOException {
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
             env.writeln("  ".repeat(depth) + dir.getFileName().toString());
             depth++;
 
@@ -110,16 +109,14 @@ public class TreeCommand implements ShellCommand {
         }
 
         @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                throws IOException {
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             env.writeln("  ".repeat(depth) + file.getFileName().toString());
 
             return FileVisitResult.CONTINUE;
         }
 
         @Override
-        public FileVisitResult postVisitDirectory(Path dir, IOException exc)
-                throws IOException {
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
             depth--;
 
             return FileVisitResult.CONTINUE;

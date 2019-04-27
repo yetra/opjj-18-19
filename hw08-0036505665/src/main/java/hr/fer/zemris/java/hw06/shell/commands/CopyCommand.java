@@ -6,6 +6,7 @@ import hr.fer.zemris.java.hw06.shell.ShellStatus;
 import hr.fer.zemris.java.hw06.shell.utility.Utility;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,20 +60,20 @@ public class CopyCommand implements ShellCommand {
         }
 
         try {
-            File srcFile = Paths.get(parsed[0]).relativize(env.getCurrentDirectory()).toFile();
-            File destFile = Paths.get(parsed[1]).relativize(env.getCurrentDirectory()).toFile();
+            Path srcPath = Paths.get(parsed[0]).relativize(env.getCurrentDirectory());
+            Path destPath = Paths.get(parsed[1]).relativize(env.getCurrentDirectory());
 
-            if (srcFile.isDirectory()) {
+            if (Files.isDirectory(srcPath)) {
                 env.writeln("The source file cannot be a directory.");
                 return ShellStatus.CONTINUE;
             }
 
-            if (destFile.isDirectory()) {
-                copyToDirectory(srcFile, destFile, env);
-            } else if (destFile.exists()) {
-                overwriteIfAllowed(srcFile, destFile, env);
+            if (Files.isDirectory(destPath)) {
+                copyToDirectory(srcPath, destPath, env);
+            } else if (Files.exists(destPath)) {
+                overwriteIfAllowed(srcPath, destPath, env);
             } else {
-                copyFile(srcFile, destFile);
+                copyFile(srcPath, destPath);
             }
 
         } catch (InvalidPathException e) {
@@ -92,21 +93,19 @@ public class CopyCommand implements ShellCommand {
      * @param src the source file to read from
      * @param dest the destination directory to copy to
      * @param env the {@link Environment} used for communicating with the user
-     * @throws IOException if and I/O error occurs during the reading/writing of the
-     *                     files
+     * @throws IOException if and I/O error occurs during the reading/writing of the files
      */
-    private void copyToDirectory(File src, File dest, Environment env)
-            throws IOException {
-        if (!dest.exists()) {
+    private void copyToDirectory(Path src, Path dest, Environment env) throws IOException {
+        if (!Files.exists(dest)) {
             env.writeln("The given destination directory does not exist.");
             return;
         }
 
-        Path destFilePath = Paths.get(dest.getAbsolutePath() + "/" + src.getName());
+        Path destFilePath = Paths.get(dest.toAbsolutePath() + "/" + src.getFileName());
         if (destFilePath.toFile().exists()) {
-            overwriteIfAllowed(src, destFilePath.toFile(), env);
+            overwriteIfAllowed(src, destFilePath, env);
         } else {
-            copyFile(src, destFilePath.toFile());
+            copyFile(src, destFilePath);
         }
     }
 
@@ -117,11 +116,9 @@ public class CopyCommand implements ShellCommand {
      * @param src the source file to read from
      * @param dest the destination file to overwrite
      * @param env the {@link Environment} used for communicating with the user
-     * @throws IOException if and I/O error occurs during the reading/writing of the
-     *                     files
+     * @throws IOException if and I/O error occurs during the reading/writing of the files
      */
-    private void overwriteIfAllowed(File src, File dest, Environment env)
-            throws IOException {
+    private void overwriteIfAllowed(Path src, Path dest, Environment env) throws IOException {
         env.writeln("The specified destination file already exists." +
                 " Do you wish to overwrite it [y/n]?");
         String response = env.readLine();
@@ -139,14 +136,11 @@ public class CopyCommand implements ShellCommand {
      *
      * @param src the source file to read from
      * @param dest the destination file to write to
-     * @throws IOException if and I/O error occurs during the reading/writing of the
-     *                     files
+     * @throws IOException if and I/O error occurs during the reading/writing of the files
      */
-    private void copyFile(File src, File dest) throws IOException {
-        try (InputStream is = new BufferedInputStream(
-                new FileInputStream(src));
-             OutputStream os = new BufferedOutputStream(
-                     new FileOutputStream(dest))) {
+    private void copyFile(Path src, Path dest) throws IOException {
+        try (InputStream is = new BufferedInputStream(new FileInputStream(src.toFile()));
+             OutputStream os = new BufferedOutputStream(new FileOutputStream(dest.toFile()))) {
 
             byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
             int bytesRead;

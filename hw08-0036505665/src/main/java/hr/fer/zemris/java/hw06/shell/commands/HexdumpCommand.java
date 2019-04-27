@@ -57,10 +57,10 @@ public class HexdumpCommand implements ShellCommand {
         try {
             Path filePath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
 
-            if (filePath.toFile().isFile()) {
+            if (Files.isRegularFile(filePath)) {
                 printHexOutput(filePath, env);
             } else {
-                env.writeln("The given path does not point to a file.");
+                env.writeln("The given path does not point to a regular file.");
             }
 
         } catch (InvalidPathException e) {
