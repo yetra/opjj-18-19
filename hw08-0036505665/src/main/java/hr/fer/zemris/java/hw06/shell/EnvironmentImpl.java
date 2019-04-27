@@ -2,10 +2,7 @@ package hr.fer.zemris.java.hw06.shell;
 
 import hr.fer.zemris.java.hw06.shell.commands.*;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * This class is an implementation of the {@link Environment} interface that uses a
@@ -85,7 +82,7 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public SortedMap<String, ShellCommand> commands() {
-        return COMMANDS;
+        return Collections.unmodifiableSortedMap(COMMANDS);
     }
 
     @Override
