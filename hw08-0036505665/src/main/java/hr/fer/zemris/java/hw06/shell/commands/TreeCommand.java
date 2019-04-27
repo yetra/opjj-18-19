@@ -8,6 +8,7 @@ import hr.fer.zemris.java.hw06.shell.utility.Utility;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +21,20 @@ import java.util.Objects;
  *
  */
 public class TreeCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "tree";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "tree dir_path",
+            "\tdir_path -- path to the directory to be listed\n",
+            "Prints a recursive, tree-like listing of the specified directory."
+    );
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -50,16 +65,12 @@ public class TreeCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "tree";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "tree dir_path",
-                "\tdir_path -- path to the directory to be listed\n",
-                "Prints a recursive, tree-like listing of the specified directory."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 
     /**

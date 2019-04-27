@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,6 +24,20 @@ import java.util.List;
  *
  */
 public class HexdumpCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "hexdump";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "hexdump file_path",
+            "\tfile_path -- the path of the file to print\n",
+            "Prints a hexadecimal representation of the contents of the specified file."
+    );
 
     /**
      * The default size of the byte array used for reading the contents of a given file.
@@ -98,16 +113,11 @@ public class HexdumpCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "hexdump";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "hexdump file_path",
-                "\tfile_path -- the path of the file to print\n",
-                "Prints a hexadecimal representation of the contents of the " +
-                        "specified file."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

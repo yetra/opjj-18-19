@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,6 +26,21 @@ import java.util.List;
  *
  */
 public class CatCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "cat";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "cat file_path [charset_name]",
+            "\tfile_path -- the path to the file that will be printed to the console",
+            "\tcharset_name (optional) -- the charset that will be used to interpret the file\n",
+            "Opens the given file and writes its contents to the console."
+    );
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -77,18 +93,11 @@ public class CatCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "cat";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "cat file_path [charset_name]",
-                "\tfile_path -- the path to the file that will be printed to " +
-                        "the console",
-                "\tcharset_name (optional) -- the charset that will be used to " +
-                        "interpret the file\n",
-                "Opens the given file and writes its contents to the console."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

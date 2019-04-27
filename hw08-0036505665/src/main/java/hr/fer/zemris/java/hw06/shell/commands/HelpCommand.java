@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw06.shell.ShellCommand;
 import hr.fer.zemris.java.hw06.shell.ShellStatus;
 import hr.fer.zemris.java.hw06.shell.utility.Utility;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,6 +17,15 @@ import java.util.List;
  *
  */
 public class HelpCommand implements ShellCommand {
+
+    private static final String NAME = "help";
+
+    private static final List<String> DESCRIPTION = List.of(
+            "help [command_name]",
+            "\tcommand_name (optional) -- name of the command whose info should be printed\n",
+            "Prints the name and description of the specified command.",
+            "If a command name is not specified, prints a list of all supported commands"
+    );
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -45,18 +55,11 @@ public class HelpCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "help";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "help [command_name]",
-                "\tcommand_name (optional) -- name of the command whose info should " +
-                        "be printed\n",
-                "Prints the name and description of the specified command.",
-                "If a command name is not specified, prints a list of all supported " +
-                        "commands"
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

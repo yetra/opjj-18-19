@@ -12,6 +12,7 @@ import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,23 @@ import java.util.List;
  */
 public class LsCommand implements ShellCommand {
 
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "ls";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "ls dir_path",
+            "\tdir_path -- path to the directory to be listed\n",
+            "Prints a non-recursive listing of the specified directory."
+    );
+
+    /**
+     * The date format for formatting a file's creation date and time.
+     */
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
 
@@ -120,15 +138,11 @@ public class LsCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "ls";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "ls dir_path",
-                "\tdir_path -- path to the directory to be listed\n",
-                "Prints a non-recursive listing of the specified directory."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

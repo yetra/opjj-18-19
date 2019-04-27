@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw06.shell.ShellCommand;
 import hr.fer.zemris.java.hw06.shell.ShellStatus;
 
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,19 @@ import java.util.Map;
  *
  */
 public class CharsetsCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "charsets";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "charsets\n",
+            "Lists the names of the supported charsets for the user's Java platform."
+    );
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -36,14 +50,11 @@ public class CharsetsCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "charsets";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "charsets\n",
-                "Lists the names of the supported charsets for the user's Java platform."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

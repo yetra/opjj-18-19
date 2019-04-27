@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,6 +22,20 @@ import java.util.List;
  *
  */
 public class MkdirCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "mkdir";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "mkdir dir_path",
+            "\tdir_path -- the location (path) of the directory structure that will be created\n",
+            "Creates the appropriate directory structure at the specified location."
+    );
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -47,15 +62,11 @@ public class MkdirCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "mkdir";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "mkdir dir_path",
-                "\tdir_path -- the location (path) of the directory structure that " +
-                        "will be created\n",
-                "Creates the appropriate directory structure at the specified location.");
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +23,26 @@ import java.util.List;
  *
  */
 public class CopyCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "copy";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "copy src_file_path dest_file_path",
+            "\tsrc_file_path -- the source file to copy from",
+            "\tdest_file_path -- the destination file to copy to\n",
+            "Copies the contents of the given source file to the specified " +
+                    "destination file.",
+            "If the destination file already exists, the user will be asked if" +
+                    " they wish to overwrite it.",
+            "If the destination file is a directory, the source file will be" +
+                    " copied into that directory using the original file name."
+    );
 
     /**
      * The default input/output stream buffer size.
@@ -138,21 +159,11 @@ public class CopyCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "copy";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "copy src_file_path dest_file_path",
-                "\tsrc_file_path -- the source file to copy from",
-                "\tdest_file_path -- the destination file to copy to\n",
-                "Copies the contents of the given source file to the specified " +
-                        "destination file.",
-                "If the destination file already exists, the user will be asked if" +
-                        " they wish to overwrite it.",
-                "If the destination file is a directory, the source file will be" +
-                        " copied into that directory using the original file name."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }

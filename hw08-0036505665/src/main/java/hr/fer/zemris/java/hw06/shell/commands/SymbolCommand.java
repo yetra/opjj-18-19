@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw06.shell.ShellCommand;
 import hr.fer.zemris.java.hw06.shell.ShellStatus;
 import hr.fer.zemris.java.hw06.shell.utility.Utility;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,6 +21,22 @@ import java.util.List;
  *
  */
 public class SymbolCommand implements ShellCommand {
+
+    /**
+     * The name of this command.
+     */
+    private static final String NAME = "symbol";
+
+    /**
+     * The description of this command.
+     */
+    private static final List<String> DESCRIPTION = List.of(
+            "symbol symbol_type [new_symbol]",
+            "\tsymbol_type -- the type of the symbol i.e. PROMPT, MULTILINE, or MORELINES",
+            "\tnew_symbol (optional) -- the symbol that will replace the current one\n",
+            "Prints the current symbol for the given symbol_type.",
+            "If new_symbol is given, the current symbol for symbol_type will be replaced by it."
+    );
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -101,20 +118,11 @@ public class SymbolCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "symbol";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return List.of(
-                "symbol symbol_type [new_symbol]",
-                "\tsymbol_type -- the type of the symbol i.e. PROMPT, MULTILINE, " +
-                        "or MORELINES",
-                "\tnew_symbol (optional) -- the symbol that will replace the " +
-                        "current one\n",
-                "Prints the current symbol for the given symbol_type.",
-                "If new_symbol is given, the current symbol for symbol_type will be " +
-                        "replaced by it."
-        );
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 }
