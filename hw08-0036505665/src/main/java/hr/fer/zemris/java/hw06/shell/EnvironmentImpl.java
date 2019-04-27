@@ -35,30 +35,33 @@ public class EnvironmentImpl implements Environment {
     /**
      * A map of all supported commands in {@link MyShell}.
      */
-    private SortedMap<String, ShellCommand> commands;
+    private static SortedMap<String, ShellCommand> COMMANDS;
 
     /**
      * The {@link Scanner} object used for communicating with the user.
      */
-    private Scanner scanner;
+    private Scanner scanner = new Scanner(System.in);
+
+    static {
+        COMMANDS = new TreeMap<>();
+
+        COMMANDS.put("symbol", new SymbolCommand());
+        COMMANDS.put("charsets", new CharsetsCommand());
+        COMMANDS.put("cat", new CatCommand());
+        COMMANDS.put("ls", new LsCommand());
+        COMMANDS.put("tree", new TreeCommand());
+        COMMANDS.put("copy", new CopyCommand());
+        COMMANDS.put("mkdir", new MkdirCommand());
+        COMMANDS.put("hexdump", new HexdumpCommand());
+        COMMANDS.put("exit", new ExitCommand());
+        COMMANDS.put("help", new HelpCommand());
+    }
 
     /**
      * Default constructior for the {@link EnvironmentImpl} class.
      */
     public EnvironmentImpl() {
-        scanner = new Scanner(System.in);
 
-        commands = new TreeMap<>();
-        commands.put("symbol", new SymbolCommand());
-        commands.put("charsets", new CharsetsCommand());
-        commands.put("cat", new CatCommand());
-        commands.put("ls", new LsCommand());
-        commands.put("tree", new TreeCommand());
-        commands.put("copy", new CopyCommand());
-        commands.put("mkdir", new MkdirCommand());
-        commands.put("hexdump", new HexdumpCommand());
-        commands.put("exit", new ExitCommand());
-        commands.put("help", new HelpCommand());
     }
 
     @Override
@@ -82,7 +85,7 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public SortedMap<String, ShellCommand> commands() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override
