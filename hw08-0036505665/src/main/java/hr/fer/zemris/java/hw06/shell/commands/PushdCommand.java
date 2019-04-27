@@ -12,21 +12,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * This class represents the pushes the current directory to the shared command data
+ * stack and sets the directory specified by dir_path as the new current directory.
+ *
+ * @author Bruna Dujmović
+ *
+ */
 public class PushdCommand implements ShellCommand {
 
     /**
      * The name of this command.
      */
-    private static final String NAME = "exit";
+    private static final String NAME = "pushd";
 
     /**
      * The description of this command.
      */
     private static final List<String> DESCRIPTION = List.of(
-            "pushd dir_path\n",
+            "pushd dir_path",
             "\tdir_path -- path to the new current directory\n",
-            "Pushes the current directory to the stack and sets the directory specified" +
-                    "by dir_path as the new current directory."
+            "Pushes the current directory to the shared command data stack and sets " +
+                    "the directory specified by dir_path as the new current directory."
     );
 
     /**

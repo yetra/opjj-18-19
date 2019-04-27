@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * This class represents the pops a directory from the top of the shared command data
- * stack and sets it as the current directory.
+ * This class represents the popd command which pops a directory from the top of the
+ * shared command data stack and sets it as the current directory. It accepts no
+ * arguments.
  *
  * @author Bruna Dujmović
  *
@@ -50,7 +51,7 @@ public class PopdCommand implements ShellCommand {
             Stack<Path> sharedStack = (Stack<Path>) env.getSharedData(STACK_KEY);
             env.setCurrentDirectory(sharedStack.pop());
 
-        } catch (EmptyStackException | IllegalArgumentException e) {
+        } catch (EmptyStackException | NullPointerException | IllegalArgumentException e) {
             env.writeln(e.getMessage());
         }
 

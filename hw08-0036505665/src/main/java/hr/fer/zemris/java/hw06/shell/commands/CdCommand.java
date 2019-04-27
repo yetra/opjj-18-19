@@ -38,14 +38,13 @@ public class CdCommand implements ShellCommand {
         String[] parsed = Utility.parseArguments(arguments);
 
         if (parsed.length != 1) {
-            env.writeln("Cat accepts one argument, " + parsed.length + " were given.");
+            env.writeln("Cd accepts one argument, " + parsed.length + " were given.");
             return ShellStatus.CONTINUE;
         }
 
         try {
-            Path newCurrentDirectory = Paths.get(parsed[0]);
-            Path resolvedPath = newCurrentDirectory.resolve(env.getCurrentDirectory());
-            env.setCurrentDirectory(resolvedPath);
+            Path dirPath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
+            env.setCurrentDirectory(dirPath);
 
         } catch (IllegalArgumentException e) {
             env.writeln(e.getMessage());
