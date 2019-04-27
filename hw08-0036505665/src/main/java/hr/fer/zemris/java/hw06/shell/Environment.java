@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.hw06.shell;
 
+import java.nio.file.Path;
 import java.util.SortedMap;
 
 /**
@@ -86,4 +87,38 @@ public interface Environment {
      * @param symbol the character that is to be the new more lines symbol
      */
     void setMorelinesSymbol(Character symbol);
+
+    /**
+     * Returns the normalized absolute path to the current directory of the running
+     * java process.
+     *
+     * @return the normalized absolute path to the current directory of the running
+     *         java process
+     */
+    Path getCurrentDirectory();
+
+    /**
+     * Sets the current directory to the directory specified by a given path.
+     *
+     * @param path the path to the new current directory
+     * @throws IllegalArgumentException if the path doesn't point to an existing
+     *         directory
+     */
+    void setCurrentDirectory(Path path);
+
+    /**
+     * Returns the shell commands' shared data specified by a given key.
+     *
+     * @param key the key of the shared command data to return
+     * @return the shell commands' shared data specified by the given key
+     */
+    Object getSharedData(String key);
+
+    /**
+     * Adds the given key-value pair to the shell commands' shared data.
+     *
+     * @param key the key of the data to add
+     * @param value the value of the data to add
+     */
+    void setSharedData(String key, Object value);
 }
