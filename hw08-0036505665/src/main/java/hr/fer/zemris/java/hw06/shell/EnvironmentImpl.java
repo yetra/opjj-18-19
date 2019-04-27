@@ -18,6 +18,11 @@ import java.util.*;
 public class EnvironmentImpl implements Environment {
 
     /**
+     * A map of all supported commands in {@link MyShell}.
+     */
+    private static SortedMap<String, ShellCommand> COMMANDS;
+
+    /**
      * The symbol which denotes the start of each shell prompt.
      */
     private char promptSymbol = '>';
@@ -34,11 +39,6 @@ public class EnvironmentImpl implements Environment {
     private char multiLineSymbol = '|';
 
     /**
-     * A map of all supported commands in {@link MyShell}.
-     */
-    private static SortedMap<String, ShellCommand> COMMANDS;
-
-    /**
      * The {@link Scanner} object used for communicating with the user.
      */
     private Scanner scanner;
@@ -47,6 +47,11 @@ public class EnvironmentImpl implements Environment {
      * The path to the current directory.
      */
     private Path currentDirectory;
+
+    /**
+     * A map of all the commands' shared data.
+     */
+    private Map<String, Object> sharedData;
 
     static {
         COMMANDS = new TreeMap<>();
@@ -69,6 +74,7 @@ public class EnvironmentImpl implements Environment {
     public EnvironmentImpl() {
         scanner = new Scanner(System.in);
         currentDirectory = Paths.get(".");
+        sharedData = new HashMap<>();
     }
 
     @Override
@@ -138,5 +144,17 @@ public class EnvironmentImpl implements Environment {
         }
 
         currentDirectory = path;
+    }
+
+    @Override
+    public Object getSharedData(String key) {
+        return sharedData.get(key);
+    }
+
+    @Override
+    public void setSharedData(String key, Object value) {
+        Objects.requireNonNull(key);
+        
+        sharedData.put(key, value);
     }
 }

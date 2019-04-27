@@ -119,6 +119,7 @@ public interface Environment {
      *
      * @param key the key of the data to add
      * @param value the value of the data to add
+     * @throws NullPointerException if the given key is {@code null}
      */
     void setSharedData(String key, Object value);
 }
