@@ -46,6 +46,28 @@ import java.util.SortedMap;
  *         - prints the name and description of the specified command, or a list of
  *           all supported commands if command_name is not given
  *
+ *     pwd
+ *         - prints the absolute path to the current directory
+ *
+ *     cd dir_path
+ *         - changes the environment's current directory to the directory specified by
+ *           dir_path
+ *
+ *     pushd dir_path
+ *         - pushes the current directory to the shared command data stack and sets the
+ *           directory specified by dir_path as the new current directory
+ *
+ *     popd
+ *         - pops a directory from the top of the shared command data stack and sets
+ *           it as the current directory
+ *
+ *     listd
+ *         - prints all the directory paths from the shared command data stack
+ *
+ *     dropd
+ *         - pops a directory from the top of the shared command data stack without
+ *           changing the current directory
+ *
  *     exit
  *         - terminates the program
  *
