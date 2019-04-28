@@ -64,6 +64,12 @@ public class EnvironmentImpl implements Environment {
         COMMANDS.put("copy", new CopyCommand());
         COMMANDS.put("mkdir", new MkdirCommand());
         COMMANDS.put("hexdump", new HexdumpCommand());
+        COMMANDS.put("pwd", new PwdCommand());
+        COMMANDS.put("cd", new CdCommand());
+        COMMANDS.put("pushd", new PushdCommand());
+        COMMANDS.put("popd", new PopdCommand());
+        COMMANDS.put("listd", new ListdCommand());
+        COMMANDS.put("dropd", new DropdCommand());
         COMMANDS.put("exit", new ExitCommand());
         COMMANDS.put("help", new HelpCommand());
     }
