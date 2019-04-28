@@ -47,7 +47,7 @@ public class MkdirCommand implements ShellCommand {
         }
 
         try {
-            Path directoryPath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
+            Path directoryPath = env.getCurrentDirectory().resolve(Paths.get(parsed[0]));
 
             Files.createDirectories(directoryPath);
 

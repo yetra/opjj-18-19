@@ -53,7 +53,7 @@ public class CatCommand implements ShellCommand {
         }
 
         try {
-            Path filePath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
+            Path filePath = env.getCurrentDirectory().resolve(Paths.get(parsed[0]));
             Charset charset = parsed.length == 1 ? Charset.defaultCharset()
                                                  : Charset.forName(parsed[1]);
             printFile(filePath, charset, env);

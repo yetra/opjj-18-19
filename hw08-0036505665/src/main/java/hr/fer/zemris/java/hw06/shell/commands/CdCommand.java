@@ -43,7 +43,7 @@ public class CdCommand implements ShellCommand {
         }
 
         try {
-            Path dirPath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
+            Path dirPath = env.getCurrentDirectory().resolve(Paths.get(parsed[0]));
             env.setCurrentDirectory(dirPath);
 
         } catch (IllegalArgumentException e) {

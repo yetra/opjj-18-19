@@ -52,7 +52,7 @@ public class PushdCommand implements ShellCommand {
         }
 
         try {
-            Path dirPath = Paths.get(parsed[0]).resolve(env.getCurrentDirectory());
+            Path dirPath = env.getCurrentDirectory().resolve(Paths.get(parsed[0]));
             if (!Files.exists(dirPath) || !Files.isDirectory(dirPath)) {
                 env.writeln("The given path does not point to an existing directory.");
                 return ShellStatus.CONTINUE;
