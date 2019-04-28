@@ -5,9 +5,7 @@ import hr.fer.zemris.java.hw06.shell.ShellCommand;
 import hr.fer.zemris.java.hw06.shell.ShellStatus;
 
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * This class represents the listd command which prints all the directory paths from
@@ -27,7 +25,7 @@ public class ListdCommand implements ShellCommand {
      * The description of this command.
      */
     private static final List<String> DESCRIPTION = List.of(
-            "pushd\n",
+            "listd\n",
             "Prints all the directory paths from the shared command data stack."
     );
 
@@ -48,7 +46,10 @@ public class ListdCommand implements ShellCommand {
         if (sharedStack == null || sharedStack.isEmpty()) {
             env.writeln("Nema pohranjenih direktorija.");
         } else {
-            sharedStack.forEach(System.out::println);
+            ListIterator<Path> li = sharedStack.listIterator(sharedStack.size());
+            while (li.hasPrevious()) {
+                System.out.println(li.previous().toString());
+            }
         }
 
         return ShellStatus.CONTINUE;
