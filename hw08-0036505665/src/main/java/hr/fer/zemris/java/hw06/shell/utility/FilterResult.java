@@ -3,6 +3,14 @@ package hr.fer.zemris.java.hw06.shell.utility;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class represents a file whose name was successfully filtered in the massrename
+ * command. It contains information about the name of the filtered file and capturing
+ * groups found in that name.
+ *
+ * @author Bruna Dujmović
+ * 
+ */
 public class FilterResult {
 
     /**
