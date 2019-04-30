@@ -84,6 +84,22 @@ public class KonfiguracijaSlagalice {
     }
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < 9; i++) {
+            sb.append(polje[i] == 0 ? "*" : polje[i]);
+            sb.append(" ");
+
+            if ((i + 1) % 3 == 0) {
+                sb.append("\n");
+            }
+        }
+
+        return sb.substring(0, sb.length() - 1);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
