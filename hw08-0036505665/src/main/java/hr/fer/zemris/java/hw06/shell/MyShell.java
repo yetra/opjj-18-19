@@ -92,7 +92,7 @@ public class MyShell {
         SortedMap<String, ShellCommand> commandMap = environment.commands();
 
         try {
-            environment.writeln("Welcome to MyShell v 1.0");
+            environment.writeln("Welcome to MyShell v 2.0");
             ShellStatus status = ShellStatus.CONTINUE;
 
             do {
