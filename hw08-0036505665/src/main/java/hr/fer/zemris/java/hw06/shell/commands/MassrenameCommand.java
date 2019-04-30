@@ -4,13 +4,13 @@ import hr.fer.zemris.java.hw06.shell.Environment;
 import hr.fer.zemris.java.hw06.shell.ShellCommand;
 import hr.fer.zemris.java.hw06.shell.ShellStatus;
 import hr.fer.zemris.java.hw06.shell.utility.FilterResult;
+import hr.fer.zemris.java.hw06.shell.utility.NameBuilder;
+import hr.fer.zemris.java.hw06.shell.utility.NameBuilderParser;
 import hr.fer.zemris.java.hw06.shell.utility.Utility;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -65,7 +65,13 @@ public class MassrenameCommand implements ShellCommand {
                 }
 
             } else {
-                env.writeln("TODO");
+                if (parsed[2].equalsIgnoreCase("show")) {
+                    showSubcommand(srcPath, parsed[3], parsed[4], env);
+                } else if (parsed[2].equalsIgnoreCase("execute")) {
+                    executeCommand(srcPath, destPath, parsed[3], parsed[4], env);
+                } else {
+                    env.writeln("Unknown subcommand \"" + parsed[2] + "\".");
+                }
             }
 
         } catch (InvalidPathException e) {
@@ -93,6 +99,34 @@ public class MassrenameCommand implements ShellCommand {
 
             env.write("\n");
         });
+    }
+
+    private void showSubcommand(Path src, String pattern, String newPattern, Environment env) throws IOException {
+        NameBuilderParser parser = new NameBuilderParser(newPattern);
+        NameBuilder builder = parser.getNameBuilder();
+
+        filter(src, pattern).forEach((result) -> {
+            StringBuilder sb = new StringBuilder();
+            builder.execute(result, sb);
+            env.writeln(result.toString() + " => " + sb.toString());
+        });
+    }
+
+    private void executeCommand(Path src, Path dest, String pattern, String newPattern, Environment env) throws IOException {
+        NameBuilderParser parser = new NameBuilderParser(newPattern);
+        NameBuilder builder = parser.getNameBuilder();
+
+        List<FilterResult> files = filter(src, pattern);
+        for (FilterResult result : files) {
+            StringBuilder sb = new StringBuilder();
+            builder.execute(result, sb);
+
+            Path srcFilePath = Paths.get(src.toString() + "/" + result.toString());
+            Path destFilePath = Paths.get(dest.toString() + "/" + sb.toString());
+            Files.move(srcFilePath, destFilePath);
+
+            env.writeln(srcFilePath.toString() + " => " + destFilePath.toString());
+        }
     }
 
     private List<FilterResult> filter(Path dir, String pattern) throws IOException {
