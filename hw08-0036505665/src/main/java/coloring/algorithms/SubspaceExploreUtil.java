@@ -32,7 +32,7 @@ public class SubspaceExploreUtil {
         toExplore.add(s0.get());
 
         while (!toExplore.isEmpty()) {
-            S state = toExplore.get(0);
+            S state = toExplore.remove(0);
 
             if (acceptable.test(state)) {
                 process.accept(state);
