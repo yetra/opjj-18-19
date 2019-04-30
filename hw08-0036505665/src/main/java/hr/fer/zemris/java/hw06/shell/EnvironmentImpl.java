@@ -70,6 +70,7 @@ public class EnvironmentImpl implements Environment {
         COMMANDS.put("popd", new PopdCommand());
         COMMANDS.put("listd", new ListdCommand());
         COMMANDS.put("dropd", new DropdCommand());
+        COMMANDS.put("massrename", new MassrenameCommand());
         COMMANDS.put("exit", new ExitCommand());
         COMMANDS.put("help", new HelpCommand());
     }
