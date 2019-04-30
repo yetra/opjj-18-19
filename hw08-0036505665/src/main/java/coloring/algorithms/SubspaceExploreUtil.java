@@ -18,7 +18,8 @@ import java.util.function.Supplier;
 public class SubspaceExploreUtil {
 
     /**
-     * Explores a subspace defined as the tuple (s0, process(s), succ(s), acceptable(s)).
+     * Explores a subspace defined as the tuple (s0, process(s), succ(s), acceptable(s))
+     * using a breadth-first search algorithm.
      *
      * @param s0 the initial state
      * @param process a {@link Consumer} that processes a given state
@@ -44,7 +45,8 @@ public class SubspaceExploreUtil {
     }
 
     /**
-     * Explores a subspace defined as the tuple (s0, process(s), succ(s), acceptable(s)).
+     * Explores a subspace defined as the tuple (s0, process(s), succ(s), acceptable(s))
+     * using an optimized breadth-first search algorithm.
      *
      * This implementation keeps track of already visited states and removes them from
      * the returned list of neighbors before expanding the list of states to explore.
@@ -79,6 +81,33 @@ public class SubspaceExploreUtil {
                 });
 
                 toExplore.addAll(toExplore.size(), notVisited);
+            }
+        }
+    }
+
+    /**
+     * Explores a subspace defined as the tuple (s0, process(s), succ(s), acceptable(s))
+     * using a depth-first search algorithm.
+     *
+     * @param s0 the initial state
+     * @param process a {@link Consumer} that processes a given state
+     * @param succ a {@link Function} that returns a list of neighboring states for a
+     *             given state
+     * @param acceptable a {@link Predicate} that returns {@code false} if a given state
+     *                   is no longer part of the observed subspace
+     * @param <S> the type of the state
+     */
+    public static <S> void dfs(Supplier<S> s0, Consumer<S> process,
+                               Function<S, List<S>> succ, Predicate<S> acceptable) {
+        List<S> toExplore = new LinkedList<>();
+        toExplore.add(s0.get());
+
+        while (!toExplore.isEmpty()) {
+            S state = toExplore.remove(0);
+
+            if (acceptable.test(state)) {
+                process.accept(state);
+                toExplore.addAll(0, succ.apply(state));
             }
         }
     }
