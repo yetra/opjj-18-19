@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class Bojanje2 {
 
     public static void main(String[] args) {
-        FillApp.run(FillApp.OWL, Arrays.asList(bfs, bfsv));
+        FillApp.run(FillApp.OWL, Arrays.asList(bfs, bfsv, dfs));
     }
 
     private static final FillAlgorithm bfs = new FillAlgorithm() {
@@ -26,6 +26,20 @@ public class Bojanje2 {
         public void fill(int x, int y, int color, Picture picture) {
             Coloring col = new Coloring(new Pixel(x,y), picture, color);
             SubspaceExploreUtil.bfs(col.s0, col.process, col.succ, col.acceptable);
+        }
+    };
+
+    private static final FillAlgorithm dfs = new FillAlgorithm() {
+
+        @Override
+        public String getAlgorithmTitle() {
+            return "Moj dfs!";
+        }
+
+        @Override
+        public void fill(int x, int y, int color, Picture picture) {
+            Coloring col = new Coloring(new Pixel(x,y), picture, color);
+            SubspaceExploreUtil.dfs(col.s0, col.process, col.succ, col.acceptable);
         }
     };
 
