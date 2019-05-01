@@ -25,7 +25,8 @@ public class SearchUtil {
      * @param goal a {@link Predicate} that returns {@code false} if a given state
      *             does not match the goal state
      * @param <S> the type of the states
-     * @return the solution represented by a {@link Node} object for a given problem
+     * @return the solution represented by a {@link Node} object for a given problem or
+     *         {@code null} if no solution is found
      */
     public static <S> Node<S> bfs(Supplier<S> s0, Function<S, List<Transition<S>>> succ,
                                   Predicate<S> goal) {
@@ -64,7 +65,8 @@ public class SearchUtil {
      * @param goal a {@link Predicate} that returns {@code false} if a given state
      *             does not match the goal state
      * @param <S> the type of the states
-     * @return the solution represented by a {@link Node} object for a given problem
+     * @return the solution represented by a {@link Node} object for a given problem or
+     *         {@code null} if no solution is found
      */
     public static <S> Node<S> bfsv(Supplier<S> s0, Function<S, List<Transition<S>>> succ,
                                   Predicate<S> goal) {
