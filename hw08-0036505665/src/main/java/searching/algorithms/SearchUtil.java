@@ -25,16 +25,15 @@ public class SearchUtil {
      * @param goal a {@link Predicate} that returns {@code false} if a given state
      *             does not match the goal state
      * @param <S> the type of the states
-     * @return he solution represented by a {@link Node} object for a given problem
+     * @return the solution represented by a {@link Node} object for a given problem
      */
     public static <S> Node<S> bfs(Supplier<S> s0, Function<S, List<Transition<S>>> succ,
                                   Predicate<S> goal) {
         List<Node<S>> toExplore = new LinkedList<>();
         toExplore.add(new Node<>(null, s0.get(), 0));
-        Node<S> node = null;
 
         while (!toExplore.isEmpty()) {
-            node = toExplore.remove(0);
+            Node<S> node = toExplore.remove(0);
 
             if (goal.test(node.getState())) {
                 return node;
@@ -48,7 +47,7 @@ public class SearchUtil {
             }
         }
 
-        return node;
+        return null;
     }
 
     /**
@@ -65,19 +64,18 @@ public class SearchUtil {
      * @param goal a {@link Predicate} that returns {@code false} if a given state
      *             does not match the goal state
      * @param <S> the type of the states
-     * @return he solution represented by a {@link Node} object for a given problem
+     * @return the solution represented by a {@link Node} object for a given problem
      */
     public static <S> Node<S> bfsv(Supplier<S> s0, Function<S, List<Transition<S>>> succ,
                                   Predicate<S> goal) {
         Set<S> visited = new HashSet<>();
         List<Node<S>> toExplore = new LinkedList<>();
-        Node<S> node = null;
 
         toExplore.add(new Node<>(null, s0.get(), 0));
         visited.add(s0.get());
 
         while (!toExplore.isEmpty()) {
-            node = toExplore.remove(0);
+            Node<S> node = toExplore.remove(0);
 
             if (goal.test(node.getState())) {
                 return node;
@@ -93,6 +91,6 @@ public class SearchUtil {
             }
         }
 
-        return node;
+        return null;
     }
 }
