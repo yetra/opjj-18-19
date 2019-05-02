@@ -51,7 +51,9 @@ public class PopdCommand implements ShellCommand {
             Stack<Path> sharedStack = (Stack<Path>) env.getSharedData(STACK_KEY);
             env.setCurrentDirectory(sharedStack.pop());
 
-        } catch (EmptyStackException | NullPointerException | IllegalArgumentException e) {
+        } catch (EmptyStackException | NullPointerException e) {
+            env.writeln("Can't perform pop on empty/non-existing stack!");
+        } catch (IllegalArgumentException e) {
             env.writeln(e.getMessage());
         }
 
