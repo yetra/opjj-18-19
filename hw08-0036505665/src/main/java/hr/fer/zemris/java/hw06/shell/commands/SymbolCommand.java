@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents the symbol command the current symbol that is set in the
- * {@link Environment} for a given symbol_type. If two arguments are given, it will
- * replace the current symbol_type symbol with the second argument.
+ * This class represents the symbol command that prints the current symbol that is
+ * set in the {@link Environment} for a given symbol_type. If two arguments are given,
+ * it will replace the current symbol_type symbol with the second argument.
  *
  * It accepts one or two arguments. The first argument is the the type of the symbol
  * i.e. PROMPT, MULTILINE, or MORELINES. The second argument (optional) is the symbol
