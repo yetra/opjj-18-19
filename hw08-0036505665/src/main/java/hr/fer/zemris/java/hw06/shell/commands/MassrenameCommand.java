@@ -90,7 +90,7 @@ public class MassrenameCommand implements ShellCommand {
         } catch (IOException e) {
             env.writeln("Cannot perform massrename on the given paths.");
         } catch (IllegalArgumentException e) {
-            env.writeln("Illegal argument: " + e.getMessage());
+            env.writeln("Illegal input: " + e.getMessage());
         } catch (IndexOutOfBoundsException e) {
             env.writeln("Index out of bounds: " + e.getMessage());
         }
@@ -208,7 +208,7 @@ public class MassrenameCommand implements ShellCommand {
      */
     private void checkLengthIs(int length, String[] arguments) {
         if (length != arguments.length) {
-            throw new IllegalArgumentException("Expected " + length + "arguments, "
+            throw new IllegalArgumentException("Expected " + length + " arguments, "
                     + arguments.length + " were given.");
         }
     }
