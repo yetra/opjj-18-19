@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -26,12 +27,19 @@ public class MassrenameCommand implements ShellCommand {
      * The description of this command.
      */
     private static final List<String> DESCRIPTION = List.of(
-            "massrename src_dir_path dest_dir_path subcommand [other]",
-            "\tsrc_dir_path -- ",
-            "\tdest_dir_path -- ",
-            "\tsubcommand -- ",
+            "massrename src_dir_path dest_dir_path subcommand mask [other]",
+            "\tsrc_dir_path -- path to the source directory",
+            "\tdest_dir_path -- path to the destination directory",
+            "\tsubcommand -- name of the subcommand to perform:",
+            "\t\tfilter -- prints all file names that match the given mask",
+            "\t\tgroups -- prints all the capturing groups found in each file name " +
+                    "that matches the given mask",
+            "\t\tshow",
+            "\t\texecute",
+            "\tmask -- the pattern for matching the file names",
             "\tother (optional) -- \n",
-            "description."
+            "Performs an operation of all files of the source directory, based on the" +
+                    "given subcommand."
     );
 
     @Override
@@ -53,7 +61,7 @@ public class MassrenameCommand implements ShellCommand {
                 env.writeln("The source and destination paths must point to a directory.");
                 return ShellStatus.CONTINUE;
             }
-            
+
             if (parsed.length == 4) {
                 if (parsed[2].equalsIgnoreCase("filter")) {
                     filterSubcommand(srcPath, parsed[3], env);
@@ -128,11 +136,20 @@ public class MassrenameCommand implements ShellCommand {
         }
     }
 
+    /**
+     * Iterates over the files in a given directory and returns a list of those whose
+     * name matches the specified pattern.
+     *
+     * @param dir the path to the directory to iterate
+     * @param pattern the pattern for matching file names
+     * @return a list of files whose name matches the specified pattern
+     * @throws IOException if there is an issue with the given directory
+     */
     private static List<FilterResult> filter(Path dir, String pattern) throws IOException {
         return Files.list(dir)
-                .filter((path) -> Files.isRegularFile(path) &&
+                .filter(path -> Files.isRegularFile(path) &&
                         Pattern.matches(pattern, path.getFileName().toString()))
-                .map((path) -> new FilterResult(path.getFileName().toString(), pattern))
+                .map(path -> new FilterResult(path.getFileName().toString(), pattern))
                 .collect(Collectors.toList());
     }
 
