@@ -15,6 +15,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents the massrename command that performs an operation on all the
+ * files in a given source directory, depending on the specified subcommand (filter/
+ * groups/show/execute).
+ *
+ * @author Bruna Dujmović
+ *
+ */
 public class MassrenameCommand implements ShellCommand {
 
     /**
@@ -26,19 +34,20 @@ public class MassrenameCommand implements ShellCommand {
      * The description of this command.
      */
     private static final List<String> DESCRIPTION = List.of(
-            "massrename src_dir_path dest_dir_path subcommand mask [other]",
+            "massrename src_dir_path dest_dir_path subcommand mask [rename_expr]",
             "\tsrc_dir_path -- path to the source directory",
             "\tdest_dir_path -- path to the destination directory",
             "\tsubcommand -- name of the subcommand to perform:",
             "\t\tfilter -- prints all file names that match the given mask",
             "\t\tgroups -- prints all the capturing groups found in each file name " +
                     "that matches the given mask",
-            "\t\tshow",
-            "\t\texecute",
+            "\t\tshow -- prints the file names before and after renaming according to" +
+                    "the rename_expr expression",
+            "\t\texecute -- performs the rename on the files",
             "\tmask -- the pattern for matching the file names",
-            "\tother (optional) -- \n",
-            "Performs an operation of all files of the source directory, based on the" +
-                    "given subcommand."
+            "\trename_expr (optional) -- the file name pattern for renaming\n",
+            "Performs an operation on all the files of the source directory, depending " +
+                    "on the specified subcommand (filter/groups/show/execute)."
     );
 
     @Override
@@ -48,7 +57,8 @@ public class MassrenameCommand implements ShellCommand {
         Path destPath;
 
         if (parsed.length < 4 || parsed.length > 5) {
-            env.writeln("Massrename accepts four or five arguments, " + parsed.length + " were given.");
+            env.writeln("Massrename accepts four or five arguments, "
+                    + parsed.length + " were given.");
             return ShellStatus.CONTINUE;
         }
 
@@ -57,98 +67,45 @@ public class MassrenameCommand implements ShellCommand {
             destPath = env.getCurrentDirectory().resolve(Paths.get(parsed[1]));
 
             if (!Files.isDirectory(srcPath) || !Files.isDirectory(destPath)) {
-                env.writeln("The source and destination paths must point to a directory.");
+                env.writeln(
+                        "The source and destination paths must point to a directory.");
                 return ShellStatus.CONTINUE;
             }
 
-            if (parsed.length == 4) {
-                if (parsed[2].equalsIgnoreCase("filter")) {
-                    filterSubcommand(srcPath, parsed[3], env);
-                } else if (parsed[2].equalsIgnoreCase("groups")) {
-                    groupsSubcommand(srcPath, parsed[3], env);
-                } else {
-                    env.writeln("Unknown subcommand \"" + parsed[2] + "\".");
-                }
+            String subcommand = parsed[2].toLowerCase();
+            if (subcommand.equals("filter") || subcommand.equals("groups")) {
+                checkLengthIs(4, parsed);
+                printFiltered(subcommand.equals("groups"), srcPath, parsed[3], env);
 
+            } else if (subcommand.equals("show") || subcommand.equals("execute")) {
+                checkLengthIs(5, parsed);
+                showOrExecute(subcommand.equalsIgnoreCase("execute"), srcPath, destPath,
+                        parsed[3], parsed[4], env);
             } else {
-                if (parsed[2].equalsIgnoreCase("show")) {
-                    showSubcommand(srcPath, parsed[3], parsed[4], env);
-                } else if (parsed[2].equalsIgnoreCase("execute")) {
-                    executeCommand(srcPath, destPath, parsed[3], parsed[4], env);
-                } else {
-                    env.writeln("Unknown subcommand \"" + parsed[2] + "\".");
-                }
+                env.writeln("Unknown subcommand \"" + parsed[2] + "\".");
             }
 
         } catch (InvalidPathException e) {
             env.writeln("Illegal path string given!");
         } catch (IOException e) {
             env.writeln("Cannot perform massrename on the given paths.");
+        } catch (IllegalArgumentException e) {
+            env.writeln("Illegal argument: " + e.getMessage());
+        } catch (IndexOutOfBoundsException e) {
+            env.writeln("Index out of bounds: " + e.getMessage());
         }
 
         return ShellStatus.CONTINUE;
     }
 
-    /**
-     * Prints the file names in the source directory that match the specified pattern.
-     *
-     * @param src the path to the source directory that contains the files
-     * @param pattern the pattern for matching the file names
-     * @param env the {@link Environment} object to print to
-     * @throws IOException if there is an issue with the given directory
-     */
-    private void filterSubcommand(Path src, String pattern, Environment env) throws IOException {
-        filter(src, pattern).forEach(result -> env.writeln(result.toString()));
+    @Override
+    public String getCommandName() {
+        return NAME;
     }
 
-    /**
-     * Prints all the capturing groups found in each file name that matches the given
-     * pattern.
-     *
-     * @param src the path to the source directory that contains the files
-     * @param pattern the pattern for matching the file names
-     * @param env the {@link Environment} object to print to
-     * @throws IOException if there is an issue with the given directory
-     */
-    private void groupsSubcommand(Path src, String pattern, Environment env) throws IOException {
-        filter(src, pattern).forEach(result -> {
-            env.write(result.toString());
-
-            int groupCount = result.numberOfGroups();
-            for (int i = 0; i <= groupCount; i++) {
-                env.write(" " + i + ": " + result.group(i));
-            }
-
-            env.write("\n");
-        });
-    }
-
-    private void showSubcommand(Path src, String pattern, String newPattern, Environment env) throws IOException {
-        NameBuilderParser parser = new NameBuilderParser(newPattern);
-        NameBuilder builder = parser.getNameBuilder();
-
-        filter(src, pattern).forEach((result) -> {
-            StringBuilder sb = new StringBuilder();
-            builder.execute(result, sb);
-            env.writeln(result.toString() + " => " + sb.toString());
-        });
-    }
-
-    private void executeCommand(Path src, Path dest, String pattern, String newPattern, Environment env) throws IOException {
-        NameBuilderParser parser = new NameBuilderParser(newPattern);
-        NameBuilder builder = parser.getNameBuilder();
-
-        List<FilterResult> files = filter(src, pattern);
-        for (FilterResult result : files) {
-            StringBuilder sb = new StringBuilder();
-            builder.execute(result, sb);
-
-            Path srcFilePath = Paths.get(src.toString() + "/" + result.toString());
-            Path destFilePath = Paths.get(dest.toString() + "/" + sb.toString());
-            Files.move(srcFilePath, destFilePath);
-
-            env.writeln(srcFilePath.toString() + " => " + destFilePath.toString());
-        }
+    @Override
+    public List<String> getCommandDescription() {
+        return Collections.unmodifiableList(DESCRIPTION);
     }
 
     /**
@@ -168,14 +125,88 @@ public class MassrenameCommand implements ShellCommand {
                 .collect(Collectors.toList());
     }
 
+    /*
+     * -----------------------------------------------------------------------------
+     * ------------------------------ HELPER METHODS -------------------------------
+     * -----------------------------------------------------------------------------
+     */
 
-    @Override
-    public String getCommandName() {
-        return NAME;
+    /**
+     * Prints all the file names that match the given pattern. If the {@code groups}
+     * parameter is {@code true}, this method will also print the capturing groups
+     * found in each file name.
+     *
+     * @param groups {@code true} if capturing groups should also be printed
+     * @param src the path to the source directory that contains the files
+     * @param pattern the pattern for matching the file names
+     * @param env the {@link Environment} object to print to
+     * @throws IOException if there is an issue with the given directory
+     */
+    private void printFiltered(boolean groups, Path src, String pattern,
+                               Environment env) throws IOException {
+
+        List<FilterResult> filtered = filter(src, pattern);
+
+        for (FilterResult result : filtered) {
+            env.write(result.toString());
+
+            if (groups) {
+                int groupCount = result.numberOfGroups();
+                for (int i = 0; i <= groupCount; i++) {
+                    env.write(" " + i + ": " + result.group(i));
+                }
+            }
+
+            env.write("\n");
+        }
     }
 
-    @Override
-    public List<String> getCommandDescription() {
-        return Collections.unmodifiableList(DESCRIPTION);
+    /**
+     * Prints all the new file names after applying a given renaming pattern. If the
+     * {@code execute} parameter is {@code true}, this method will also perform the
+     * actual renaming on the files.
+     *
+     * @param execute {@code true} if capturing groups should also be printed
+     * @param src the path to the source directory that contains the files
+     * @param dest the path to the destination directory for the files
+     * @param pattern the pattern for matching the file names
+     * @param newPattern the pattern for renaming
+     * @param env the {@link Environment} object to print to
+     * @throws IOException if there is an issue with the given directory
+     */
+    private void showOrExecute(boolean execute, Path src, Path dest, String pattern,
+                               String newPattern, Environment env) throws IOException {
+
+        NameBuilderParser parser = new NameBuilderParser(newPattern);
+        NameBuilder builder = parser.getNameBuilder();
+        List<FilterResult> filtered = filter(src, pattern);
+
+        for (FilterResult result : filtered) {
+            StringBuilder sb = new StringBuilder();
+            builder.execute(result, sb);
+
+            if (execute) {
+                Path srcFilePath = Paths.get(src.toString() + "/" + result.toString());
+                Path destFilePath = Paths.get(dest.toString() + "/" + sb.toString());
+                Files.move(srcFilePath, destFilePath);
+            }
+
+            env.writeln(result.toString() + " => " + sb.toString());
+        }
+    }
+
+    /**
+     * Checks if the expected length matches the length of the given array.
+     *
+     * @param length the expected length
+     * @param arguments the array to check
+     * @throws IllegalArgumentException if the given array's length does not match the
+     *         expected length
+     */
+    private void checkLengthIs(int length, String[] arguments) {
+        if (length != arguments.length) {
+            throw new IllegalArgumentException("Expected " + length + "arguments, "
+                    + arguments.length + " were given.");
+        }
     }
 }
