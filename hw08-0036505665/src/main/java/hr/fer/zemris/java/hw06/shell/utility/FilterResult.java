@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw06.shell.utility;
 
+import java.nio.file.Path;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,13 +29,14 @@ public class FilterResult {
      * Constructs a {@link FilterResult} object for a given file name that matches a
      * specified pattern.
      *
-     * @param name the name of the result
+     * @param result the path of the result
      * @param pattern the pattern that the name should match
      * @throws IllegalArgumentException if the given name cannot be matched by the
      *         specified pattern
+     * @throws NullPointerException if the given file path is {@code null}
      */
-    public FilterResult(String name, String pattern) {
-        this.name = name;
+    public FilterResult(Path result, String pattern) {
+        this.name = Objects.requireNonNull(result).getFileName().toString();
         this.matcher = Pattern.compile(pattern).matcher(name);
 
         if (!matcher.find()) {

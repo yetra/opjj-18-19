@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -149,7 +148,7 @@ public class MassrenameCommand implements ShellCommand {
         return Files.list(dir)
                 .filter(path -> Files.isRegularFile(path) &&
                         Pattern.matches(pattern, path.getFileName().toString()))
-                .map(path -> new FilterResult(path.getFileName().toString(), pattern))
+                .map(path -> new FilterResult(path, pattern))
                 .collect(Collectors.toList());
     }
 
