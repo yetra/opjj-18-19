@@ -3,6 +3,14 @@ package hr.fer.zemris.java.hw06.shell.utility;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * A lexer for the {@link NameBuilderParser}. It separates a given expression into
+ * tokens of two different types - string or substitution.
+ *
+ * @see NameBuilderLexerTokenType
+ * @author Bruna Dujmović
+ * 
+ */
 public class NameBuilderLexer {
 
     /**
@@ -15,18 +23,27 @@ public class NameBuilderLexer {
      */
     private int currentIndex;
 
+    /**
+     * {@code true} is this lexer is currently inside of a substitution (between ${
+     * and }).
+     */
     private boolean inSubstitution;
 
+    /**
+     * Constructs a {@link NameBuilderLexer} for the given expression string.
+     *
+     * @param expression the expression string
+     */
     public NameBuilderLexer(String expression) {
         chars = Objects.requireNonNull(expression).toCharArray();
         inSubstitution = false;
     }
 
     /**
-     * Parses and returns the next argument.
+     * Parses and returns the next token.
      *
-     * @return the next argument
-     * @throws IllegalArgumentException if the argument cannot be properly parsed
+     * @return the next token
+     * @throws IllegalArgumentException if the token cannot be properly parsed
      */
     public NameBuilderLexerToken nextToken() {
         skipBlanks();
@@ -34,7 +51,6 @@ public class NameBuilderLexer {
         if (!hasNextToken()) {
             return null;
         }
-
 
         if (substitutionIsOn(currentIndex)) {
             currentIndex += 2;
@@ -55,6 +71,11 @@ public class NameBuilderLexer {
         }
     }
 
+    /**
+     * Returns {@code true} if this lexer still has more input to tokenize.
+     *
+     * @return {@code true} if this lexer still has more input to tokenize
+     */
     public boolean hasNextToken() {
         return currentIndex < chars.length;
     }
@@ -66,12 +87,12 @@ public class NameBuilderLexer {
      */
 
     /**
-     * Constructs an argument string of {@link #chars} characters that satisfy a
-     * given {@link Predicate}'s condition.
+     * Constructs a token string of {@link #chars} characters that satisfy a given
+     * {@link Predicate}'s condition.
      *
-     * @param tester the tester that checks if the currently observed character
-     *               still belongs to the current token
-     * @return an argument string of {@link #chars} characters
+     * @param tester the tester that checks if the currently observed character still
+     *               belongs to the current token
+     * @return a token string of {@link #chars} characters
      */
     private String buildStringWhile(Predicate<Integer> tester) {
         StringBuilder sb = new StringBuilder();
@@ -96,10 +117,25 @@ public class NameBuilderLexer {
         }
     }
 
+    /**
+     * Returns {@code true} if a substitution starts on the given index. A substitution
+     * starts if the character on the current index is '$' and the character on the
+     * next index is '{'.
+     *
+     * @param index the index to check
+     * @return {@code true} if a substitution starts on the given index
+     */
     private boolean substitutionIsOn(int index) {
-        return index + 1 < chars.length && chars[index] == '$' && chars[index + 1] == '{';
+        return index + 1 < chars.length && chars[index] == '$'
+                && chars[index + 1] == '{';
     }
 
+    /**
+     * Returns {@code true} if a whitespace character is on the given index.
+     *
+     * @param index the index to check
+     * @return {@code true} if a whitespace character is on the given index
+     */
     private boolean whitespaceIsOn(int index) {
         return Character.isWhitespace(chars[index]);
     }
@@ -113,6 +149,7 @@ public class NameBuilderLexer {
      *         escaped character follows
      */
     private boolean escapingIsOn(int index) {
-        return index + 1 < chars.length && chars[index] == '\\' && chars[index + 1] == '\\';
+        return index + 1 < chars.length && chars[index] == '\\'
+                && chars[index + 1] == '\\';
     }
 }
