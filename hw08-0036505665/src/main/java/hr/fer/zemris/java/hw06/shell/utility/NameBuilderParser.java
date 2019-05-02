@@ -24,27 +24,7 @@ public class NameBuilderParser {
             String value = token.getValue();
 
             if (token.getType() == NameBuilderLexerTokenType.SUBSTITUTION) {
-                String[] valueParts = value.split(",");
-
-                if (valueParts.length == 1) {
-                    int index = Integer.parseInt(valueParts[0].trim());
-                    nameBuilders.add(Builders.group(index));
-
-                } else if (valueParts.length == 2) {
-                    int index = Integer.parseInt(valueParts[0].trim());
-                    int minWidth = Integer.parseInt(valueParts[1].trim());
-                    char padding = ' ';
-
-                    if (valueParts[1].matches("0.")) {
-                        minWidth = Integer.parseInt(valueParts[1].trim().substring(1));
-                        padding = '0';
-                    }
-
-                    nameBuilders.add(Builders.group(index, padding, minWidth));
-
-                } else {
-                    throw new IllegalArgumentException("Invalid substitution \"" + value + "\".");
-                }
+                parseSubstitution(value);
             } else {
                 nameBuilders.add(Builders.text(value));
             }
@@ -54,5 +34,37 @@ public class NameBuilderParser {
     public NameBuilder getNameBuilder() {
         return (result, sb) ->
                 nameBuilders.forEach((builder) -> builder.execute(result, sb));
+    }
+
+    /**
+     * Parses a given substitution string.
+     *
+     * @param value the substitution string
+     * @throws IllegalArgumentException if the given substitution string is invalid
+     */
+    private void parseSubstitution(String value) {
+        String[] parts = value.split(",");
+
+        if (parts.length == 1) {
+            int index = Integer.parseInt(parts[0].trim());
+
+            nameBuilders.add(Builders.group(index));
+
+        } else if (parts.length == 2) {
+            int index = Integer.parseInt(parts[0].trim());
+            int minWidth = Integer.parseInt(parts[1].trim());
+            char padding = parts[1].matches("0.") ? '0' : ' ';
+
+            if (index < 0 || minWidth < 0) {
+                throw new IllegalArgumentException(
+                        "Substitution cannot contain negative integers!");
+            }
+
+            nameBuilders.add(Builders.group(index, padding, minWidth));
+
+        } else {
+            throw new IllegalArgumentException(
+                    "Invalid substitution \"" + value + "\".");
+        }
     }
 }
