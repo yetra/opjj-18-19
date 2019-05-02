@@ -9,12 +9,23 @@ import marcupic.opjj.statespace.coloring.Picture;
 
 import java.util.Arrays;
 
+/**
+ * Demonstrates the {@link Coloring} and {@link SubspaceExploreUtil} classes.
+ */
 public class Bojanje2 {
 
+    /**
+     * Main program. Starts the painting GUI.
+     *
+     * @param args command-line arguments, not used
+     */
     public static void main(String[] args) {
         FillApp.run(FillApp.OWL, Arrays.asList(bfs, bfsv, dfs));
     }
 
+    /**
+     * Creates a bfs-like {@link FillAlgorithm}.
+     */
     private static final FillAlgorithm bfs = new FillAlgorithm() {
 
         @Override
@@ -29,6 +40,9 @@ public class Bojanje2 {
         }
     };
 
+    /**
+     * Creates a dfs-like {@link FillAlgorithm}.
+     */
     private static final FillAlgorithm dfs = new FillAlgorithm() {
 
         @Override
@@ -43,6 +57,9 @@ public class Bojanje2 {
         }
     };
 
+    /**
+     * Creates an optimized bfs-like {@link FillAlgorithm}.
+     */
     private static final FillAlgorithm bfsv = new FillAlgorithm() {
 
         @Override
