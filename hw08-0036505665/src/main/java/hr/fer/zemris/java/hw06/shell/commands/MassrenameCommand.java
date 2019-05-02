@@ -189,9 +189,12 @@ public class MassrenameCommand implements ShellCommand {
                 Path srcFilePath = Paths.get(src.toString() + "/" + result.toString());
                 Path destFilePath = Paths.get(dest.toString() + "/" + sb.toString());
                 Files.move(srcFilePath, destFilePath);
-            }
 
-            env.writeln(result.toString() + " => " + sb.toString());
+                env.writeln(srcFilePath.toString() + " => " + destFilePath.toString());
+
+            } else {
+                env.writeln(result.toString() + " => " + sb.toString());
+            }
         }
     }
 
