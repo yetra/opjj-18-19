@@ -6,7 +6,7 @@ package hr.fer.zemris.java.hw06.shell.utility;
  * @author Bruna Dujmović
  *
  */
-public class Builders {
+public class DefaultNameBuilders {
 
     /**
      * A {@link NameBuilder} that appends a given string constant to the given

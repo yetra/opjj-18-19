@@ -41,7 +41,7 @@ public class NameBuilderParser {
             if (token.getType() == NameBuilderLexerTokenType.SUBSTITUTION) {
                 parseSubstitution(value);
             } else {
-                nameBuilders.add(Builders.text(value));
+                nameBuilders.add(DefaultNameBuilders.text(value));
             }
         }
     }
@@ -73,7 +73,7 @@ public class NameBuilderParser {
         if (parts.length == 1) {
             int index = Integer.parseInt(parts[0].trim());
 
-            nameBuilders.add(Builders.group(index));
+            nameBuilders.add(DefaultNameBuilders.group(index));
 
         } else if (parts.length == 2) {
             int index = Integer.parseInt(parts[0].trim());
@@ -85,7 +85,7 @@ public class NameBuilderParser {
                         "Substitution cannot contain negative integers!");
             }
 
-            nameBuilders.add(Builders.group(index, padding, minWidth));
+            nameBuilders.add(DefaultNameBuilders.group(index, padding, minWidth));
 
         } else {
             throw new IllegalArgumentException(
