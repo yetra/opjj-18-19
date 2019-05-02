@@ -4,17 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class is a parser for parsing a given file name expression.
+ *
+ * Its {@link #getNameBuilder()} method can be used to get a {@link NameBuilder} object
+ * that will know how to construct the name described by the given expression.
+ *
+ * @author Bruna Dujmović
+ *
+ */
 public class NameBuilderParser {
 
+    /**
+     * The {@link NameBuilderLexer} used for separating a given expression into tokens.
+     */
     private NameBuilderLexer lexer;
 
+    /**
+     * The list of {@link NameBuilder} objects parsed from a given expression.
+     */
     private List<NameBuilder> nameBuilders = new ArrayList<>();
 
     /**
-     * Constructs a parser for
+     * Constructs a parser for a given file name expression.
      *
-     * @param expression
-     * @throws NullPointerException
+     * @param expression the expression that represents a file name
+     * @throws NullPointerException if the given expression is {@code null}
      */
     public NameBuilderParser(String expression) {
         lexer = new NameBuilderLexer(Objects.requireNonNull(expression));
@@ -31,9 +46,17 @@ public class NameBuilderParser {
         }
     }
 
+    /**
+     * Returns a composite {@link NameBuilder} that iterates over the {@link #nameBuilders}
+     * list and executes each element.
+     *
+     * @return a composite {@link NameBuilder} that iterates over the {@link #nameBuilders}
+     *         list and executes each element
+     */
     public NameBuilder getNameBuilder() {
-        return (result, sb) ->
-                nameBuilders.forEach((builder) -> builder.execute(result, sb));
+        return (result, sb) -> nameBuilders.forEach(
+                builder -> builder.execute(result, sb)
+        );
     }
 
     /**
@@ -41,6 +64,8 @@ public class NameBuilderParser {
      *
      * @param value the substitution string
      * @throws IllegalArgumentException if the given substitution string is invalid
+     * @throws NumberFormatException if a given substitution element can't be parsed
+     *         to an integer
      */
     private void parseSubstitution(String value) {
         String[] parts = value.split(",");
