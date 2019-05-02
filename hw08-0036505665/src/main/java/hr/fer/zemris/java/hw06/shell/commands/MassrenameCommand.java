@@ -8,7 +8,6 @@ import hr.fer.zemris.java.hw06.shell.utility.NameBuilder;
 import hr.fer.zemris.java.hw06.shell.utility.NameBuilderParser;
 import hr.fer.zemris.java.hw06.shell.utility.Utility;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Collections;
@@ -129,7 +128,7 @@ public class MassrenameCommand implements ShellCommand {
         }
     }
 
-    private List<FilterResult> filter(Path dir, String pattern) throws IOException {
+    private static List<FilterResult> filter(Path dir, String pattern) throws IOException {
         return Files.list(dir)
                 .filter((path) -> Files.isRegularFile(path) &&
                         Pattern.matches(pattern, path.getFileName().toString()))
