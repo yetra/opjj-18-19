@@ -68,6 +68,10 @@ import java.util.SortedMap;
  *         - pops a directory from the top of the shared command data stack without
  *           changing the current directory
  *
+ *     massrename src_dir_path dest_dir_path subcommand mask [rename_expr]
+ *         - performs an operation on all the files of the source directory, depending
+ *           on the specified subcommand (filter/groups/show/execute)
+ *
  *     exit
  *         - terminates the program
  *
