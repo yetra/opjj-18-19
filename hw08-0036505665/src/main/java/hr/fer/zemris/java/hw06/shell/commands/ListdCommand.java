@@ -45,11 +45,12 @@ public class ListdCommand implements ShellCommand {
         Stack<Path> sharedStack = (Stack<Path>) env.getSharedData(STACK_KEY);
         if (sharedStack == null || sharedStack.isEmpty()) {
             env.writeln("Nema pohranjenih direktorija.");
-        } else {
-            ListIterator<Path> li = sharedStack.listIterator(sharedStack.size());
-            while (li.hasPrevious()) {
-                System.out.println(li.previous().toString());
-            }
+            return ShellStatus.CONTINUE;
+        }
+
+        ListIterator<Path> li = sharedStack.listIterator(sharedStack.size());
+        while (li.hasPrevious()) {
+            System.out.println(li.previous().toString());
         }
 
         return ShellStatus.CONTINUE;
