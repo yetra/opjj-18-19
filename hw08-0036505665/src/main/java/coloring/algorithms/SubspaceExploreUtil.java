@@ -73,14 +73,11 @@ public class SubspaceExploreUtil {
             if (acceptable.test(state)) {
                 process.accept(state);
 
-                List<S> notVisited = new LinkedList<>();
                 succ.apply(state).forEach((neighbor) -> {
                     if (visited.add(neighbor)) {
-                        notVisited.add(neighbor);
+                        toExplore.add(neighbor);
                     }
                 });
-
-                toExplore.addAll(toExplore.size(), notVisited);
             }
         }
     }
