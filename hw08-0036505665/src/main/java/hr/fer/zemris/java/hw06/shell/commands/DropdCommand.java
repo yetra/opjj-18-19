@@ -50,8 +50,8 @@ public class DropdCommand implements ShellCommand {
         try {
             ((Stack<Path>) env.getSharedData(STACK_KEY)).pop();
 
-        } catch (EmptyStackException e) {
-            env.writeln("Cannot pop from an empty stack!");
+        } catch (EmptyStackException | NullPointerException e) {
+            env.writeln("Can't perform pop on empty/non-existing stack!");
         }
 
         return ShellStatus.CONTINUE;
