@@ -80,7 +80,7 @@ public class EnvironmentImpl implements Environment {
      */
     public EnvironmentImpl() {
         scanner = new Scanner(System.in);
-        currentDirectory = Paths.get(".");
+        currentDirectory = Paths.get(".").toAbsolutePath().normalize();
         sharedData = new HashMap<>();
     }
 
@@ -140,7 +140,7 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public Path getCurrentDirectory() {
-        return currentDirectory.toAbsolutePath().normalize();
+        return currentDirectory;
     }
 
     @Override
@@ -150,7 +150,7 @@ public class EnvironmentImpl implements Environment {
                     "The given path does not point to an existing directory.");
         }
 
-        currentDirectory = path;
+        currentDirectory = path.toAbsolutePath().normalize();
     }
 
     @Override
