@@ -89,17 +89,33 @@ public class MassrenameCommand implements ShellCommand {
         return ShellStatus.CONTINUE;
     }
 
+    /**
+     * Prints the file names in the source directory that match the specified pattern.
+     *
+     * @param src the path to the source directory that contains the files
+     * @param pattern the pattern for matching the file names
+     * @param env the {@link Environment} object to print to
+     * @throws IOException if there is an issue with the given directory
+     */
     private void filterSubcommand(Path src, String pattern, Environment env) throws IOException {
-        filter(src, pattern).forEach(
-                (result) -> env.writeln(result.toString())
-        );
+        filter(src, pattern).forEach(result -> env.writeln(result.toString()));
     }
 
+    /**
+     * Prints all the capturing groups found in each file name that matches the given
+     * pattern.
+     *
+     * @param src the path to the source directory that contains the files
+     * @param pattern the pattern for matching the file names
+     * @param env the {@link Environment} object to print to
+     * @throws IOException if there is an issue with the given directory
+     */
     private void groupsSubcommand(Path src, String pattern, Environment env) throws IOException {
-        filter(src, pattern).forEach((result) -> {
+        filter(src, pattern).forEach(result -> {
             env.write(result.toString());
 
-            for (int i = 0, groupCount = result.numberOfGroups(); i <= groupCount; i++) {
+            int groupCount = result.numberOfGroups();
+            for (int i = 0; i <= groupCount; i++) {
                 env.write(" " + i + ": " + result.group(i));
             }
 
