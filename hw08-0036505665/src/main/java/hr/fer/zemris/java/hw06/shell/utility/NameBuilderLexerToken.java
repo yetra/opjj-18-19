@@ -3,7 +3,7 @@ package hr.fer.zemris.java.hw06.shell.utility;
 import java.util.Objects;
 
 /**
- * A class which models a token produced by a {@code SmartScriptLexer} object.
+ * A class which models a token produced by the {@link NameBuilderLexer}.
  *
  * @author Bruna Dujmović
  *
