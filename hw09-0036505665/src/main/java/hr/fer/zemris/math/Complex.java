@@ -191,6 +191,6 @@ public class Complex {
 
     @Override
     public String toString() {
-        return re + (im > 0 ? "+" : "") + "i" + im;
+        return re + (im >= 0 ? "+" : "-") + "i" + Math.abs(im);
     }
 }
