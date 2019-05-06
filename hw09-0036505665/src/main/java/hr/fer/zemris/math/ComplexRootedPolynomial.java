@@ -31,16 +31,16 @@ public class ComplexRootedPolynomial {
      * @param roots the roots of the polynomial
      * @throws NullPointerException if the given constant or roots are {@code null}
      */
-    public ComplexRootedPolynomial(Complex constant, Complex ... roots) {
+    public ComplexRootedPolynomial(Complex constant, Complex... roots) {
         this.constant = Objects.requireNonNull(constant);
         this.roots = Objects.requireNonNull(roots);
     }
 
     /**
-     * Returns the value of the polynomial at a given complex point.
+     * Returns the value of this polynomial at a given complex point.
      *
      * @param z the point to calculate the value for
-     * @return the value of the polynomial at a given complex point
+     * @return the value of this polynomial at a given complex point
      * @throws NullPointerException if the given point is {@code null}
      */
     public Complex apply(Complex z) {
@@ -60,7 +60,15 @@ public class ComplexRootedPolynomial {
      * @return the {@link ComplexPolynomial} object that represents this polynomial
      */
     public ComplexPolynomial toComplexPolynom() {
-        return null;
+        ComplexPolynomial result = new ComplexPolynomial(constant);
+
+        for (Complex root : roots) {
+            result = result.multiply(
+                    new ComplexPolynomial(root.negate(), Complex.ONE)
+            );
+        }
+
+        return result;
     }
 
     @Override
