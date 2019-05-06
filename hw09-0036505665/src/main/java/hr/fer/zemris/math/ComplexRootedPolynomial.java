@@ -75,10 +75,10 @@ public class ComplexRootedPolynomial {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("(").append(constant.toString()).append(")");
+        sb.append("(").append(constant).append(")");
 
         for (Complex root : roots) {
-            sb.append("*").append("(z-(").append(root.toString()).append("))");
+            sb.append("*").append("(z-(").append(root).append("))");
         }
         
         return sb.toString();
