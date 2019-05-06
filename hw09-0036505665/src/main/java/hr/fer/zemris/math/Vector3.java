@@ -6,6 +6,7 @@ package hr.fer.zemris.math;
  * without changing the respective object.
  *
  * @author Bruna Dujmović
+ *
  */
 public class Vector3 {
 
