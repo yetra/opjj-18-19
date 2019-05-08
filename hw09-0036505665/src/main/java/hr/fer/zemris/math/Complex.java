@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This class models a complex number.
+ * This class models an immutable complex number. All the mathematical operations performed
+ * on the objects of this class will return a new {@link Complex} object as the result,
+ * without changing the current object.
  *
  * @author Bruna Dujmović
  *
@@ -97,6 +99,7 @@ public class Complex {
      */
     public Complex divide(Complex c) {
         Objects.requireNonNull(c);
+
         double reNumerator = re * c.re + im * c.im;
         double imNumerator = im * c.re - re * c.im;
         double denominator = c.re * c.re + c.im * c.im;

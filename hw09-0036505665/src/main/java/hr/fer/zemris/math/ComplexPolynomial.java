@@ -6,7 +6,7 @@ import java.util.Objects;
  * This class models a polynomial with complex coefficients that is constructed from
  * its factors.
  *
- * The form of the polynomial is f(z) = zn * z^n + .. + z2 * z^2 + z1 * z + z0,
+ * The form of the polynomial is f(z) = zn * z^n + ... + z2 * z^2 + z1 * z + z0,
  * where z0 to zn are its factors.
  *
  * @author Bruna Dujmović
@@ -25,6 +25,7 @@ public class ComplexPolynomial {
      * following parameter is z1, then z2 etc.
      *
      * @param factors the factors of the polynomial
+     * @throws NullPointerException if the given factors are {@code null}
      */
     public ComplexPolynomial(Complex... factors) {
         this.factors = Objects.requireNonNull(factors);

@@ -1,9 +1,11 @@
 package hr.fer.zemris.math;
 
+import java.util.Objects;
+
 /**
- * This class models and immutable 3D vector. All the mathematical operations performed
+ * This class models an immutable 3D vector. All the mathematical operations performed
  * on the objects of this class will return a new {@link Vector3} object as the result,
- * without changing the respective object.
+ * without changing the current object.
  *
  * @author Bruna Dujmović
  *
@@ -62,8 +64,11 @@ public class Vector3 {
      *
      * @param other the vector to add
      * @return a new {@link Vector3} object that is the result of the addition
+     * @throws NullPointerException if the given vector is {@code null}
      */
     public Vector3 add(Vector3 other) {
+        Objects.requireNonNull(other);
+
         return new Vector3(x + other.x, y + other.y, z + other.z);
     }
 
@@ -73,8 +78,11 @@ public class Vector3 {
      *
      * @param other the vector to subtract
      * @return a new {@link Vector3} object that is the result of the subtraction
+     * @throws NullPointerException if the given vector is {@code null}
      */
     public Vector3 sub(Vector3 other) {
+        Objects.requireNonNull(other);
+
         return new Vector3(x - other.x, y - other.y, z - other.z);
     }
 
@@ -84,8 +92,11 @@ public class Vector3 {
      *
      * @param other the vector to perform the dot product with
      * @return a new {@link Vector3} object that is the result of the dot product
+     * @throws NullPointerException if the given vector is {@code null}
      */
     public double dot(Vector3 other) {
+        Objects.requireNonNull(other);
+
         return x * other.x + y * other.y + z * other.z;
     }
 
@@ -93,10 +104,13 @@ public class Vector3 {
      * Performs the cross product operation on this vector and a given {@code other},
      * and returns the result in a new {@link Vector3} object.
      *
-     * @param other the vector to perform the dot cross with
+     * @param other the vector to perform the cross product with
      * @return a new {@link Vector3} object that is the result of the cross product
+     * @throws NullPointerException if the given vector is {@code null}
      */
     public Vector3 cross(Vector3 other) {
+        Objects.requireNonNull(other);
+
         double newX = y * other.z - z * other.y;
         double newY = z * other.x - x * other.z;
         double newZ = x * other.y - y * other.x;
@@ -120,8 +134,11 @@ public class Vector3 {
      *
      * @param other the other vector for calculating the cosine of the angle
      * @return the cosine of the angle between this vector and the given {@code other}
+     * @throws NullPointerException if the given vector is {@code null}
      */
     public double cosAngle(Vector3 other) {
+        Objects.requireNonNull(other);
+
         return dot(other) / (norm() * other.norm());
     }
 
@@ -153,7 +170,7 @@ public class Vector3 {
     }
 
     /**
-     * Returns an array representation of this vector of the following form: [x, y, z].
+     * Returns an array representation of this vector of the form [x, y, z].
      *
      * @return an array representation of this vector
      */

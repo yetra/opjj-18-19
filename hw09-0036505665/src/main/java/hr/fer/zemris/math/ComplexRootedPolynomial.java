@@ -63,9 +63,7 @@ public class ComplexRootedPolynomial {
         ComplexPolynomial result = new ComplexPolynomial(constant);
 
         for (Complex root : roots) {
-            result = result.multiply(
-                    new ComplexPolynomial(root.negate(), Complex.ONE)
-            );
+            result = result.multiply(new ComplexPolynomial(root.negate(), Complex.ONE));
         }
 
         return result;
@@ -88,9 +86,9 @@ public class ComplexRootedPolynomial {
      * Finds the index of the closest root of this complex number which is within
      * the specified {@code threshold} for the given point {@code z}.
      *
-     * Specifically, this method finds the index of the root that has the smallest
-     * value |z - root[i]| that is less than the threshold. If no such root exists,
-     * this method will return -1.
+     * Specifically, this method finds the index i of the root that has the smallest
+     * value |z - root[i]| that is less than the threshold. If no such root exists, -1
+     * is returned.
      *
      * @param z the point to calculate the value with
      * @param threshold the value of the threshold
