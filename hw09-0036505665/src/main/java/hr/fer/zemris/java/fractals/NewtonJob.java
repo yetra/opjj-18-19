@@ -12,14 +12,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * drawing a Newton fractal on a specified complex plane.
  *
  * It generates the Newton-Raphson iterations for a complex polynomial f(z) using the
- * formula z_n+1 = z_n - f(z_n) / f'(z_n) until {@link #maxIterations} is reached or
- * the module |z_n+1 - z_n| becomes adequately small (less than or equal to {@link
- * #CONVERGENCE_THRESHOLD}).
+ * formula z_n+1 = z_n - f(z_n) / f'(z_n) until conditions are satisfied.
  *
  * Once stopped, it finds the closest root for the final point z_n and colors the point
- * based on the index of that root. If it stopped on a z_n that is further than the
- * predefined {@link #ROOT_THRESHOLD}, the point will be colored with a color associated
- * with the index 0.
+ * based on the index of that root.
  *
  * @author Bruna Dujmović
  *
@@ -135,7 +131,7 @@ public class NewtonJob implements Callable<Void> {
     @Override
     public Void call() {
         for (int y = yMin; y <= yMax; y++) {
-            for (int x = 0; x <= width; x++) {
+            for (int x = 0; x < width; x++) {
                 Complex zn = mapToComplexPlane(x, y);
                 ComplexPolynomial derived = polynomial.derive();
 
@@ -156,7 +152,6 @@ public class NewtonJob implements Callable<Void> {
 
                 int index = rootedPolynomial.indexOfClosestRootFor(zn, ROOT_THRESHOLD);
                 data[x + y * height] = (index == -1) ? 0 : (short) (index + 1);
-                // TODO explan index of data array?
             }
         }
 

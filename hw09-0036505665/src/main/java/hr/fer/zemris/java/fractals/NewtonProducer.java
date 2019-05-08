@@ -60,7 +60,7 @@ public class NewtonProducer implements IFractalProducer {
     public void produce(double reMin, double reMax, double imMin, double imMax,
                         int width, int height, long requestNo,
                         IFractalResultObserver observer, AtomicBoolean cancel) {
-
+        System.out.println("Zapocinjem izracun...");
         short[] data = new short[width * height];
         int ySections = 8 * Runtime.getRuntime().availableProcessors();
         int yPerSection = height / ySections;
@@ -90,6 +90,7 @@ public class NewtonProducer implements IFractalProducer {
 
         pool.shutdown();
 
+        System.out.println("Racunanje gotovo. Idem obavijestiti promatraca tj. GUI!");
         observer.acceptResult(data, (short) (polynomial.order() + 1), requestNo);
     }
 }
