@@ -37,7 +37,7 @@ public class ComplexPolynomial {
      * @return the order of this polynomial
      */
     public short order() {
-        return (short) factors.length;
+        return (short) (factors.length - 1);
     }
 
     /**
@@ -51,7 +51,7 @@ public class ComplexPolynomial {
     public ComplexPolynomial multiply(ComplexPolynomial p) {
         Objects.requireNonNull(p);
 
-        Complex[] resultFactors = new Complex[factors.length + p.factors.length - 1];
+        Complex[] resultFactors = new Complex[order() + p.order() + 1];
         for (int i = 0; i < factors.length; i++) {
             for (int j = 0; j < p.factors.length; j++) {
                 Complex result = factors[i].multiply(p.factors[j]);
