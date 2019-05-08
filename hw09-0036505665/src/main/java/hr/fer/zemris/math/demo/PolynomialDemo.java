@@ -4,7 +4,7 @@ import hr.fer.zemris.math.Complex;
 import hr.fer.zemris.math.ComplexPolynomial;
 import hr.fer.zemris.math.ComplexRootedPolynomial;
 
-public class PolynominalDemo {
+public class PolynomialDemo {
 
     /*
      * Daje okvirni ispis:
