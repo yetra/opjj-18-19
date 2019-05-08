@@ -39,7 +39,6 @@ public class Newton {
             while (!(line = sc.nextLine()).equals("done")) {
                 try {
                     roots.add(parseRoot(line));
-//                    System.out.println(parseRoot(line));
 
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
@@ -72,21 +71,15 @@ public class Newton {
      * @return the {@link Complex} object parsed from the root string
      */
     private static Complex parseRoot(String rootString) {
-        String normalized = rootString.replaceAll("\\s+", "");
+        String normalized = rootString.replaceAll("\\s+", "").replaceAll("i$", "i1");
 
         try {
-            if (rootString.contains("i")) {
+            if (normalized.matches("(.*\\d+[+-]i\\d+.*$)|(^-?i\\d+.*)")) {
                 int middle = normalized.indexOf('i') - 1;
                 normalized = normalized.replace("i", "");
 
                 if (middle < 1) {
-                    if (normalized.equals("")) {
-                        return new Complex(0.0, 1.0);
-                    } else if (normalized.equals("-")) {
-                        return new Complex(0.0, -1.0);
-                    }
-
-                    double im = Double.parseDouble(rootString);
+                    double im = Double.parseDouble(normalized);
                     return new Complex(0.0, im);
 
                 } else {
