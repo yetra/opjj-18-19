@@ -3,14 +3,15 @@ package hr.fer.zemris.java.raytracer;
 import hr.fer.zemris.java.raytracer.model.*;
 import hr.fer.zemris.java.raytracer.viewer.RayTracerViewer;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static hr.fer.zemris.java.raytracer.Util.tracer;
 
 /**
  * This program is a simplification of a ray-tracer for the rendering of 3D scenes.
+ * The implementation here parallelizes the calculation using the Fork-Join framework
+ * and RecursiveAction.
  */
-public class RayCaster {
+public class RayCasterParallel {
 
     /**
      * The main method. Shows the image using {@link RayTracerViewer}.
@@ -22,8 +23,8 @@ public class RayCaster {
                 new Point3D(10,0,0),
                 new Point3D(0,0,0),
                 new Point3D(0,0,10),
-                20, 20)
-        ;
+                20, 20
+        );
     }
 
     /**
@@ -36,10 +37,9 @@ public class RayCaster {
         return new IRayTracerProducer() {
 
             @Override
-            public void produce(Point3D eye, Point3D view, Point3D viewUp,
-                                double horizontal, double vertical, int width,
-                                int height, long requestNo, IRayTracerResultObserver observer,
-                                AtomicBoolean cancel) {
+            public void produce(Point3D eye, Point3D view, Point3D viewUp, double horizontal,
+                                double vertical, int width, int height, long requestNo,
+                                IRayTracerResultObserver observer, AtomicBoolean cancel) {
 
                 System.out.println("Započinjem izračune...");
                 short[] red = new short[width*height];
@@ -59,24 +59,12 @@ public class RayCaster {
 
                 Scene scene = RayTracerViewer.createPredefinedScene();
 
-                short[] rgb = new short[3];
-                int offset = 0;
-                for(int y = 0; y < height; y++) {
-                    for(int x = 0; x < width; x++) {
-                        Point3D screenPoint = screenCorner
-                                .add(xAxis.scalarMultiply(x * horizontal / (width - 1)))
-                                .sub(yAxis.scalarMultiply(y * vertical / (height - 1)));
-                        Ray ray = Ray.fromPoints(eye, screenPoint);
-
-                        tracer(scene, ray, rgb);
-
-                        red[offset] = rgb[0] > 255 ? 255 : rgb[0];
-                        green[offset] = rgb[1] > 255 ? 255 : rgb[1];
-                        blue[offset] = rgb[2] > 255 ? 255 : rgb[2];
-
-                        offset++;
-                    }
-                }
+                ForkJoinPool pool = new ForkJoinPool();
+                pool.invoke(new RecursiveTracerAction(
+                        width, height, horizontal, vertical, 0, height - 1, xAxis,
+                        yAxis, eye, screenCorner, scene, red, green, blue, cancel
+                ));
+                pool.shutdown();
 
                 System.out.println("Izračuni gotovi...");
                 observer.acceptResult(red, green, blue, requestNo);
