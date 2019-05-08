@@ -88,8 +88,6 @@ public class NewtonProducer implements IFractalProducer {
             } catch (InterruptedException | ExecutionException e) {}
         }
 
-        pool.shutdown();
-
         System.out.println("Racunanje gotovo. Idem obavijestiti promatraca tj. GUI!");
         observer.acceptResult(data, (short) (polynomial.order() + 1), requestNo);
     }
