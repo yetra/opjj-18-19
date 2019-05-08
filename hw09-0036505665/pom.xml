@@ -38,14 +38,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>coloring-framework</groupId>
-      <artifactId>coloring-framework</artifactId>
-      <version>1</version>
+      <groupId>fractal-viewer</groupId>
+      <artifactId>fractal-viewer</artifactId>
+      <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>slagalica</groupId>
-      <artifactId>slagalica</artifactId>
-      <version>1</version>
+      <groupId>raytracer</groupId>
+      <artifactId>raytracer</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 
