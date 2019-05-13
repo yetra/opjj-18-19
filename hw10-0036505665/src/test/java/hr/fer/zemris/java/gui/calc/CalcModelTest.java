@@ -17,7 +17,7 @@ public class CalcModelTest {
 	
 	private static CalcModel newCalcModel() {
 		// Zamijenite ovo tako da vraća primjerak Vaše implementacije modela.
-		return new DummyCalcModel();
+		return new CalcModelImpl();
 	}
 
 	@BeforeEach
@@ -160,7 +160,7 @@ public class CalcModelTest {
 		model.insertDigit(5);
 		model.swapSign();
 
-		assertEquals(-5, model.getValue(), 1E-10); 
+		assertEquals(-5, model.getValue(), 1E-10);
 		assertEquals("-5", model.toString()); 
 	}
 
@@ -274,6 +274,19 @@ public class CalcModelTest {
 		
 		assertEquals(34.0, model.getValue(), 1E-10); 
 		assertEquals("34", model.toString()); 
+	}
+
+	@Test
+	public void leadingDecimalZerosAreIgnored() {
+		model.insertDigit(0);
+		model.insertDigit(0);
+		model.insertDigit(0);
+		model.insertDecimalPoint();
+		model.insertDigit(3);
+		model.insertDigit(4);
+
+		assertEquals(0.34, model.getValue(), 1E-10);
+		assertEquals("0.34", model.toString());
 	}
 
 	@Test
