@@ -52,19 +52,66 @@ public class Calculator extends JFrame {
     }
 
     /**
-     * Initializes all GUI components of this calculator.
+     * Initializes the GUI.
      */
     private void initGUI() {
         Container cp = getContentPane();
-        cp.setLayout(new CalcLayout());
+        cp.setLayout(new CalcLayout(3));
 
-        JLabel display = new JLabel("0");
+        // display
+        JLabel display = new JLabel(model.toString());
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         display.setOpaque(true);
-        display.setBackground(Color.YELLOW);
+C        display.setBackground(Color.YELLOW);
         model.addCalcValueListener(e -> display.setText(model.toString()));
         cp.add(display, "1,1");
 
+        // operation buttons initialization
+        initDigitButtons(cp);
+        initBinaryOperationButtons(cp);
+        initUnaryOperationButtons(cp);
+
+        // clear operations
+        cp.add(new OperationButton("clr", e -> model.clear()), "1,7");
+        cp.add(new OperationButton("res", e -> model.clearAll()), "2,7");
+
+        // stack operations
+        cp.add(new OperationButton("push", e -> valueStack.push(model.getValue())), "3,7");
+        cp.add(new OperationButton("pop", e -> popStack()), "4,7");
+
+        // swap sign
+        cp.add(new OperationButton("+/-", e -> swapSign()), "5,4");
+        // insert decimal point
+        cp.add(new OperationButton(".", e -> insertDecimalPoint()), "5,5");
+
+        // equals
+        cp.add(new OperationButton(
+                "=", e -> {
+                    if (model.isActiveOperandSet() && model.getPendingBinaryOperation() != null) {
+                        model.setValue(
+                                model.getPendingBinaryOperation().applyAsDouble(
+                                        model.getActiveOperand(), model.getValue()
+                                )
+                        );
+                        model.setPendingBinaryOperation(null);
+                    }
+                }), "1,6"
+        );
+
+        // Inv checkbox
+        JCheckBox invCheckBox = new JCheckBox("Inv");
+        invCheckBox.addActionListener(
+                e -> invOperationButtons.forEach(InvOperationButton::inverse)
+        );
+        cp.add(invCheckBox, "5,7");
+    }
+
+    /**
+     * Initializes the digit buttons.
+     *
+     * @param cp the container for adding the buttons
+     */
+    private void initDigitButtons(Container cp) {
         cp.add(new OperationButton("0", e -> insertDigit(0)), "5,3");
         cp.add(new OperationButton("1", e -> insertDigit(1)), "4,3");
         cp.add(new OperationButton("2", e -> insertDigit(2)), "4,4");
@@ -75,15 +122,14 @@ public class Calculator extends JFrame {
         cp.add(new OperationButton("7", e -> insertDigit(7)), "2,3");
         cp.add(new OperationButton("8", e -> insertDigit(8)), "2,4");
         cp.add(new OperationButton("9", e -> insertDigit(9)), "2,5");
+    }
 
-        cp.add(new OperationButton("clr", e -> model.clear()), "1,7");
-        cp.add(new OperationButton("res", e -> model.clearAll()), "2,7");
-        cp.add(new OperationButton("push", e -> valueStack.push(model.getValue())), "3,7");
-        cp.add(new OperationButton("pop", e -> popStack()), "4,7");
-
-        cp.add(new OperationButton("+/-", e -> swapSign()), "5,4");
-        cp.add(new OperationButton(".", e -> insertDecimalPoint()), "5,5");
-
+    /**
+     * Initializes the binary operation buttons.
+     *
+     * @param cp the container for adding the buttons
+     */
+    private void initBinaryOperationButtons(Container cp) {
         cp.add(new OperationButton(
                 "1/x", e -> model.setValue(1.0 / model.getValue())), "2,1"
         );
@@ -136,20 +182,14 @@ public class Calculator extends JFrame {
         );
         cp.add(ctg, "5,2");
         invOperationButtons.add(ctg);
+    }
 
-        cp.add(new OperationButton(
-                "=", e -> {
-                    if (model.isActiveOperandSet() && model.getPendingBinaryOperation() != null) {
-                        model.setValue(
-                                model.getPendingBinaryOperation().applyAsDouble(
-                                        model.getActiveOperand(), model.getValue()
-                                )
-                        );
-                        model.setPendingBinaryOperation(null);
-                    }
-                }), "1,6"
-        );
-
+    /**
+     * Initializes the unary operation buttons.
+     *
+     * @param cp the container for adding the buttons
+     */
+    private void initUnaryOperationButtons(Container cp) {
         cp.add(new OperationButton(
                 "/", e -> setBinaryOperation((first, second) -> first / second)), "2,6"
         );
@@ -165,12 +205,6 @@ public class Calculator extends JFrame {
         cp.add(new OperationButton(
                 "+", e -> setBinaryOperation((first, second) -> first + second)), "5,6"
         );
-
-        JCheckBox invCheckBox = new JCheckBox("Inv");
-        invCheckBox.addActionListener(
-                e -> invOperationButtons.forEach(InvOperationButton::inverse)
-        );
-        cp.add(invCheckBox, "5,7");
     }
 
     /**
