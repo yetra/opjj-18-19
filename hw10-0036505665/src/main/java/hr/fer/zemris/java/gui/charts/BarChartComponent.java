@@ -2,6 +2,7 @@ package hr.fer.zemris.java.gui.charts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 
 /**
@@ -116,7 +117,7 @@ public class BarChartComponent extends JComponent {
         paintGrid(g2d);
         paintBars(g2d);
         paintXAxis(g2d, fm);
-        paintYAxis(g2d, fm);
+        paintYAxis(g2d, fm, maxYNumberWidth);
 
         g2d.setStroke(new BasicStroke(2));
         g2d.setColor(Color.GRAY);
@@ -228,7 +229,7 @@ public class BarChartComponent extends JComponent {
      * @param g2d the {@link Graphics2D} object to use
      * @param fm the corresponding {@link FontMetrics} object
      */
-    private void paintYAxis(Graphics2D g2d, FontMetrics fm) {
+    private void paintYAxis(Graphics2D g2d, FontMetrics fm, int maxYNumberWidth) {
         int yCount = (chart.getMaxY() - chart.getMinY()) / chart.getySpacing();
 
         g2d.setStroke(AXIS_STROKE);
@@ -236,10 +237,20 @@ public class BarChartComponent extends JComponent {
         
         // axis line
         g2d.drawLine(xAxis.start, yAxis.start, xAxis.start, yAxis.end);
+
+        // caption
+        AffineTransform saveAT = g2d.getTransform();
+        AffineTransform rotateAT = AffineTransform.getQuadrantRotateInstance(3);
+        g2d.setTransform(rotateAT);
+        g2d.drawString(
+                chart.getyCaption(),
+                - (yAxis.start / 2 + fm.stringWidth(chart.getyCaption()) / 2 + AXIS_EXTENSION),
+                xAxis.start - CHART_SPACING - maxYNumberWidth - CHART_SPACING
+
+        );
+        g2d.setTransform(saveAT);
         
-        // initial tick mark
-        g2d.drawLine(xAxis.start - TICK_LENGTH, yAxis.start, xAxis.start, yAxis.start);
-        
+
         for (int row = 0; row <= yCount; row++) {
             // value
             String value = Integer.toString(chart.getMinY() + row * chart.getySpacing());
