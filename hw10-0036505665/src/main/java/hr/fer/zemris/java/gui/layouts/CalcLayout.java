@@ -124,7 +124,7 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public void removeLayoutComponent(Component comp) {
-        components.values().removeIf(value -> value.equals(comp));
+        components.values().removeIf(value -> value == comp);
     }
 
     @Override
