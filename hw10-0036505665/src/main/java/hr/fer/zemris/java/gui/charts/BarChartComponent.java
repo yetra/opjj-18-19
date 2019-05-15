@@ -16,7 +16,7 @@ public class BarChartComponent extends JComponent {
     /**
      * The space between the axis and the caption.
      */
-    private static final int CHART_SPACING = 20;
+    private static final int SPACING = 20;
     /**
      * The line between the last tick mark and the end of the arrow.
      */
@@ -63,13 +63,22 @@ public class BarChartComponent extends JComponent {
     private BarChart chart;
 
     /**
-     * A container for x-axis data.
+     * The start coordinate of the x-axis.
      */
-    private Axis xAxis;
+    private int xAxisStart;
     /**
-     * A container for y-axis data.
+     * The end coordinate of the x-axis.
      */
-    private Axis yAxis;
+    private int xAxisEnd;
+
+    /**
+     * The start coordinate of the y-axis.
+     */
+    private int yAxisStart;
+    /**
+     * The end coordinate of the y-axis.
+     */
+    private int yAxisEnd;
 
     /**
      * The dimensions of a grid cell.
@@ -99,19 +108,15 @@ public class BarChartComponent extends JComponent {
 
         int maxYNumberWidth = fm.stringWidth(Integer.toString(chart.getMaxY()));
 
-        xAxis = new Axis(
-                insets.left + fm.getHeight() + CHART_SPACING + maxYNumberWidth + CHART_SPACING,
-                component.width - insets.right - AXIS_EXTENSION
-        );
+        xAxisStart = insets.left + fm.getHeight() + SPACING + maxYNumberWidth + SPACING;
+        xAxisEnd = component.width - insets.right - AXIS_EXTENSION;
 
-        yAxis = new Axis(
-                component.height - (insets.bottom + fm.getHeight() + CHART_SPACING + fm.getHeight() + CHART_SPACING),
-                insets.top + AXIS_EXTENSION
-        );
+        yAxisStart = component.height - insets.bottom + fm.getHeight() - SPACING - fm.getHeight() - SPACING;
+        yAxisEnd = insets.top + AXIS_EXTENSION;
 
         cell = new Dimension(
-                (xAxis.end - xAxis.start) / values.size(),
-                (yAxis.start - yAxis.end) * chart.getySpacing() / (chart.getMaxY() - chart.getMinY())
+                (xAxisEnd - xAxisStart) / values.size(),
+                (yAxisStart - yAxisEnd) * chart.getySpacing() / (chart.getMaxY() - chart.getMinY())
         );
 
         paintGrid(g2d);
@@ -136,8 +141,8 @@ public class BarChartComponent extends JComponent {
         int xCount = chart.getValues().size();
         for (int x = 1; x <= xCount; x++) {
             g2d.drawLine(
-                    xAxis.start + x * cell.width, yAxis.start,
-                    xAxis.start + x * cell.width, yAxis.end
+                    xAxisStart + x * cell.width, yAxisStart,
+                    xAxisStart + x * cell.width, yAxisEnd
             );
         }
 
@@ -145,8 +150,8 @@ public class BarChartComponent extends JComponent {
         int yCount = (chart.getMaxY() - chart.getMinY()) / chart.getySpacing();
         for (int y = 1; y <= yCount; y++) {
             g2d.drawLine(
-                    xAxis.start, yAxis.start - y * cell.height,
-                    xAxis.end, yAxis.start - y * cell.height
+                    xAxisStart, yAxisStart - y * cell.height,
+                    xAxisEnd, yAxisStart - y * cell.height
             );
         }
     }
@@ -166,8 +171,8 @@ public class BarChartComponent extends JComponent {
             int yValue = values.get(x).getY();
 
             Rectangle r = new Rectangle(
-                    xAxis.start + x * cell.width,
-                    yAxis.start - cell.height  * (yValue / ySpacing),
+                    xAxisStart + x * cell.width,
+                    yAxisStart - cell.height  * (yValue / ySpacing),
                     cell.width,
                     cell.height * (yValue / ySpacing)
             );
@@ -194,31 +199,31 @@ public class BarChartComponent extends JComponent {
         g2d.setColor(AXIS_COLOR);
         
         // axis line
-        g2d.drawLine(xAxis.start, yAxis.start, xAxis.end, yAxis.start);
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisEnd, yAxisStart);
         
         // caption
         g2d.drawString(
                 chart.getxCaption(),
-                xAxis.start + (xAxis.end - AXIS_EXTENSION - xAxis.start) / 2 - fm.stringWidth(chart.getxCaption()) / 2,
-                yAxis.start + CHART_SPACING + fm.getHeight() + CHART_SPACING
+                xAxisStart + (xAxisEnd - AXIS_EXTENSION - xAxisStart) / 2 - fm.stringWidth(chart.getxCaption()) / 2,
+                yAxisStart + SPACING + fm.getHeight() + SPACING
         );
         
         // initial tick mark
-        g2d.drawLine(xAxis.start, yAxis.start, xAxis.start, yAxis.start + TICK_LENGTH);
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisStart + TICK_LENGTH);
         
         for (int x = 1; x <= xCount; x++) {
             // value
             String value = Integer.toString(values.get(x - 1).getX());
             g2d.drawString(
                     value,
-                    xAxis.start + x * cell.width - cell.width / 2 - fm.stringWidth(value) / 2,
-                    yAxis.start + CHART_SPACING
+                    xAxisStart + x * cell.width - cell.width / 2 - fm.stringWidth(value) / 2,
+                    yAxisStart + SPACING
             );
 
             // tick mark
             g2d.drawLine(
-                    xAxis.start + x * cell.width, yAxis.start,
-                    xAxis.start + x * cell.width, yAxis.start + TICK_LENGTH
+                    xAxisStart + x * cell.width, yAxisStart,
+                    xAxisStart + x * cell.width, yAxisStart + TICK_LENGTH
             );
         }
     }
@@ -236,7 +241,7 @@ public class BarChartComponent extends JComponent {
         g2d.setColor(AXIS_COLOR);
         
         // axis line
-        g2d.drawLine(xAxis.start, yAxis.start, xAxis.start, yAxis.end);
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisEnd);
 
         // caption
         AffineTransform saveAT = g2d.getTransform();
@@ -244,8 +249,8 @@ public class BarChartComponent extends JComponent {
         g2d.setTransform(rotateAT);
         g2d.drawString(
                 chart.getyCaption(),
-                - (yAxis.start / 2 + fm.stringWidth(chart.getyCaption()) / 2 + AXIS_EXTENSION),
-                xAxis.start - CHART_SPACING - maxYNumberWidth - CHART_SPACING
+                - (yAxisStart / 2 + fm.stringWidth(chart.getyCaption()) / 2 + AXIS_EXTENSION),
+                xAxisStart - SPACING - maxYNumberWidth - SPACING
 
         );
         g2d.setTransform(saveAT);
@@ -256,42 +261,15 @@ public class BarChartComponent extends JComponent {
             String value = Integer.toString(chart.getMinY() + row * chart.getySpacing());
             g2d.drawString(
                     value,
-                    xAxis.start - TICK_LENGTH - CHART_SPACING - fm.stringWidth(value),
-                    yAxis.start - row * cell.height + fm.getAscent() / 2 - (int) AXIS_STROKE.getLineWidth() / 2
+                    xAxisStart - TICK_LENGTH - SPACING - fm.stringWidth(value),
+                    yAxisStart - row * cell.height + fm.getAscent() / 2 - (int) AXIS_STROKE.getLineWidth() / 2
             );
 
             // tick mark
             g2d.drawLine(
-                    xAxis.start - TICK_LENGTH, yAxis.start - row * cell.height,
-                    xAxis.start, yAxis.start - row * cell.height
+                    xAxisStart - TICK_LENGTH, yAxisStart - row * cell.height,
+                    xAxisStart, yAxisStart - row * cell.height
             );
-        }
-    }
-
-    /**
-     * A helper class that serves as a container for the axes' start and end coordinates.
-     */
-    private class Axis {
-
-        /**
-         * The start coordinate of the axis.
-         */
-        private int start;
-
-        /**
-         * The end coordinate of the axis.
-         */
-        private int end;
-
-        /**
-         * Constructs an {@link Axis} of the given start and end coordinates.
-         *
-         * @param start the start coordinate of the axis
-         * @param end the end coordinate of the axis
-         */
-        public Axis(int start, int end) {
-            this.start = start;
-            this.end = end;
         }
     }
 }
