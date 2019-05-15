@@ -3,6 +3,7 @@ package hr.fer.zemris.java.gui.charts;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class BarChartComponent extends JComponent {
     /**
      * The line between the last tick mark and the end of the arrow.
      */
-    private static final int AXIS_EXTENSION = 5;
+    private static final int ARROW_LENGTH = 8;
     /**
      * The length of a tick mark on the axis.
      */
@@ -109,10 +110,10 @@ public class BarChartComponent extends JComponent {
         int maxYNumberWidth = fm.stringWidth(Integer.toString(chart.getMaxY()));
 
         xAxisStart = insets.left + fm.getHeight() + SPACING + maxYNumberWidth + SPACING;
-        xAxisEnd = component.width - insets.right - AXIS_EXTENSION;
+        xAxisEnd = component.width - insets.right - ARROW_LENGTH;
 
-        yAxisStart = component.height - insets.bottom + fm.getHeight() - SPACING - fm.getHeight() - SPACING;
-        yAxisEnd = insets.top + AXIS_EXTENSION;
+        yAxisStart = component.height - insets.bottom - fm.getHeight() - SPACING - fm.getHeight() - SPACING;
+        yAxisEnd = insets.top + ARROW_LENGTH;
 
         cell = new Dimension(
                 (xAxisEnd - xAxisStart) / values.size(),
@@ -199,12 +200,12 @@ public class BarChartComponent extends JComponent {
         g2d.setColor(AXIS_COLOR);
         
         // axis line
-        g2d.drawLine(xAxisStart, yAxisStart, xAxisEnd, yAxisStart);
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisEnd + ARROW_LENGTH, yAxisStart);
         
         // caption
         g2d.drawString(
                 chart.getxCaption(),
-                xAxisStart + (xAxisEnd - AXIS_EXTENSION - xAxisStart) / 2 - fm.stringWidth(chart.getxCaption()) / 2,
+                xAxisStart + (xAxisEnd - ARROW_LENGTH - xAxisStart) / 2 - fm.stringWidth(chart.getxCaption()) / 2,
                 yAxisStart + SPACING + fm.getHeight() + SPACING
         );
         
@@ -226,6 +227,10 @@ public class BarChartComponent extends JComponent {
                     xAxisStart + x * cell.width, yAxisStart + TICK_LENGTH
             );
         }
+
+        // arrow
+        g2d.drawLine(xAxisEnd + ARROW_LENGTH / 2, yAxisStart - TICK_LENGTH / 2, xAxisEnd + ARROW_LENGTH, yAxisStart);
+        g2d.drawLine(xAxisEnd + ARROW_LENGTH / 2, yAxisStart + TICK_LENGTH / 2, xAxisEnd + ARROW_LENGTH, yAxisStart);
     }
 
     /**
@@ -241,7 +246,7 @@ public class BarChartComponent extends JComponent {
         g2d.setColor(AXIS_COLOR);
         
         // axis line
-        g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisEnd);
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisEnd - ARROW_LENGTH);
 
         // caption
         AffineTransform saveAT = g2d.getTransform();
@@ -271,5 +276,9 @@ public class BarChartComponent extends JComponent {
                     xAxisStart, yAxisStart - row * cell.height
             );
         }
+
+        // arrow
+        g2d.drawLine(xAxisStart - TICK_LENGTH / 2, yAxisEnd - ARROW_LENGTH / 2, xAxisStart, yAxisEnd - ARROW_LENGTH);
+        g2d.drawLine(xAxisStart + TICK_LENGTH / 2, yAxisEnd - ARROW_LENGTH / 2, xAxisStart, yAxisEnd - ARROW_LENGTH);
     }
 }
