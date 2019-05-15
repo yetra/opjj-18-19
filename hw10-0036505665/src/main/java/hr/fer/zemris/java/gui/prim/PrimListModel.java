@@ -67,7 +67,8 @@ public class PrimListModel implements ListModel<Integer> {
     @Override
     public Integer getElementAt(int index) {
         if (index < 0 || index >= primes.size()) {
-            throw new IllegalArgumentException("Not enough generated primes!");
+            throw new ArrayIndexOutOfBoundsException(
+                    "Model does not contain that many primes!");
         }
 
         return primes.get(index);
