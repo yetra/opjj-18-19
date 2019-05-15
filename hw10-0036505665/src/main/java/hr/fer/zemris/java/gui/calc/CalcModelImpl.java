@@ -112,8 +112,8 @@ public class CalcModelImpl implements CalcModel {
     }
 
     @Override
-    public void swapSign() {    // TODO throws ?????
-        if (!isEditable) { // TODO check exception types
+    public void swapSign() throws CalculatorInputException {
+        if (!isEditable) {
             throw new CalculatorInputException("This model is not editable!");
         }
 
@@ -129,12 +129,12 @@ public class CalcModelImpl implements CalcModel {
     }
 
     @Override
-    public void insertDecimalPoint() {
+    public void insertDecimalPoint() throws CalculatorInputException {
         if (!isEditable) {
             throw new CalculatorInputException("This model is not editable!");
         }
         if (valueString.isEmpty() || valueString.equals("-") || valueString.contains(".")) {
-            throw new CalculatorInputException("Value string already contains a decimal point!");
+            throw new CalculatorInputException("Cannot add a decimal point!");
         }
 
         valueString = valueString.concat(".");
@@ -142,7 +142,7 @@ public class CalcModelImpl implements CalcModel {
     }
 
     @Override
-    public void insertDigit(int digit) {
+    public void insertDigit(int digit) throws CalculatorInputException, IllegalArgumentException {
         if (!isEditable) {
             throw new CalculatorInputException("This model is not editable!");
         }
@@ -168,7 +168,7 @@ public class CalcModelImpl implements CalcModel {
     }
 
     @Override
-    public double getActiveOperand() {
+    public double getActiveOperand() throws IllegalStateException {
         if (!isActiveOperandSet) {
             throw new IllegalStateException("Active operand is not set!");
         }
