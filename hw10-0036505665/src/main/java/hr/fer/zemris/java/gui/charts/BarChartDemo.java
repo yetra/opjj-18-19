@@ -119,7 +119,7 @@ public class BarChartDemo extends JFrame {
             System.exit(1);
         }
 
-        String[] valueStrings = lines.get(2).split("\\s");
+        String[] valueStrings = lines.get(2).split("\\s+");
 
         List<XYValue> values = new ArrayList<>();
         for (String valueString : valueStrings) {
