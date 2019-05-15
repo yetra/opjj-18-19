@@ -100,12 +100,12 @@ public class BarChartComponent extends JComponent {
 
         xAxis = new Axis(
                 insets.left + fm.getHeight() + CHART_SPACING + maxYNumberWidth + CHART_SPACING,
-                component.width - insets.right
+                component.width - insets.right - AXIS_EXTENSION
         );
 
         yAxis = new Axis(
                 component.height - (insets.bottom + fm.getHeight() + CHART_SPACING + fm.getHeight() + CHART_SPACING),
-                insets.top
+                insets.top + AXIS_EXTENSION
         );
 
         cell = new Dimension(
@@ -136,7 +136,7 @@ public class BarChartComponent extends JComponent {
         for (int x = 1; x <= xCount; x++) {
             g2d.drawLine(
                     xAxis.start + x * cell.width, yAxis.start,
-                    xAxis.start + x * cell.width, yAxis.end + AXIS_EXTENSION
+                    xAxis.start + x * cell.width, yAxis.end
             );
         }
 
@@ -145,7 +145,7 @@ public class BarChartComponent extends JComponent {
         for (int y = 1; y <= yCount; y++) {
             g2d.drawLine(
                     xAxis.start, yAxis.start - y * cell.height,
-                    xAxis.end - AXIS_EXTENSION, yAxis.start - y * cell.height
+                    xAxis.end, yAxis.start - y * cell.height
             );
         }
     }
@@ -220,8 +220,6 @@ public class BarChartComponent extends JComponent {
                     xAxis.start + x * cell.width, yAxis.start + TICK_LENGTH
             );
         }
-        
-//        g2d.drawLine(xAxis.end - AXIS_EXTENSION, yAxis.start, xAxis.end, yAxis.start);
     }
 
     /**
@@ -242,13 +240,13 @@ public class BarChartComponent extends JComponent {
         // initial tick mark
         g2d.drawLine(xAxis.start - TICK_LENGTH, yAxis.start, xAxis.start, yAxis.start);
         
-        for (int row = 1; row <= yCount; row++) {
+        for (int row = 0; row <= yCount; row++) {
             // value
-            String value = Integer.toString(chart.getMinY() + (row - 1) * chart.getySpacing());
+            String value = Integer.toString(chart.getMinY() + row * chart.getySpacing());
             g2d.drawString(
                     value,
                     xAxis.start - TICK_LENGTH - CHART_SPACING - fm.stringWidth(value),
-                    yAxis.start - (row - 1) * cell.height + fm.getAscent() / 2 - 1 // brush stroke
+                    yAxis.start - row * cell.height + fm.getAscent() / 2 - (int) AXIS_STROKE.getLineWidth() / 2
             );
 
             // tick mark
@@ -257,7 +255,6 @@ public class BarChartComponent extends JComponent {
                     xAxis.start, yAxis.start - row * cell.height
             );
         }
-        g2d.drawLine(xAxis.end - AXIS_EXTENSION, yAxis.start, xAxis.end, yAxis.start);
     }
 
     /**
