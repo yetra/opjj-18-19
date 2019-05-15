@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.gui.calc;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -18,6 +19,16 @@ public class OperationButton extends JButton {
      * The background color of this button.
      */
     private static final Color BACKGROUND_COLOR = new Color(0xDCDFFE);
+
+    /**
+     * The color of the border around this button.
+     */
+    private static final Color BORDER_COLOR = new Color(0x818E9D);
+
+    /**
+     * The width of the border around this button.
+     */
+    private static final int BORDER_WIDTH = 1;
 
     /**
      * The text written on this button.
@@ -41,7 +52,13 @@ public class OperationButton extends JButton {
 
         setOpaque(true);
         setBackground(BACKGROUND_COLOR);
+        setBorder(new LineBorder(BORDER_COLOR, BORDER_WIDTH));
+
+        if ("0123456789".contains(text)) {
+            setFont(getFont().deriveFont(30f));
+        }
         setText(text);
+
         addActionListener(listener);
     }
 }

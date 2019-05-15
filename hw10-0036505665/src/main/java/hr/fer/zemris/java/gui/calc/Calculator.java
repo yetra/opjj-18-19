@@ -5,6 +5,7 @@ import hr.fer.zemris.java.gui.calc.model.CalculatorInputException;
 import hr.fer.zemris.java.gui.layouts.CalcLayout;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -25,6 +26,11 @@ import java.util.function.DoubleBinaryOperator;
 public class Calculator extends JFrame {
 
     /**
+     * The color of the display.
+     */
+    private static final Color DISPLAY_COLOR = Color.YELLOW;
+
+    /**
      * The model used for this calculator.
      */
     private CalcModel model = new CalcModelImpl();
@@ -43,8 +49,8 @@ public class Calculator extends JFrame {
      * Constructs a {@link Calculator} object and initializes the GUI.
      */
     public Calculator() {
-        setLocation(20, 50);
-        setSize(300, 200);
+        setLocation(100, 100);
+        setSize(600, 300);
         setTitle("Java Calculator v1.0");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -62,7 +68,9 @@ public class Calculator extends JFrame {
         JLabel display = new JLabel(model.toString());
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         display.setOpaque(true);
-C        display.setBackground(Color.YELLOW);
+        display.setBackground(DISPLAY_COLOR);
+        display.setBorder(new LineBorder(Color.BLACK, 1));
+        display.setFont(display.getFont().deriveFont(30f));
         model.addCalcValueListener(e -> display.setText(model.toString()));
         cp.add(display, "1,1");
 
@@ -297,7 +305,6 @@ C        display.setBackground(Color.YELLOW);
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new Calculator();
-            frame.pack();
             frame.setVisible(true);
         });
     }
