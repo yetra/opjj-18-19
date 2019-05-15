@@ -21,7 +21,7 @@ public class CalcLayout implements LayoutManager2 {
 
     /**
      * An {@link RCPosition} object representing the first position of the layout.
-     * Its always occupies positions (1,1) to (1,5) inclusive.
+     * It always occupies positions (1,1) to (1,5) inclusive.
      */
     private static final RCPosition FIRST_POSITION = new RCPosition(1, 1);
 
@@ -68,13 +68,13 @@ public class CalcLayout implements LayoutManager2 {
         } else if (constraints instanceof String) {
             position = RCPosition.fromString((String) constraints);
         } else {
-            throw new CalcLayoutException();
+            throw new CalcLayoutException("Invalid constraint type!");
         }
 
         validate(position);
 
         if (components.containsKey(position)) {
-            throw new CalcLayoutException();
+            throw new CalcLayoutException("A component already exists on the given position.");
         }
         components.put(position, comp);
     }
@@ -90,11 +90,11 @@ public class CalcLayout implements LayoutManager2 {
         int column = position.getColumn();
 
         if (row < 1 || row > 5 || column < 1 || column > 7) {
-            throw new CalcLayoutException();
+            throw new CalcLayoutException("Invalid position!");
         }
 
         if (row == 1 && (column >= 2 && column <= 5)) {
-            throw new CalcLayoutException();
+            throw new CalcLayoutException("Invalid position!");
         }
     }
 
@@ -115,7 +115,6 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public void invalidateLayout(Container target) {
-//        components = new HashMap<>(); TODO ?
     }
 
     @Override
@@ -125,9 +124,7 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public void removeLayoutComponent(Component comp) {
-        components.values().removeIf(
-                (value) -> value.equals(comp)
-        );
+        components.values().removeIf(value -> value.equals(comp));
     }
 
     @Override

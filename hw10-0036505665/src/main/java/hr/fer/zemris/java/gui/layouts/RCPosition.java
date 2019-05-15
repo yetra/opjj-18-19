@@ -53,6 +53,7 @@ public class RCPosition {
      *
      * @param positionString the position string to parse
      * @return an {@link RCPosition} object parsed from the given string
+     * @throws CalcLayoutException if the given string can't be parsed
      */
     public static RCPosition fromString(String positionString) {
         String[] parts = positionString.split(",");
@@ -60,10 +61,10 @@ public class RCPosition {
         try {
             int row = Integer.parseInt(parts[0]);
             int column = Integer.parseInt(parts[1]);
-
             return new RCPosition(row, column);
+
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException(); // TODO which exception?
+            throw new CalcLayoutException("Invalid position string!");
         }
     }
 
