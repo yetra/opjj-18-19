@@ -241,6 +241,7 @@ public class BarChartComponent extends JComponent {
      */
     private void paintYAxis(Graphics2D g2d, FontMetrics fm, int maxYNumberWidth) {
         int yCount = (chart.getMaxY() - chart.getMinY()) / chart.getySpacing();
+        String yCaption = chart.getyCaption();
 
         g2d.setStroke(AXIS_STROKE);
         g2d.setColor(AXIS_COLOR);
@@ -253,10 +254,9 @@ public class BarChartComponent extends JComponent {
         AffineTransform rotateAT = AffineTransform.getQuadrantRotateInstance(3);
         g2d.setTransform(rotateAT);
         g2d.drawString(
-                chart.getyCaption(),
-                - (yAxisStart / 2 + fm.stringWidth(chart.getyCaption()) / 2 + AXIS_EXTENSION),
+                yCaption,
+                (yAxisEnd - yAxisStart) / 2 - yAxisEnd - fm.stringWidth(yCaption) / 2 - TICK_LENGTH - ARROW_LENGTH,
                 xAxisStart - SPACING - maxYNumberWidth - SPACING
-
         );
         g2d.setTransform(saveAT);
         
