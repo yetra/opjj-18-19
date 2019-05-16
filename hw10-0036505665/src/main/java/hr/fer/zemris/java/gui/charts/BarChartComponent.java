@@ -178,9 +178,9 @@ public class BarChartComponent extends JComponent {
 
             Rectangle r = new Rectangle(
                     xAxisStart + x * cell.width,
-                    yAxisStart - cell.height  * (yValue / ySpacing),
+                    yAxisStart - cell.height * ((yValue - chart.getMinY()) / ySpacing),
                     cell.width,
-                    cell.height * (yValue / ySpacing)
+                    cell.height * ((yValue - chart.getMinY()) / ySpacing)
             );
 
             g2d.setColor(BAR_FILL);
