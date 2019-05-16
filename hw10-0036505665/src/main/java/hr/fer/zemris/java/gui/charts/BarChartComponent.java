@@ -59,6 +59,11 @@ public class BarChartComponent extends JComponent {
     private static final BasicStroke BAR_OUTLINE_STROKE = new BasicStroke(1);
 
     /**
+     * The color of the font used on the chart.
+     */
+    private static final Color FONT_COLOR = Color.BLACK;
+
+    /**
      * The chart to paint.
      */
     private BarChart chart;
@@ -197,29 +202,32 @@ public class BarChartComponent extends JComponent {
         int xCount = values.size();
         
         g2d.setStroke(AXIS_STROKE);
-        g2d.setColor(AXIS_COLOR);
-        
-        // axis line
-        g2d.drawLine(xAxisStart, yAxisStart, xAxisEnd + ARROW_LENGTH, yAxisStart);
-        
+
         // caption
+        g2d.setColor(FONT_COLOR);
         g2d.drawString(
                 chart.getxCaption(),
                 xAxisStart + (xAxisEnd - ARROW_LENGTH - xAxisStart) / 2 - fm.stringWidth(chart.getxCaption()) / 2,
                 yAxisStart + SPACING + fm.getHeight() + SPACING
         );
+        g2d.setColor(AXIS_COLOR);
+        
+        // axis line
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisEnd + ARROW_LENGTH, yAxisStart);
         
         // initial tick mark
         g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisStart + TICK_LENGTH);
         
         for (int x = 1; x <= xCount; x++) {
             // value
+            g2d.setColor(FONT_COLOR);
             String value = Integer.toString(values.get(x - 1).getX());
             g2d.drawString(
                     value,
                     xAxisStart + x * cell.width - cell.width / 2 - fm.stringWidth(value) / 2,
                     yAxisStart + SPACING
             );
+            g2d.setColor(AXIS_COLOR);
 
             // tick mark
             g2d.drawLine(
@@ -244,12 +252,9 @@ public class BarChartComponent extends JComponent {
         String yCaption = chart.getyCaption();
 
         g2d.setStroke(AXIS_STROKE);
-        g2d.setColor(AXIS_COLOR);
-        
-        // axis line
-        g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisEnd - ARROW_LENGTH);
 
         // caption
+        g2d.setColor(FONT_COLOR);
         AffineTransform saveAT = g2d.getTransform();
         AffineTransform rotateAT = AffineTransform.getQuadrantRotateInstance(3);
         g2d.setTransform(rotateAT);
@@ -259,16 +264,22 @@ public class BarChartComponent extends JComponent {
                 xAxisStart - SPACING - maxYNumberWidth - SPACING
         );
         g2d.setTransform(saveAT);
+        g2d.setColor(AXIS_COLOR);
+
+        // axis line
+        g2d.drawLine(xAxisStart, yAxisStart, xAxisStart, yAxisEnd - ARROW_LENGTH);
         
 
         for (int row = 0; row <= yCount; row++) {
             // value
+            g2d.setColor(FONT_COLOR);
             String value = Integer.toString(chart.getMinY() + row * chart.getySpacing());
             g2d.drawString(
                     value,
                     xAxisStart - TICK_LENGTH - SPACING - fm.stringWidth(value),
                     yAxisStart - row * cell.height + fm.getAscent() / 2 - (int) AXIS_STROKE.getLineWidth() / 2
             );
+            g2d.setColor(AXIS_COLOR);
 
             // tick mark
             g2d.drawLine(
