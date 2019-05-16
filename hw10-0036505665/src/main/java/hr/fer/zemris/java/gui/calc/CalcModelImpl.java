@@ -211,13 +211,13 @@ public class CalcModelImpl implements CalcModel {
         int length = valueString.length();
 
         if (length > 1) {
-            int index = 0;
+            int index = isPositive ? 0 : 1;
             while (index + 1 < length && valueString.charAt(index) == '0'
                     && valueString.charAt(index + 1) != '.') {
                 index++;
             }
 
-            valueString = valueString.substring(index);
+            valueString = (isPositive ? "" : "-") + valueString.substring(index);
         }
     }
 }
