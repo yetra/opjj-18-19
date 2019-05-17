@@ -38,12 +38,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>fractal-viewer</groupId>
+      <groupId>hr.fer.zemris.java.fractals</groupId>
       <artifactId>fractal-viewer</artifactId>
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>raytracer</groupId>
+      <groupId>hr.fer.zemris.java.raytracer</groupId>
       <artifactId>raytracer</artifactId>
       <version>1.0</version>
     </dependency>
