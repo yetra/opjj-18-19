@@ -151,7 +151,7 @@ public class NewtonJob implements Callable<Void> {
                 } while (module > CONVERGENCE_THRESHOLD && iteration < maxIterations);
 
                 int index = rootedPolynomial.indexOfClosestRootFor(zn, ROOT_THRESHOLD);
-                data[x + y * height] = (index == -1) ? 0 : (short) (index + 1);
+                data[x + y * width] = (index == -1) ? 0 : (short) (index + 1);
             }
         }
 
