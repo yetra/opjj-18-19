@@ -30,15 +30,21 @@ public interface MultipleDocumentModel {
      *
      * @param path the path to the document to load
      * @return a document loaded from the given path
+     * @throws NullPointerException if the given path is {@code null}
      */
     SingleDocumentModel loadDocument(Path path);
 
     /**
-     * Saves the specified document specified by a given {@link SingleDocumentModel}
-     * to the given path.
+     * Saves the document specified by a given {@link SingleDocumentModel} to the given
+     * path and updates the document path reference in its model.
+     *
+     * If the given path is {@code null} the document will be saved using the path
+     * specified in its model.
      *
      * @param model the model of the document to save
      * @param newPath the path for saving the specified document
+     * @throws IllegalArgumentException if the given path is already associated with an
+     *                                  existing model
      */
     void saveDocument(SingleDocumentModel model, Path newPath);
 

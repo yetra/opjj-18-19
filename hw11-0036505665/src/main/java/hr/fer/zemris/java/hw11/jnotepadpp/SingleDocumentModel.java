@@ -31,6 +31,7 @@ public interface SingleDocumentModel {
      * Sets the file path of the document to the specified path.
      *
      * @param path the new file path of the document
+     * @throws NullPointerException if the given path is {@code null}
      */
     void setFilePath(Path path);
 
