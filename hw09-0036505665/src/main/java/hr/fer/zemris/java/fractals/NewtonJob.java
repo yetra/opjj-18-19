@@ -130,7 +130,7 @@ public class NewtonJob implements Callable<Void> {
 
     @Override
     public Void call() {
-        for (int y = yMin; y <= yMax; y++) {
+        for (int y = yMin; y <= yMax & !cancel.get(); y++) {
             for (int x = 0; x < width; x++) {
                 Complex zn = mapToComplexPlane(x, y);
                 ComplexPolynomial derived = polynomial.derive();
@@ -151,7 +151,7 @@ public class NewtonJob implements Callable<Void> {
                 } while (module > CONVERGENCE_THRESHOLD && iteration < maxIterations);
 
                 int index = rootedPolynomial.indexOfClosestRootFor(zn, ROOT_THRESHOLD);
-                data[x + y * height] = (index == -1) ? 0 : (short) (index + 1);
+                data[x + y * width] = (index == -1) ? 0 : (short) (index + 1);
             }
         }
 

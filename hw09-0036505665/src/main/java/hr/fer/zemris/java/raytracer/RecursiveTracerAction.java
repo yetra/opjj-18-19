@@ -138,7 +138,7 @@ class RecursiveTracerAction extends RecursiveAction {
     private void computeDirect() {
         short[] rgb = new short[3];
         int offset = 0;
-        for(int y = 0; y < height; y++) {
+        for(int y = yMin; y <= yMax && !cancel.get(); y++) {
             for(int x = 0; x < width; x++) {
                 Point3D screenPoint = screenCorner
                         .add(xAxis.scalarMultiply(x * horizontal / (width - 1)))
