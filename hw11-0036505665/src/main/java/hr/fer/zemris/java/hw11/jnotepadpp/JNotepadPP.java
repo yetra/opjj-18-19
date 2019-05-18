@@ -104,7 +104,24 @@ public class JNotepadPP extends JFrame {
      * Creates {@link JNotepadPP}'s menu bar and menus.
      */
     private void createMenus() {
+        JMenuBar mb = new JMenuBar();
 
+        JMenu file = new JMenu("File");
+        mb.add(file);
+        file.add(new JMenuItem(newDocument));
+        file.add(new JMenuItem(openDocument));
+        file.add(new JMenuItem(closeDocument));
+        file.addSeparator();
+        file.add(new JMenuItem(saveDocument));
+        file.add(new JMenuItem(saveAsDocument));
+
+        JMenu edit = new JMenu("Edit");
+        mb.add(edit);
+        edit.add(new JMenuItem(cutAction));
+        edit.add(new JMenuItem(copyAction));
+        edit.add(new JMenuItem(pasteAction));
+
+        setJMenuBar(mb);
     }
 
     /**
