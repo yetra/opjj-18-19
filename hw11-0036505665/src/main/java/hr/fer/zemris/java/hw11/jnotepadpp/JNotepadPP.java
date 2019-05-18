@@ -130,7 +130,14 @@ public class JNotepadPP extends JFrame {
      * @return {@link JNotepadPP}'s toolbar
      */
     private JToolBar createToolBar() {
-        return null;
+        JToolBar tb = new JToolBar();
+        tb.setFloatable(true);
+
+        tb.add(new JButton(cutAction));
+        tb.add(new JButton(copyAction));
+        tb.add(new JButton(pasteAction));
+
+        return tb;
     }
 
     /*
