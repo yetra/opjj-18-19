@@ -81,11 +81,13 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
     @Override
     public void saveDocument(SingleDocumentModel model, Path newPath) {
-        models.forEach(m -> {
-            if (m.getFilePath().equals(newPath)) {
+        for (SingleDocumentModel document : models) {
+            Path filePath = document.getFilePath();
+
+            if (filePath != null && filePath.equals(newPath)) {
                 throw new IllegalArgumentException("The specified file is already opened!");
             }
-        });
+        }
 
         try {
             Files.writeString(
