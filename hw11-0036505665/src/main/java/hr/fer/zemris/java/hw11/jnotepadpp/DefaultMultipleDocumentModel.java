@@ -37,11 +37,17 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
     @Override
     public SingleDocumentModel createNewDocument() {
-        currentDocument = new DefaultSingleDocumentModel(null, "");
-        models.add(currentDocument);
-        setSelectedIndex(models.size() - 1);
+        createNewCurrentDocument(null, "");
 
         return currentDocument;
+    }
+
+    private void createNewCurrentDocument(Path path, String text) {
+        currentDocument = new DefaultSingleDocumentModel(path, text);
+        models.add(currentDocument);
+
+        addTab("(unnamed)", new JScrollPane(currentDocument.getTextComponent()));
+        setSelectedIndex(models.size() - 1);
     }
 
     @Override
@@ -57,24 +63,20 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             if (model.getFilePath().equals(path)) {
                 setSelectedIndex(i);
                 currentDocument = model;
-
-                return model;
             }
         }
 
         try {
             String textContent = Files.readString(path);
-            currentDocument = new DefaultSingleDocumentModel(path, textContent);
-            models.add(currentDocument);
-            setSelectedIndex(models.size() - 1);
-
-            return currentDocument;
+            createNewCurrentDocument(path, textContent);
 
         } catch (IOException e) {
             throw new IllegalArgumentException(
                     "The given path does not point to a readable file!"
             );
         }
+
+        return currentDocument;
     }
 
     @Override
