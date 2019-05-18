@@ -48,7 +48,7 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
     public DefaultSingleDocumentModel(Path filePath, String textContent) {
         this.filePath = filePath;
 
-        JTextArea textArea = new JTextArea(textContent);
+        textArea = new JTextArea(textContent);
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
