@@ -37,7 +37,11 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
     @Override
     public SingleDocumentModel createNewDocument() {
-        return null;
+        currentDocument = new DefaultSingleDocumentModel(null, "");
+        models.add(currentDocument);
+        setSelectedIndex(models.size() - 1);
+
+        return currentDocument;
     }
 
     @Override
@@ -53,6 +57,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             if (model.getFilePath().equals(path)) {
                 setSelectedIndex(i);
                 currentDocument = model;
+
                 return model;
             }
         }
@@ -62,6 +67,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             currentDocument = new DefaultSingleDocumentModel(path, textContent);
             models.add(currentDocument);
             setSelectedIndex(models.size() - 1);
+
             return currentDocument;
 
         } catch (IOException e) {
