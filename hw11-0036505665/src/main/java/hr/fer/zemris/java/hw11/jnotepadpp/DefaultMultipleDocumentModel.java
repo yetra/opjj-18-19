@@ -6,7 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * This class is an implementation of the {@link MultipleDocumentModel} interface
@@ -116,5 +118,33 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     @Override
     public SingleDocumentModel getDocument(int index) {
         return models.get(index);
+    }
+
+    @Override
+    public Iterator<SingleDocumentModel> iterator() {
+        return new DocumentModelIterator();
+    }
+
+    /**
+     * This class represents an iterator over {@link SingleDocumentModel} objects
+     * stored in the {@link #models} list.
+     */
+    private class DocumentModelIterator implements Iterator<SingleDocumentModel> {
+
+        int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < models.size();
+        }
+
+        @Override
+        public SingleDocumentModel next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            return models.get(currentIndex++);
+        }
     }
 }

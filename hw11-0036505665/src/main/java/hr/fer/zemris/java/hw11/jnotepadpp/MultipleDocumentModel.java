@@ -9,7 +9,7 @@ import java.nio.file.Path;
  * @author Bruna Dujmović
  *
  */
-public interface MultipleDocumentModel {
+public interface MultipleDocumentModel extends Iterable<SingleDocumentModel> {
 
     /**
      * Returns a newly created blank document.
