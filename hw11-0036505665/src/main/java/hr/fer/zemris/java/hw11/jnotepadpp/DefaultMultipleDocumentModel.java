@@ -106,6 +106,9 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         int index = models.indexOf(model);
         removeTabAt(index);
         models.remove(index);
+        currentDocument = models.get(
+                (index == models.size() - 1) ? index - 1 : index + 1
+        );
     }
 
     @Override
