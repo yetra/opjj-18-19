@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,12 +38,15 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      * Constructs a new {@link DefaultMultipleDocumentModel}.
      */
     public DefaultMultipleDocumentModel() {
-        addChangeListener(e -> {
+        // listen for tab change and update currentDocument accordingly
+        this.addChangeListener(e -> {
             int selected = getSelectedIndex();
+            SingleDocumentModel previousDocument = currentDocument;
+            currentDocument = selected == -1 ? null : models.get(selected);
 
-            if (selected != -1) {
-                currentDocument = models.get(selected);
-            }
+            listeners.forEach(
+                    l -> l.currentDocumentChanged(previousDocument, currentDocument)
+            );
         });
     }
 
@@ -67,7 +69,6 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             if (model.getFilePath() != null && model.getFilePath().equals(path)) {
                 setSelectedIndex(i);
-                currentDocument = model;
             }
         }
 
@@ -115,13 +116,6 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     @Override
     public void closeDocument(SingleDocumentModel model) {
         int index = models.indexOf(model);
-
-        if (models.size() > 1) {
-            currentDocument = models.get(
-                    (index == models.size() - 1) ? index - 1 : index + 1
-            );
-        }
-
         removeTabAt(index);
         models.remove(index);
     }
@@ -182,13 +176,13 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      * @param text the text of the document
      */
     private void newCurrentDocument(Path path, String text) {
-        currentDocument = new DefaultSingleDocumentModel(path, text);
-        models.add(currentDocument);
+        SingleDocumentModel newDocument = new DefaultSingleDocumentModel(path, text);
+        models.add(newDocument);
 
         addTab(
                 path == null ? "(unnamed)" : path.getFileName().toString(),
                 null,
-                new JScrollPane(currentDocument.getTextComponent()),
+                new JScrollPane(newDocument.getTextComponent()),
                 path == null ? "(unnamed)" : path.toString()
         );
 
