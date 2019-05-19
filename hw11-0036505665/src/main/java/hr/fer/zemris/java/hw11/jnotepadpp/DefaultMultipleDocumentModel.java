@@ -189,7 +189,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
                 path == null ? "(unnamed)" : path.getFileName().toString(),
                 null,
                 new JScrollPane(currentDocument.getTextComponent()),
-                path == null ? null : path.toString()
+                path == null ? "(unnamed)" : path.toString()
         );
 
         setSelectedIndex(models.size() - 1);
