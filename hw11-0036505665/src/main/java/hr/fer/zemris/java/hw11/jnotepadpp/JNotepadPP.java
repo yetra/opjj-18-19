@@ -86,6 +86,15 @@ public class JNotepadPP extends JFrame {
             @Override
             public void documentRemoved(SingleDocumentModel model) {}
         });
+
+        // disable Save/Save As/Close document actions when no tab present
+        mdm.addChangeListener(e -> {
+            boolean hasTabs = mdm.getNumberOfDocuments() != 0;
+
+            saveDocument.setEnabled(hasTabs);
+            saveAsDocument.setEnabled(hasTabs);
+            closeDocument.setEnabled(hasTabs);
+        });
     }
 
     /**
@@ -107,16 +116,19 @@ public class JNotepadPP extends JFrame {
         saveDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
         saveDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         saveDocument.putValue(Action.SHORT_DESCRIPTION, "Save document to disc");
+        saveDocument.setEnabled(false);
 
         saveAsDocument.putValue(Action.NAME, "Save As");
         saveAsDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift S"));
         saveAsDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         saveAsDocument.putValue(Action.SHORT_DESCRIPTION, "Save document to disc");
+        saveAsDocument.setEnabled(false);
 
         closeDocument.putValue(Action.NAME, "Close");
         closeDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control W"));
         closeDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
         closeDocument.putValue(Action.SHORT_DESCRIPTION, "Close current document without saving");
+        closeDocument.setEnabled(false);
 
         cutAction.putValue(Action.NAME, "Cut");
 
