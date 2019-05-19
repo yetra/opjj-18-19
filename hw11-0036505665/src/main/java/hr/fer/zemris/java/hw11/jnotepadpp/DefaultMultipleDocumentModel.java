@@ -63,6 +63,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     @Override
     public SingleDocumentModel createNewDocument() {
         newCurrentDocument(null, "");
+        currentDocument.setModified(true);
 
         return currentDocument;
     }
