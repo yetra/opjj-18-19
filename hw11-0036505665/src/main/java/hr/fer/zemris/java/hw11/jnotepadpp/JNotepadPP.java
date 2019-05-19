@@ -297,10 +297,7 @@ public class JNotepadPP extends JFrame {
         }
 
         try {
-            SingleDocumentModel modelToSave = mdm.getCurrentDocument();
-            mdm.saveDocument(modelToSave, savePath);
-            modelToSave.setModified(false);
-            modelToSave.setFilePath(savePath);
+            mdm.saveDocument(mdm.getCurrentDocument(), savePath);
 
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(

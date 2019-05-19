@@ -99,6 +99,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             Files.writeString(pathToSave, model.getTextComponent().getText());
             model.setFilePath(pathToSave);
+            model.setModified(false);
 
             int index = models.indexOf(currentDocument);
             setToolTipTextAt(index, pathToSave.toString());
