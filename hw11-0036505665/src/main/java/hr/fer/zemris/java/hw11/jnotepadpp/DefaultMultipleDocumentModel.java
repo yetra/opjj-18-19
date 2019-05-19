@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -18,6 +19,15 @@ import java.util.NoSuchElementException;
  *
  */
 public class DefaultMultipleDocumentModel extends JTabbedPane implements MultipleDocumentModel {
+
+    /**
+     * The icon used for modified documents.
+     */
+    private static final ImageIcon MODIFIED_ICON = loadIcon("icons/modified.png");
+    /**
+     * The icon used for unmodified documents.
+     */
+    private static final ImageIcon UNMODIFIED_ICON = loadIcon("icons/unmodified.png");
 
     /**
      * The {@link SingleDocumentModel} that is on the current tab,
@@ -105,6 +115,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             int index = models.indexOf(currentDocument);
             setToolTipTextAt(index, pathToSave.toString());
             setTitleAt(index, pathToSave.getFileName().toString());
+            setIconAt(index, UNMODIFIED_ICON);
 
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -177,15 +188,53 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      */
     private void newCurrentDocument(Path path, String text) {
         SingleDocumentModel newDocument = new DefaultSingleDocumentModel(path, text);
+        newDocument.addSingleDocumentListener(documentChange);
         models.add(newDocument);
 
         addTab(
                 path == null ? "(unnamed)" : path.getFileName().toString(),
-                null,
+                path == null ? MODIFIED_ICON : UNMODIFIED_ICON,
                 new JScrollPane(newDocument.getTextComponent()),
                 path == null ? "(unnamed)" : path.toString()
         );
 
         setSelectedIndex(models.size() - 1);
     }
+
+    /**
+     * Loads a resource specified by a given name and returns it as an {@link ImageIcon}.
+     *
+     * @param name the name of the resource
+     * @return an {@link ImageIcon} representing the specified resource
+     */
+    private static ImageIcon loadIcon(String name) {
+        try (InputStream is = DefaultMultipleDocumentModel.class.getResourceAsStream(name)) {
+            if (is == null) {
+                throw new IllegalArgumentException("No such resource found!");
+            }
+
+            byte[] bytes = is.readAllBytes();
+            return new ImageIcon(bytes);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * A {@link SingleDocumentListener} that listens for changes in the document's
+     * content and updates its icon accordingly.
+     */
+    private final SingleDocumentListener documentChange = new SingleDocumentListener() {
+        @Override
+        public void documentModifyStatusUpdated(SingleDocumentModel model) {
+            setIconAt(models.indexOf(model), MODIFIED_ICON);
+        }
+
+        @Override
+        public void documentFilePathUpdated(SingleDocumentModel model) {
+        }
+    };
 }
