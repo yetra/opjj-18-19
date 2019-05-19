@@ -36,6 +36,7 @@ public class JNotepadPP extends JFrame {
      */
     public JNotepadPP() {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("JNotepad++");
         setLocation(10, 10);
         setSize(500, 500);
 
@@ -61,6 +62,30 @@ public class JNotepadPP extends JFrame {
         createActions();
         createMenus();
         cp.add(createToolBar(), BorderLayout.PAGE_START);
+
+        // update window title on tab change
+        mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
+
+            @Override
+            public void currentDocumentChanged(SingleDocumentModel previousModel, SingleDocumentModel currentModel) {
+                String title = "JNotepad++";
+
+                if (currentModel != null) {
+                    Path currentDocumentPath = currentModel.getFilePath();
+                    title = (currentDocumentPath == null ?
+                            "(unnamed)" : currentDocumentPath.toString() + "")
+                            + " - " + title;
+                }
+
+                setTitle(title);
+            }
+
+            @Override
+            public void documentAdded(SingleDocumentModel model) {}
+
+            @Override
+            public void documentRemoved(SingleDocumentModel model) {}
+        });
     }
 
     /**
