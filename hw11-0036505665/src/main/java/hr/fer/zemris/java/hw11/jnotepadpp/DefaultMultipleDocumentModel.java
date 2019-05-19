@@ -95,11 +95,14 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         }
 
         try {
-            Files.writeString(
-                    newPath == null ? model.getFilePath() : newPath,
-                    model.getTextComponent().getText(),
-                    StandardOpenOption.CREATE
-            );
+            Path pathToSave = newPath == null ? model.getFilePath() : newPath;
+
+            Files.writeString(pathToSave, model.getTextComponent().getText());
+            model.setFilePath(pathToSave);
+
+            int index = models.indexOf(currentDocument);
+            setToolTipTextAt(index, pathToSave.toString());
+            setTitleAt(index, pathToSave.getFileName().toString());
 
         } catch (IOException e) {
             throw new IllegalArgumentException(
