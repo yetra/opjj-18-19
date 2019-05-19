@@ -35,6 +35,19 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      */
     private List<MultipleDocumentListener> listeners = new ArrayList<>();
 
+    /**
+     * Constructs a new {@link DefaultMultipleDocumentModel}.
+     */
+    public DefaultMultipleDocumentModel() {
+        addChangeListener(e -> {
+            int selected = getSelectedIndex();
+
+            if (selected != -1) {
+                currentDocument = models.get(selected);
+            }
+        });
+    }
+
     @Override
     public SingleDocumentModel createNewDocument() {
         newCurrentDocument(null, "");
