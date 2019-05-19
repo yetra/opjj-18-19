@@ -37,17 +37,9 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
     @Override
     public SingleDocumentModel createNewDocument() {
-        createNewCurrentDocument(null, "");
+        newCurrentDocument(null, "");
 
         return currentDocument;
-    }
-
-    private void createNewCurrentDocument(Path path, String text) {
-        currentDocument = new DefaultSingleDocumentModel(path, text);
-        models.add(currentDocument);
-
-        addTab("(unnamed)", new JScrollPane(currentDocument.getTextComponent()));
-        setSelectedIndex(models.size() - 1);
     }
 
     @Override
@@ -68,7 +60,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         try {
             String textContent = Files.readString(path);
-            createNewCurrentDocument(path, textContent);
+            newCurrentDocument(path, textContent);
 
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -84,7 +76,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         for (SingleDocumentModel document : models) {
             Path filePath = document.getFilePath();
 
-            if (filePath != null && filePath.equals(newPath)) {
+            if (filePath != null && document != model && filePath.equals(newPath)) {
                 throw new IllegalArgumentException("The specified file is already opened!");
             }
         }
@@ -108,9 +100,6 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         int index = models.indexOf(model);
         removeTabAt(index);
         models.remove(index);
-        currentDocument = models.get(
-                (index == models.size() - 1) ? index - 1 : index + 1
-        );
     }
 
     @Override
@@ -159,5 +148,26 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             return models.get(currentIndex++);
         }
+    }
+
+    /**
+     * Creates a new current document specified by the given path and text and sets
+     * it as the current tab.
+     *
+     * @param path the path of the document
+     * @param text the text of the document
+     */
+    private void newCurrentDocument(Path path, String text) {
+        currentDocument = new DefaultSingleDocumentModel(path, text);
+        models.add(currentDocument);
+
+        addTab(
+                path == null ? "(unnamed)" : path.getFileName().toString(),
+                null,
+                new JScrollPane(currentDocument.getTextComponent()),
+                path == null ? null : path.toString()
+        );
+
+        setSelectedIndex(models.size() - 1);
     }
 }
