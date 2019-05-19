@@ -62,10 +62,7 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                modified = true;
-                listeners.forEach(l -> l.documentModifyStatusUpdated(
-                        DefaultSingleDocumentModel.this
-                ));
+                setModified(true);
             }
         });
     }
@@ -83,6 +80,8 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
     @Override
     public void setFilePath(Path path) {
         filePath = Objects.requireNonNull(path);
+
+        listeners.forEach(l -> l.documentFilePathUpdated(this));
     }
 
     @Override
@@ -93,6 +92,8 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
     @Override
     public void setModified(boolean modified) {
         this.modified = modified;
+
+        listeners.forEach(l -> l.documentModifyStatusUpdated(this));
     }
 
     @Override
@@ -104,4 +105,5 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
     public void removeSingleDocumentListener(SingleDocumentListener l) {
         listeners.remove(l);
     }
+
 }
