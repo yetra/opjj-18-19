@@ -135,6 +135,8 @@ public class JNotepadPP extends JFrame {
         copyAction.putValue(Action.NAME, "Copy");
 
         pasteAction.putValue(Action.NAME, "Paste");
+
+        showStatistics.putValue(Action.NAME, "Statistics");
     }
 
     /**
@@ -173,6 +175,7 @@ public class JNotepadPP extends JFrame {
         tb.add(new JButton(cutAction));
         tb.add(new JButton(copyAction));
         tb.add(new JButton(pasteAction));
+        tb.add(new JButton(showStatistics));
 
         return tb;
     }
@@ -248,6 +251,16 @@ public class JNotepadPP extends JFrame {
      * caret, if nothing is selected.
      */
     private final Action pasteAction = new DefaultEditorKit.PasteAction();
+
+    /**
+     * Displays statistical info on the current documents.
+     */
+    private final Action showStatistics = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            showStatistics();
+        }
+    };
 
     /*
      * ---------------------------------------------------------------------------
@@ -344,6 +357,36 @@ public class JNotepadPP extends JFrame {
                     JOptionPane.ERROR_MESSAGE
             );
         }
+    }
+
+    /**
+     * A helper method for performing the {@link #showStatistics} action.
+     */
+    private void showStatistics() {
+        if (mdm.getNumberOfDocuments() == 0) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No open documents!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        String documentText = mdm.getCurrentDocument().getTextComponent().getText();
+
+        int numberOfChars = documentText.length();
+        int numberOfNonBlankChars = documentText.replaceAll("\\s+", "").length();
+        long numberOfLines = documentText.lines().count();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Your document has " + numberOfChars + " characters, "
+                        + numberOfNonBlankChars + " non-blank characters, and "
+                        + numberOfLines + " lines.",
+                "Statistics",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     /*
