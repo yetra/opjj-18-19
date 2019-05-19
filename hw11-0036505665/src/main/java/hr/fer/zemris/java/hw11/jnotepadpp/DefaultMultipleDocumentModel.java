@@ -65,7 +65,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         for (int i = 0, size = models.size(); i < size; i++) {
             SingleDocumentModel model = models.get(i);
 
-            if (model.getFilePath().equals(path)) {
+            if (model.getFilePath() != null && model.getFilePath().equals(path)) {
                 setSelectedIndex(i);
                 currentDocument = model;
             }
