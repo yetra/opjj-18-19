@@ -12,7 +12,7 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
     /**
      * The wrapped {@link ILocalizationProvider} object.
      */
-    private ILocalizationProvider provider;
+    private ILocalizationProvider parent;
 
     /**
      * A flag for checking if this bridge is connected.
@@ -20,12 +20,12 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
     private boolean connected;
 
     /**
-     * Constructs a {@link LocalizationProviderBridge} that wraps the given provider.
+     * Constructs a {@link LocalizationProviderBridge} that wraps the given parent.
      *
-     * @param provider the provider to wrap
+     * @param parent the parent to wrap
      */
-    public LocalizationProviderBridge(ILocalizationProvider provider) {
-        this.provider = provider;
+    public LocalizationProviderBridge(ILocalizationProvider parent) {
+        this.parent = parent;
     }
 
     /**
@@ -36,7 +36,7 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
             return;
         }
 
-        provider.addLocalizationListener(localizationChange);
+        parent.addLocalizationListener(localizationChange);
         connected = true;
     }
 
@@ -46,12 +46,12 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
     public void disconnect() {
         connected = false;
 
-        provider.removeLocalizationListener(localizationChange);
+        parent.removeLocalizationListener(localizationChange);
     }
 
     @Override
     public String getString(String key) {
-        return provider.getString(key);
+        return parent.getString(key);
     }
 
     /**
