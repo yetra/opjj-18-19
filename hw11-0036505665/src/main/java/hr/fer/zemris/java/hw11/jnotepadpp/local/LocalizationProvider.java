@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.hw11.jnotepadpp.local;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -10,6 +11,11 @@ import java.util.ResourceBundle;
  * @author Bruna Dujmović
  */
 public class LocalizationProvider extends AbstractLocalizationProvider {
+
+    /**
+     * The base name of the resource bundle.
+     */
+    private static final String BASE_NAME = "hr.fer.zemris.java.hw11.jnotepadpp.local.JNotepadPP";
 
     /**
      * A reference to the only instance of this class.
@@ -30,8 +36,7 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
      * Constructs a {@link LocalizationProvider} with "en" as the default language.
      */
     private LocalizationProvider() {
-        language = "en";
-        resourceBundle = ResourceBundle.getBundle(language);
+        setLanguage("en");
     }
 
     /**
@@ -54,7 +59,10 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
      */
     public void setLanguage(String language) {
         this.language = language;
-        resourceBundle = ResourceBundle.getBundle(language);
+
+        Locale locale = Locale.forLanguageTag(language);
+        resourceBundle = ResourceBundle.getBundle(BASE_NAME, locale);
+        fire();
     }
 
     @Override
