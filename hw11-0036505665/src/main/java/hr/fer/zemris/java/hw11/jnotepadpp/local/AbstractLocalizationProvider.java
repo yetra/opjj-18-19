@@ -31,7 +31,4 @@ public abstract class AbstractLocalizationProvider implements ILocalizationProvi
     public void fire() {
         listeners.forEach(ILocalizationListener::localizationChanged);
     }
-
-    @Override
-    public abstract String getString(String key);
 }

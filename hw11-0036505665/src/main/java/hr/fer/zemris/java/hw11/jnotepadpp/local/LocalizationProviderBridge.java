@@ -20,12 +20,18 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
     private boolean connected;
 
     /**
+     * The current language.
+     */
+    private String language;
+
+    /**
      * Constructs a {@link LocalizationProviderBridge} that wraps the given parent.
      *
      * @param parent the parent to wrap
      */
     public LocalizationProviderBridge(ILocalizationProvider parent) {
         this.parent = parent;
+        this.language = parent.getCurrentLanguage();
     }
 
     /**
@@ -35,9 +41,15 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
         if (connected) {
             return;
         }
-
-        parent.addLocalizationListener(localizationChange);
         connected = true;
+
+        String connectLanguage = parent.getCurrentLanguage();
+        if (!language.equals(connectLanguage)) {
+            fire();
+            language = connectLanguage;
+        }
+        
+        parent.addLocalizationListener(localizationChange);
     }
 
     /**
@@ -45,6 +57,7 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
      */
     public void disconnect() {
         connected = false;
+        language = parent.getCurrentLanguage();
 
         parent.removeLocalizationListener(localizationChange);
     }
@@ -52,6 +65,11 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
     @Override
     public String getString(String key) {
         return parent.getString(key);
+    }
+
+    @Override
+    public String getCurrentLanguage() {
+        return language;
     }
 
     /**
