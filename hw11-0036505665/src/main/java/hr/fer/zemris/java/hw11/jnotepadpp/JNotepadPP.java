@@ -235,6 +235,7 @@ public class JNotepadPP extends JFrame {
         });
 
         JLabel clockLabel = new JLabel("");
+        clockLabel.setHorizontalAlignment(JLabel.RIGHT);
         sb.add(clockLabel);
         showClock(clockLabel);
 
