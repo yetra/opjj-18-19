@@ -2,6 +2,8 @@ package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.CaretListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -210,10 +212,31 @@ public class JNotepadPP extends JFrame {
         JPanel sb = new JPanel(new GridLayout(0, 3));
         sb.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         sb.setPreferredSize(new Dimension(getWidth(), 24));
-        
+
+        JLabel lengthLabel = new JLabel("length: 0");
+        sb.add(lengthLabel);
+        JLabel caretInfoLabel = new JLabel("Ln: 0  Col: 0  Sel: 0");
+        sb.add(caretInfoLabel);
+
+        // update length & caret info labels on tab switch
+        mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
+            @Override
+            public void currentDocumentChanged(SingleDocumentModel previousModel,
+                                               SingleDocumentModel currentModel) {
+                // TODO remove listener ?
+                showTextContentInfo(lengthLabel, caretInfoLabel);
+            }
+
+            @Override
+            public void documentAdded(SingleDocumentModel model) {}
+
+            @Override
+            public void documentRemoved(SingleDocumentModel model) {}
+        });
+
         JLabel clockLabel = new JLabel("");
-        showClockOn(clockLabel);
         sb.add(clockLabel);
+        showClock(clockLabel);
 
         return sb;
     }
@@ -469,7 +492,7 @@ public class JNotepadPP extends JFrame {
      *
      * @param label the label on which to display the clock
      */
-    private void showClockOn(JLabel label) {
+    private void showClock(JLabel label) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
         Thread clock = new Thread(() -> {
@@ -485,6 +508,33 @@ public class JNotepadPP extends JFrame {
         });
         clock.setDaemon(true);
         clock.start();
+    }
+
+    /**
+     * Displays text content info for the currently open document on the specified
+     * labels.
+     *
+     * @param lengthLabel the label on which to display the length of the text
+     * @param caretInfoLabel the label on which to display caret info (line, column,
+     *                       selection length)
+     */
+    private void showTextContentInfo(JLabel lengthLabel, JLabel caretInfoLabel) {
+        JTextArea textArea = mdm.getCurrentDocument().getTextComponent();
+        CaretListener listener = e -> {
+            try {
+                int length = textArea.getText().length();
+                lengthLabel.setText("length: " + length);
+
+                int caretPos = textArea.getCaretPosition();
+                int ln = textArea.getLineOfOffset(caretPos);
+                int col = caretPos - textArea.getLineStartOffset(ln++) + 1;
+                int sel = textArea.getSelectionEnd() - textArea.getSelectionStart();
+                caretInfoLabel.setText("Ln: " + ln + "  Col: " + col + "  Sel: " + sel);
+
+            } catch (BadLocationException ignorable) {}
+        };
+
+        textArea.addCaretListener(listener);
     }
 
     /*
