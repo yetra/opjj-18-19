@@ -1,7 +1,7 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
+import javax.swing.border.*;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
@@ -209,13 +209,19 @@ public class JNotepadPP extends JFrame {
      * @return {@link JNotepadPP}'s status bar
      */
     private JPanel createStatusBar() {
+        CompoundBorder cellBorder = BorderFactory.createCompoundBorder(
+                new MatteBorder(0, 1, 0, 0, Color.GRAY), new EmptyBorder(0, 4, 0, 4)
+        );
+
         JPanel sb = new JPanel(new GridLayout(0, 3));
         sb.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         sb.setPreferredSize(new Dimension(getWidth(), 24));
 
         JLabel lengthLabel = new JLabel("length: 0");
+        lengthLabel.setBorder(cellBorder);
         sb.add(lengthLabel);
         JLabel caretInfoLabel = new JLabel("Ln: 0  Col: 0  Sel: 0");
+        caretInfoLabel.setBorder(cellBorder);
         sb.add(caretInfoLabel);
 
         // update length & caret info labels on tab switch
@@ -236,6 +242,7 @@ public class JNotepadPP extends JFrame {
 
         JLabel clockLabel = new JLabel("");
         clockLabel.setHorizontalAlignment(JLabel.RIGHT);
+        clockLabel.setBorder(cellBorder);
         sb.add(clockLabel);
         showClock(clockLabel);
 
