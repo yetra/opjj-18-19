@@ -5,6 +5,8 @@ import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -62,6 +64,14 @@ public class JNotepadPP extends JFrame {
         createActions();
         createMenus();
         cp.add(createToolBar(), BorderLayout.PAGE_START);
+
+        // check modified files on exit
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                exitNotepad();
+            }
+        });
 
         // update window title on tab change
         mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
@@ -130,6 +140,11 @@ public class JNotepadPP extends JFrame {
         closeDocument.putValue(Action.SHORT_DESCRIPTION, "Close current document without saving");
         closeDocument.setEnabled(false);
 
+        exitNotepad.putValue(Action.NAME, "Exit");
+        exitNotepad.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Q"));
+        exitNotepad.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
+        exitNotepad.putValue(Action.SHORT_DESCRIPTION, "Exit from JNotepad++");
+
         cutAction.putValue(Action.NAME, "Cut");
 
         copyAction.putValue(Action.NAME, "Copy");
@@ -153,6 +168,8 @@ public class JNotepadPP extends JFrame {
         file.addSeparator();
         file.add(new JMenuItem(saveDocument));
         file.add(new JMenuItem(saveAsDocument));
+        file.addSeparator();
+        file.add(new JMenuItem(exitNotepad));
 
         JMenu edit = new JMenu("Edit");
         mb.add(edit);
@@ -259,6 +276,16 @@ public class JNotepadPP extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             showStatistics();
+        }
+    };
+
+    /**
+     * Exits the program after checking if modified files wish to be saved.
+     */
+    private final Action exitNotepad = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            exitNotepad();
         }
     };
 
@@ -387,6 +414,32 @@ public class JNotepadPP extends JFrame {
                 "Statistics",
                 JOptionPane.INFORMATION_MESSAGE
         );
+    }
+
+    /**
+     * A helper method for the {@link #exitNotepad} action.
+     */
+    private void exitNotepad() {
+        for (SingleDocumentModel document : mdm) {
+            if (document.isModified()) {
+                int response = JOptionPane.showConfirmDialog(
+                        this,
+                        "This document has unsaved changes. Do you wish to save them?",
+                        "Unsaved changes found",
+                        JOptionPane.YES_NO_CANCEL_OPTION
+                );
+
+                if (response == JOptionPane.CANCEL_OPTION) {
+                    break;
+                }
+
+                if (response == JOptionPane.YES_OPTION) {
+                    saveDocument(false);
+                }
+            }
+        }
+
+        dispose();
     }
 
     /*
