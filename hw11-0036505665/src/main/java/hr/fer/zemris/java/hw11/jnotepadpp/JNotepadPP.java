@@ -1,6 +1,9 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.CaretListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +12,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * {@link JNotepadPP} is a simple text file editor that supports working with multiple
@@ -64,6 +69,7 @@ public class JNotepadPP extends JFrame {
         createActions();
         createMenus();
         cp.add(createToolBar(), BorderLayout.PAGE_START);
+        cp.add(createStatusBar(), BorderLayout.PAGE_END);
 
         // check modified files on exit
         this.addWindowListener(new WindowAdapter() {
@@ -197,6 +203,52 @@ public class JNotepadPP extends JFrame {
         return tb;
     }
 
+    /**
+     * Creates and returns {@link JNotepadPP}'s status bar.
+     *
+     * @return {@link JNotepadPP}'s status bar
+     */
+    private JPanel createStatusBar() {
+        CompoundBorder cellBorder = BorderFactory.createCompoundBorder(
+                new MatteBorder(0, 1, 0, 0, Color.GRAY), new EmptyBorder(0, 4, 0, 4)
+        );
+
+        JPanel sb = new JPanel(new GridLayout(0, 3));
+        sb.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+        sb.setPreferredSize(new Dimension(getWidth(), 24));
+
+        JLabel lengthLabel = new JLabel("length: 0");
+        lengthLabel.setBorder(cellBorder);
+        sb.add(lengthLabel);
+        JLabel caretInfoLabel = new JLabel("Ln: 0  Col: 0  Sel: 0");
+        caretInfoLabel.setBorder(cellBorder);
+        sb.add(caretInfoLabel);
+
+        // update length & caret info labels on tab switch
+        mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
+            @Override
+            public void currentDocumentChanged(SingleDocumentModel previousModel,
+                                               SingleDocumentModel currentModel) {
+                // TODO remove listener ?
+                showTextContentInfo(lengthLabel, caretInfoLabel);
+            }
+
+            @Override
+            public void documentAdded(SingleDocumentModel model) {}
+
+            @Override
+            public void documentRemoved(SingleDocumentModel model) {}
+        });
+
+        JLabel clockLabel = new JLabel("");
+        clockLabel.setHorizontalAlignment(JLabel.RIGHT);
+        clockLabel.setBorder(cellBorder);
+        sb.add(clockLabel);
+        showClock(clockLabel);
+
+        return sb;
+    }
+
     /*
      * ---------------------------------------------------------------------------
      * --------------------------------- Actions ---------------------------------
@@ -291,7 +343,7 @@ public class JNotepadPP extends JFrame {
 
     /*
      * ---------------------------------------------------------------------------
-     * ----------------------------- Action methods ------------------------------
+     * ----------------------------- Helper methods ------------------------------
      * ---------------------------------------------------------------------------
      */
 
@@ -440,6 +492,57 @@ public class JNotepadPP extends JFrame {
         }
 
         dispose();
+    }
+
+    /**
+     * Displays and periodically updates a clock of the format yyyy/MM/dd HH:mm:ss on
+     * the given label.
+     *
+     * @param label the label on which to display the clock
+     */
+    private void showClock(JLabel label) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+        Thread clock = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignorable) {}
+
+                SwingUtilities.invokeLater(() ->
+                        label.setText(formatter.format(LocalDateTime.now()))
+                );
+            }
+        });
+        clock.setDaemon(true);
+        clock.start();
+    }
+
+    /**
+     * Displays text content info for the currently open document on the specified
+     * labels.
+     *
+     * @param lengthLabel the label on which to display the length of the text
+     * @param caretInfoLabel the label on which to display caret info (line, column,
+     *                       selection length)
+     */
+    private void showTextContentInfo(JLabel lengthLabel, JLabel caretInfoLabel) {
+        JTextArea textArea = mdm.getCurrentDocument().getTextComponent();
+        CaretListener listener = e -> {
+            try {
+                int length = textArea.getText().length();
+                lengthLabel.setText("length: " + length);
+
+                int caretPos = textArea.getCaretPosition();
+                int ln = textArea.getLineOfOffset(caretPos);
+                int col = caretPos - textArea.getLineStartOffset(ln++) + 1;
+                int sel = textArea.getSelectionEnd() - textArea.getSelectionStart();
+                caretInfoLabel.setText("Ln: " + ln + "  Col: " + col + "  Sel: " + sel);
+
+            } catch (BadLocationException ignorable) {}
+        };
+
+        textArea.addCaretListener(listener);
     }
 
     /*
