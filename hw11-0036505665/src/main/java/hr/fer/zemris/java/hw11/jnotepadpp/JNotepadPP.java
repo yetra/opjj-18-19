@@ -10,6 +10,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * {@link JNotepadPP} is a simple text file editor that supports working with multiple
@@ -208,8 +210,10 @@ public class JNotepadPP extends JFrame {
         JPanel sb = new JPanel(new GridLayout(0, 3));
         sb.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         sb.setPreferredSize(new Dimension(getWidth(), 24));
-
-        sb.add(new JLabel("Status bar"));
+        
+        JLabel clockLabel = new JLabel("");
+        showClockOn(clockLabel);
+        sb.add(clockLabel);
 
         return sb;
     }
@@ -308,7 +312,7 @@ public class JNotepadPP extends JFrame {
 
     /*
      * ---------------------------------------------------------------------------
-     * ----------------------------- Action methods ------------------------------
+     * ----------------------------- Helper methods ------------------------------
      * ---------------------------------------------------------------------------
      */
 
@@ -457,6 +461,30 @@ public class JNotepadPP extends JFrame {
         }
 
         dispose();
+    }
+
+    /**
+     * Displays and periodically updates a clock of the format yyyy/MM/dd HH:mm:ss on
+     * the given label.
+     *
+     * @param label the label on which to display the clock
+     */
+    private void showClockOn(JLabel label) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+        Thread clock = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignorable) {}
+
+                SwingUtilities.invokeLater(() ->
+                        label.setText(formatter.format(LocalDateTime.now()))
+                );
+            }
+        });
+        clock.setDaemon(true);
+        clock.start();
     }
 
     /*
