@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -64,6 +65,7 @@ public class JNotepadPP extends JFrame {
         createActions();
         createMenus();
         cp.add(createToolBar(), BorderLayout.PAGE_START);
+        cp.add(createStatusBar(), BorderLayout.PAGE_END);
 
         // check modified files on exit
         this.addWindowListener(new WindowAdapter() {
@@ -195,6 +197,21 @@ public class JNotepadPP extends JFrame {
         tb.add(new JButton(showStatistics));
 
         return tb;
+    }
+
+    /**
+     * Creates and returns {@link JNotepadPP}'s status bar.
+     *
+     * @return {@link JNotepadPP}'s status bar
+     */
+    private JPanel createStatusBar() {
+        JPanel sb = new JPanel(new GridLayout(0, 3));
+        sb.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+        sb.setPreferredSize(new Dimension(getWidth(), 24));
+
+        sb.add(new JLabel("Status bar"));
+
+        return sb;
     }
 
     /*
