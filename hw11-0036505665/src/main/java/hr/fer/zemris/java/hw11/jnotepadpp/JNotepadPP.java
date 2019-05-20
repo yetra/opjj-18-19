@@ -1,5 +1,9 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
+import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.FormLocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.CaretListener;
@@ -37,6 +41,13 @@ public class JNotepadPP extends JFrame {
      * open documents.
      */
     private DefaultMultipleDocumentModel mdm;
+
+    /**
+     * A {@link FormLocalizationProvider} for the localization of this {@link JFrame}.
+     */
+    private FormLocalizationProvider flp = new FormLocalizationProvider(
+            LocalizationProvider.getInstance(), this
+    );
 
     /**
      * Constructs an {@link JNotepadPP} frame and initializes its components.
@@ -83,7 +94,8 @@ public class JNotepadPP extends JFrame {
         mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
 
             @Override
-            public void currentDocumentChanged(SingleDocumentModel previousModel, SingleDocumentModel currentModel) {
+            public void currentDocumentChanged(SingleDocumentModel previousModel,
+                                               SingleDocumentModel currentModel) {
                 String title = "JNotepad++";
 
                 if (currentModel != null) {
@@ -118,46 +130,44 @@ public class JNotepadPP extends JFrame {
      * subscribed GUI components.
      */
     private void createActions() {
-        newDocument.putValue(Action.NAME, "New");
         newDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control N"));
         newDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
         newDocument.putValue(Action.SHORT_DESCRIPTION, "Create new document");
 
-        openDocument.putValue(Action.NAME, "Open");
         openDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control O"));
         openDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_O);
         openDocument.putValue(Action.SHORT_DESCRIPTION, "Open document from disc");
 
-        saveDocument.putValue(Action.NAME, "Save");
         saveDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
         saveDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         saveDocument.putValue(Action.SHORT_DESCRIPTION, "Save document to disc");
         saveDocument.setEnabled(false);
 
-        saveAsDocument.putValue(Action.NAME, "Save As");
         saveAsDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift S"));
         saveAsDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
         saveAsDocument.putValue(Action.SHORT_DESCRIPTION, "Save document to disc");
         saveAsDocument.setEnabled(false);
 
-        closeDocument.putValue(Action.NAME, "Close");
         closeDocument.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control W"));
         closeDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
         closeDocument.putValue(Action.SHORT_DESCRIPTION, "Close current document without saving");
         closeDocument.setEnabled(false);
 
-        exitNotepad.putValue(Action.NAME, "Exit");
         exitNotepad.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Q"));
         exitNotepad.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
         exitNotepad.putValue(Action.SHORT_DESCRIPTION, "Exit from JNotepad++");
 
-        cutAction.putValue(Action.NAME, "Cut");
+        switchToCroatian.putValue(Action.NAME, "hr");
+        switchToCroatian.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_H);
+        switchToCroatian.putValue(Action.SHORT_DESCRIPTION, "Hrvatski");
 
-        copyAction.putValue(Action.NAME, "Copy");
+        switchToEnglish.putValue(Action.NAME, "en");
+        switchToEnglish.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
+        switchToEnglish.putValue(Action.SHORT_DESCRIPTION, "English");
 
-        pasteAction.putValue(Action.NAME, "Paste");
-
-        showStatistics.putValue(Action.NAME, "Statistics");
+        switchToGerman.putValue(Action.NAME, "de");
+        switchToGerman.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
+        switchToGerman.putValue(Action.SHORT_DESCRIPTION, "Deutsch");
     }
 
     /**
@@ -166,7 +176,7 @@ public class JNotepadPP extends JFrame {
     private void createMenus() {
         JMenuBar mb = new JMenuBar();
 
-        JMenu file = new JMenu("File");
+        JMenu file = new JMenu(fileMenu);
         mb.add(file);
         file.add(new JMenuItem(newDocument));
         file.add(new JMenuItem(openDocument));
@@ -177,11 +187,17 @@ public class JNotepadPP extends JFrame {
         file.addSeparator();
         file.add(new JMenuItem(exitNotepad));
 
-        JMenu edit = new JMenu("Edit");
+        JMenu edit = new JMenu(editMenu);
         mb.add(edit);
         edit.add(new JMenuItem(cutAction));
         edit.add(new JMenuItem(copyAction));
         edit.add(new JMenuItem(pasteAction));
+
+        JMenu languages = new JMenu(languagesMenu);
+        mb.add(languages);
+        languages.add(new JMenuItem(switchToCroatian));
+        languages.add(new JMenuItem(switchToEnglish));
+        languages.add(new JMenuItem(switchToGerman));
 
         setJMenuBar(mb);
     }
@@ -256,9 +272,33 @@ public class JNotepadPP extends JFrame {
      */
 
     /**
+     * Expands the file {@link JMenu}.
+     */
+    private final Action fileMenu = new LocalizableAction("file", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {}
+    };
+
+    /**
+     * Expands the edit {@link JMenu}.
+     */
+    private final Action editMenu = new LocalizableAction("edit", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {}
+    };
+
+    /**
+     * Expands the languages {@link JMenu}.
+     */
+    private final Action languagesMenu = new LocalizableAction("languages", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {}
+    };
+
+    /**
      * Creates a new blank document.
      */
-    private final Action newDocument = new AbstractAction() {
+    private final Action newDocument = new LocalizableAction("new", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             mdm.createNewDocument();
@@ -268,7 +308,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Opens an existing document.
      */
-    private final Action openDocument = new AbstractAction() {
+    private final Action openDocument = new LocalizableAction("open", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             openDocument();
@@ -278,7 +318,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Saves the current document.
      */
-    private final Action saveDocument = new AbstractAction() {
+    private final Action saveDocument = new LocalizableAction("save", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             saveDocument(false);
@@ -288,7 +328,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Performs save-as on the current document.
      */
-    private final Action saveAsDocument = new AbstractAction() {
+    private final Action saveAsDocument = new LocalizableAction("saveas", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             saveDocument(true);
@@ -298,7 +338,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Closes the current document.
      */
-    private final Action closeDocument = new AbstractAction() {
+    private final Action closeDocument = new LocalizableAction("close", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             mdm.closeDocument(mdm.getCurrentDocument());
@@ -308,23 +348,38 @@ public class JNotepadPP extends JFrame {
     /**
      * Cuts the selected text and places its contents into the system clipboard.
      */
-    private final Action cutAction = new DefaultEditorKit.CutAction();
+    private final Action cutAction = new LocalizableAction("cut", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new DefaultEditorKit.CutAction().actionPerformed(e);
+        }
+    };
 
     /**
      * Copies the contents of the selected text to the system clipboard.
      */
-    private final Action copyAction = new DefaultEditorKit.CopyAction();
+    private final Action copyAction = new LocalizableAction("copy", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new DefaultEditorKit.CopyAction().actionPerformed(e);
+        }
+    };
 
     /**
      * Pastes the contents of the system clipboard onto the selection or before the
      * caret, if nothing is selected.
      */
-    private final Action pasteAction = new DefaultEditorKit.PasteAction();
+    private final Action pasteAction = new LocalizableAction("paste", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new DefaultEditorKit.PasteAction().actionPerformed(e);
+        }
+    };
 
     /**
      * Displays statistical info on the current documents.
      */
-    private final Action showStatistics = new AbstractAction() {
+    private final Action showStatistics = new LocalizableAction("statistics", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             showStatistics();
@@ -334,10 +389,31 @@ public class JNotepadPP extends JFrame {
     /**
      * Exits the program after checking if modified files wish to be saved.
      */
-    private final Action exitNotepad = new AbstractAction() {
+    private final Action exitNotepad = new LocalizableAction("exit", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             exitNotepad();
+        }
+    };
+
+    private final Action switchToEnglish = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LocalizationProvider.getInstance().setLanguage("en");
+        }
+    };
+
+    private final Action switchToCroatian = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LocalizationProvider.getInstance().setLanguage("hr");
+        }
+    };
+
+    private final Action switchToGerman = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LocalizationProvider.getInstance().setLanguage("de");
         }
     };
 
