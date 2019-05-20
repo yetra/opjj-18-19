@@ -1,7 +1,9 @@
-package hr.fer.zemris.java.hw11.jnotepadpp.local;
+package hr.fer.zemris.java.hw11.jnotepadpp.local.swing;
+
+import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationListener;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
  * An extension of {@link AbstractAction} that updates its {@link #NAME} key and
@@ -46,7 +48,4 @@ public abstract class LocalizableAction extends AbstractAction {
         putValue(NAME, lp.getString(key));
         lp.addLocalizationListener(listener);
     }
-
-    @Override
-    public abstract void actionPerformed(ActionEvent e);
 }

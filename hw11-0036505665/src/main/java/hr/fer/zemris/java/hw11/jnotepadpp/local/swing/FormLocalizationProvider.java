@@ -1,4 +1,7 @@
-package hr.fer.zemris.java.hw11.jnotepadpp.local;
+package hr.fer.zemris.java.hw11.jnotepadpp.local.swing;
+
+import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProviderBridge;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
