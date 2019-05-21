@@ -532,7 +532,7 @@ public class JNotepadPP extends JFrame {
     private final Action uniqueAction = new LocalizableAction("unique", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            uniqueLines();
         }
     };
 
@@ -814,6 +814,44 @@ public class JNotepadPP extends JFrame {
             }
             lines.sort(comparator);
 
+            doc.remove(start, end - start + 1);
+            doc.insertString(start, String.join("", lines), null);
+
+            component.setSelectionStart(start);
+            component.setSelectionEnd(end);
+        } catch (BadLocationException ignorable) {}
+    }
+
+    /**
+     * Removes duplicate lines from the selection.
+     */
+    private void uniqueLines() {
+        JTextComponent component = mdm.getCurrentDocument().getTextComponent();
+        Document doc = component.getDocument();
+
+        int start = component.getSelectionStart();
+        int end = component.getSelectionEnd();
+        if (end - start < 1) {
+            return;
+        }
+
+        Element root = doc.getDefaultRootElement();
+        int startLine = root.getElementIndex(start);
+        int endLine = root.getElementIndex(end);
+
+        try {
+            Set<String> lines = new LinkedHashSet<>();
+            for (int line = startLine; line <= endLine; line++) {
+                Element lineElement = root.getElement(line);
+                int lineStart = lineElement.getStartOffset();
+                int lineEnd = lineElement.getEndOffset();
+
+                String text = doc.getText(lineStart, lineEnd - lineStart + 1);
+                lines.add(text);
+            }
+
+            start = root.getElement(startLine).getStartOffset();
+            end = root.getElement(endLine).getEndOffset();
             doc.remove(start, end - start + 1);
             doc.insertString(start, String.join("", lines), null);
 
