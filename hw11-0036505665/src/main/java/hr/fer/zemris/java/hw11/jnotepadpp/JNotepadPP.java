@@ -7,8 +7,7 @@ import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.CaretListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -722,22 +721,19 @@ public class JNotepadPP extends JFrame {
      *                       selection length)
      */
     private void showTextContentInfo(JLabel lengthLabel, JLabel caretInfoLabel) {
-        JTextArea textArea = mdm.getCurrentDocument().getTextComponent();
-        CaretListener listener = e -> {
-            try {
-                int length = textArea.getText().length();
-                lengthLabel.setText("length: " + length);
+        JTextComponent component = mdm.getCurrentDocument().getTextComponent();
+        Document doc = component.getDocument();
+        Element root = doc.getDefaultRootElement();
 
-                int caretPos = textArea.getCaretPosition();
-                int ln = textArea.getLineOfOffset(caretPos);
-                int col = caretPos - textArea.getLineStartOffset(ln++) + 1;
-                int sel = textArea.getSelectionEnd() - textArea.getSelectionStart();
-                caretInfoLabel.setText("Ln: " + ln + "  Col: " + col + "  Sel: " + sel);
+        component.addCaretListener(e -> {
+            lengthLabel.setText("length: " + component.getText().length());
 
-            } catch (BadLocationException ignorable) {}
-        };
-
-        textArea.addCaretListener(listener);
+            int pos = component.getCaretPosition();
+            int ln = root.getElementIndex(pos) + 1;
+            int col = pos - root.getElement(ln - 1).getStartOffset() + 1;
+            int sel = component.getSelectionEnd() - component.getSelectionStart();
+            caretInfoLabel.setText("Ln: " + ln + "  Col: " + col + "  Sel: " + sel);
+        });
     }
 
     /**
@@ -747,22 +743,23 @@ public class JNotepadPP extends JFrame {
      * @param convert the {@link UnaryOperator} that specifies how to change the case
      */
     private void changeCase(UnaryOperator<String> convert) {
-        JTextArea textArea = mdm.getCurrentDocument().getTextComponent();
-        int start = textArea.getSelectionStart();
-        int end = textArea.getSelectionEnd();
+        JTextComponent component = mdm.getCurrentDocument().getTextComponent();
+        Document doc = component.getDocument();
 
+        int start = component.getSelectionStart();
+        int end = component.getSelectionEnd();
         if (end - start < 1) {
             return;
         }
 
         try {
-            String text = textArea.getText(start, end - start);
+            String text = doc.getText(start, end - start);
 
-            textArea.getDocument().remove(start, end - start);
-            textArea.getDocument().insertString(start, convert.apply(text), null);
+            doc.remove(start, end - start);
+            doc.insertString(start, convert.apply(text), null);
 
-            textArea.setSelectionStart(start);
-            textArea.setSelectionEnd(end);
+            component.setSelectionStart(start);
+            component.setSelectionEnd(end);
         } catch (BadLocationException ignorable) {}
     }
 
