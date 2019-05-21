@@ -6,7 +6,6 @@ import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
@@ -511,7 +512,7 @@ public class JNotepadPP extends JFrame {
     private final Action ascendingSort = new LocalizableAction("ascending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            sortSelectedLines(String::compareTo);
         }
     };
 
@@ -521,7 +522,7 @@ public class JNotepadPP extends JFrame {
     private final Action descendingSort = new LocalizableAction("descending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            sortSelectedLines(Comparator.reverseOrder());
         }
     };
 
@@ -781,6 +782,44 @@ public class JNotepadPP extends JFrame {
         }
 
         return new String(chars);
+    }
+
+    /**
+     * Sorts the selected lines.
+     *
+     * @param comparator the comparator used for sorting
+     */
+    private void sortSelectedLines(Comparator<? super String> comparator) {
+        JTextComponent component = mdm.getCurrentDocument().getTextComponent();
+        Document doc = component.getDocument();
+
+        int start = component.getSelectionStart();
+        int end = component.getSelectionEnd();
+        if (end - start < 1) {
+            return;
+        }
+
+        Element root = doc.getDefaultRootElement();
+        int startLine = root.getElementIndex(start);
+        int endLine = root.getElementIndex(end);
+
+        try {
+            List<String> lines = new ArrayList<>();
+            for (int line = startLine; line <= endLine; line++) {
+                Element lineElement = root.getElement(line);
+                lines.add(doc.getText(
+                        lineElement.getStartOffset(),
+                        lineElement.getEndOffset() - lineElement.getStartOffset()
+                ));
+            }
+            lines.sort(comparator);
+
+            doc.remove(start, end - start + 1);
+            doc.insertString(start, String.join("", lines), null);
+
+            component.setSelectionStart(start);
+            component.setSelectionEnd(end);
+        } catch (BadLocationException ignorable) {}
     }
 
     /*
