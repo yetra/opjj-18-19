@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.function.UnaryOperator;
 
 /**
  * {@link JNotepadPP} is a simple text file editor that supports working with multiple
@@ -168,6 +169,18 @@ public class JNotepadPP extends JFrame {
         switchToGerman.putValue(Action.NAME, "de");
         switchToGerman.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
         switchToGerman.putValue(Action.SHORT_DESCRIPTION, "Deutsch");
+
+        toUpperCase.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control U"));
+        toUpperCase.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
+        toUpperCase.putValue(Action.SHORT_DESCRIPTION, "Converts selection to upper case");
+
+        toLowerCase.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control L"));
+        toLowerCase.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
+        toLowerCase.putValue(Action.SHORT_DESCRIPTION, "Converts selection to lower case");
+
+        invertCase.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control I"));
+        invertCase.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
+        invertCase.putValue(Action.SHORT_DESCRIPTION, "Inverts case of selection");
     }
 
     /**
@@ -192,6 +205,19 @@ public class JNotepadPP extends JFrame {
         edit.add(new JMenuItem(cutAction));
         edit.add(new JMenuItem(copyAction));
         edit.add(new JMenuItem(pasteAction));
+
+        JMenu tools = new JMenu(toolsMenu);
+        mb.add(tools);
+        JMenu changeCase = new JMenu(changeCaseSubmenu);
+        tools.add(changeCase);
+        changeCase.add(new JMenuItem(toUpperCase));
+        changeCase.add(new JMenuItem(toLowerCase));
+        changeCase.add(new JMenuItem(invertCase));
+        JMenu sort = new JMenu(sortSubmenu);
+        tools.add(sort);
+        sort.add(new JMenuItem(ascendingSort));
+        sort.add(new JMenuItem(descendingSort));
+        tools.add(new JMenuItem(uniqueAction));
 
         JMenu languages = new JMenu(languagesMenu);
         mb.add(languages);
@@ -291,6 +317,30 @@ public class JNotepadPP extends JFrame {
      * Expands the languages {@link JMenu}.
      */
     private final Action languagesMenu = new LocalizableAction("languages", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {}
+    };
+
+    /**
+     * Expands the tools {@link JMenu}.
+     */
+    private final Action toolsMenu = new LocalizableAction("tools", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {}
+    };
+
+    /**
+     * Expands the change case {@link JMenu}.
+     */
+    private final Action changeCaseSubmenu = new LocalizableAction("changecase", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {}
+    };
+
+    /**
+     * Expands the sort {@link JMenu}.
+     */
+    private final Action sortSubmenu = new LocalizableAction("sort", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {}
     };
@@ -396,6 +446,9 @@ public class JNotepadPP extends JFrame {
         }
     };
 
+    /**
+     * Switches the language to English.
+     */
     private final Action switchToEnglish = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -403,6 +456,9 @@ public class JNotepadPP extends JFrame {
         }
     };
 
+    /**
+     * Switches the language to Croatian.
+     */
     private final Action switchToCroatian = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -410,10 +466,73 @@ public class JNotepadPP extends JFrame {
         }
     };
 
+    /**
+     * Switches the language to German.
+     */
     private final Action switchToGerman = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("de");
+        }
+    };
+
+    /**
+     * Converts the selected text to upper case.
+     */
+    private final Action toUpperCase = new LocalizableAction("upper", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+
+    /**
+     * Converts the selected text to lower case.
+     */
+    private final Action toLowerCase = new LocalizableAction("lower", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+
+    /**
+     * Inverts the case of the selected text.
+     */
+    private final Action invertCase = new LocalizableAction("invert", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+    };
+
+    /**
+     * Sorts the selected lines in ascending order.
+     */
+    private final Action ascendingSort = new LocalizableAction("ascending", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+
+    /**
+     * Sorts the selected lines in descending order.
+     */
+    private final Action descendingSort = new LocalizableAction("descending", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+
+    /**
+     * Removes duplicates of the selected line.
+     */
+    private final Action uniqueAction = new LocalizableAction("unique", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
         }
     };
 
