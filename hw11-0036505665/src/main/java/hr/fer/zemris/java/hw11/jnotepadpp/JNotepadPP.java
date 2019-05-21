@@ -482,7 +482,7 @@ public class JNotepadPP extends JFrame {
     private final Action toUpperCase = new LocalizableAction("upper", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            changeCase(String::toUpperCase);
         }
     };
 
@@ -492,7 +492,7 @@ public class JNotepadPP extends JFrame {
     private final Action toLowerCase = new LocalizableAction("lower", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            changeCase(String::toLowerCase);
         }
     };
 
@@ -502,7 +502,7 @@ public class JNotepadPP extends JFrame {
     private final Action invertCase = new LocalizableAction("invert", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            changeCase(text -> invertCase(text));
         }
     };
 
@@ -738,6 +738,52 @@ public class JNotepadPP extends JFrame {
         };
 
         textArea.addCaretListener(listener);
+    }
+
+    /**
+     * Changes the case of the current document text based on the given {@link
+     * UnaryOperator}.
+     *
+     * @param convert the {@link UnaryOperator} that specifies how to change the case
+     */
+    private void changeCase(UnaryOperator<String> convert) {
+        JTextArea textArea = mdm.getCurrentDocument().getTextComponent();
+        int start = textArea.getSelectionStart();
+        int end = textArea.getSelectionEnd();
+
+        if (end - start < 1) {
+            return;
+        }
+
+        try {
+            String text = textArea.getText(start, end - start);
+
+            textArea.getDocument().remove(start, end - start);
+            textArea.getDocument().insertString(start, convert.apply(text), null);
+
+            textArea.setSelectionStart(start);
+            textArea.setSelectionEnd(end);
+        } catch (BadLocationException ignorable) {}
+    }
+
+    /**
+     * Inverts the case of the given text and returns it.
+     *
+     * @param text the text to be inverted
+     * @return the given text in inverted case
+     */
+    private String invertCase(String text) {
+        char[] chars = text.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            if (Character.isUpperCase(chars[i])) {
+                chars[i] = Character.toLowerCase(chars[i]);
+            } else if (Character.isLowerCase(chars[i])) {
+                chars[i] = Character.toUpperCase(chars[i]);
+            }
+        }
+
+        return new String(chars);
     }
 
     /*
