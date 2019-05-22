@@ -125,6 +125,7 @@ public class JNotepadPP extends JFrame {
             saveDocument.setEnabled(hasTabs);
             saveAsDocument.setEnabled(hasTabs);
             closeDocument.setEnabled(hasTabs);
+            showStatistics.setEnabled(hasTabs);
         });
     }
 
@@ -155,6 +156,11 @@ public class JNotepadPP extends JFrame {
         closeDocument.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
         closeDocument.putValue(Action.SHORT_DESCRIPTION, "Close current document without saving");
         closeDocument.setEnabled(false);
+
+        showStatistics.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt S"));
+        showStatistics.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
+        showStatistics.putValue(Action.SHORT_DESCRIPTION, "Show statistics for current document");
+        showStatistics.setEnabled(false);
 
         exitNotepad.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Q"));
         exitNotepad.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
@@ -200,6 +206,8 @@ public class JNotepadPP extends JFrame {
         file.add(new JMenuItem(saveDocument));
         file.add(new JMenuItem(saveAsDocument));
         file.addSeparator();
+        file.add(new JMenuItem(showStatistics));
+        file.addSeparator();
         file.add(new JMenuItem(exitNotepad));
 
         JMenu edit = new LJMenu("edit", flp);
@@ -239,10 +247,16 @@ public class JNotepadPP extends JFrame {
         JToolBar tb = new JToolBar();
         tb.setFloatable(true);
 
+        tb.add(new JButton(newDocument));
+        tb.add(new JButton(openDocument));
+        tb.add(new JButton(closeDocument));
+        tb.add(new JButton(saveDocument));
+        tb.add(new JButton(saveAsDocument));
         tb.add(new JButton(cutAction));
         tb.add(new JButton(copyAction));
         tb.add(new JButton(pasteAction));
         tb.add(new JButton(showStatistics));
+        tb.add(new JButton(exitNotepad));
 
         return tb;
     }
