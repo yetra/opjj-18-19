@@ -89,6 +89,7 @@ public class JNotepadPP extends JFrame {
         cp.add(createStatusBar(), BorderLayout.PAGE_END);
 
         this.addWindowListener(checkModifiedOnExit);
+
         mdm.addMultipleDocumentListener(updateTitle);
         mdm.addChangeListener(disableActionsNoTab);
         mdm.addMultipleDocumentListener(disableActionsNoSelection);
@@ -838,6 +839,24 @@ public class JNotepadPP extends JFrame {
         } catch (BadLocationException ignorable) {}
     }
 
+    /**
+     * Updates the window title.
+     *
+     * @param model the currently open document's model
+     */
+    private void updateTitle(SingleDocumentModel model) {
+        String title = "JNotepad++";
+
+        if (model != null) {
+            Path currentDocumentPath = model.getFilePath();
+            title = (currentDocumentPath == null ?
+                    "(unnamed)" : currentDocumentPath.toString() + "")
+                    + " - " + title;
+        }
+
+        setTitle(title);
+    }
+
     /*
      * ---------------------------------------------------------------------------
      * ---------------------------- Helper listeners -----------------------------
@@ -852,16 +871,8 @@ public class JNotepadPP extends JFrame {
         @Override
         public void currentDocumentChanged(SingleDocumentModel previousModel,
                 SingleDocumentModel currentModel) {
-            String title = "JNotepad++";
-
-            if (currentModel != null) {
-                Path currentDocumentPath = currentModel.getFilePath();
-                title = (currentDocumentPath == null ?
-                        "(unnamed)" : currentDocumentPath.toString() + "")
-                        + " - " + title;
-            }
-
-            setTitle(title);
+            updateTitle(currentModel);
+            currentModel.addSingleDocumentListener(updateTitleOnPathChange);
         }
 
         @Override
@@ -869,6 +880,21 @@ public class JNotepadPP extends JFrame {
 
         @Override
         public void documentRemoved(SingleDocumentModel model) {}
+    };
+
+    /**
+     * Updates the window title on current document path change.
+     */
+    private final SingleDocumentListener updateTitleOnPathChange =
+            new SingleDocumentListener() {
+
+        @Override
+        public void documentModifyStatusUpdated(SingleDocumentModel model) {}
+
+        @Override
+        public void documentFilePathUpdated(SingleDocumentModel model) {
+            updateTitle(model);
+        }
     };
 
     /**
