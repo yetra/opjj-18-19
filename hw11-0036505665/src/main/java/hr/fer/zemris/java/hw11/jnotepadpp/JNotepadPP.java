@@ -90,6 +90,7 @@ public class JNotepadPP extends JFrame {
         this.addWindowListener(checkModifiedOnExit);
         mdm.addMultipleDocumentListener(updateTitle);
         mdm.addChangeListener(disableActionsNoTab);
+        mdm.addMultipleDocumentListener(disableActionsNoSelection);
     }
 
     /**
@@ -129,29 +130,64 @@ public class JNotepadPP extends JFrame {
         exitNotepad.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
         exitNotepad.putValue(Action.SHORT_DESCRIPTION, "Exit from JNotepad++");
 
+        cutAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift C"));
+        cutAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
+        cutAction.putValue(Action.SHORT_DESCRIPTION, "Cuts the selected text");
+        cutAction.setEnabled(false);
+
+        copyAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+        copyAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
+        copyAction.putValue(Action.SHORT_DESCRIPTION, "Copies the selected text");
+        copyAction.setEnabled(false);
+
+        pasteAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control P"));
+        pasteAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
+        pasteAction.putValue(Action.SHORT_DESCRIPTION, "Pastes text from the clipboard");
+
         switchToCroatian.putValue(Action.NAME, "hr");
+        switchToCroatian.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt H"));
         switchToCroatian.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_H);
         switchToCroatian.putValue(Action.SHORT_DESCRIPTION, "Hrvatski");
 
         switchToEnglish.putValue(Action.NAME, "en");
+        switchToEnglish.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt E"));
         switchToEnglish.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
         switchToEnglish.putValue(Action.SHORT_DESCRIPTION, "English");
 
         switchToGerman.putValue(Action.NAME, "de");
+        switchToGerman.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt D"));
         switchToGerman.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
         switchToGerman.putValue(Action.SHORT_DESCRIPTION, "Deutsch");
 
         toUpperCase.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control U"));
         toUpperCase.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
         toUpperCase.putValue(Action.SHORT_DESCRIPTION, "Converts selection to upper case");
+        toUpperCase.setEnabled(false);
 
         toLowerCase.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control L"));
         toLowerCase.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_L);
         toLowerCase.putValue(Action.SHORT_DESCRIPTION, "Converts selection to lower case");
+        toLowerCase.setEnabled(false);
 
         invertCase.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control I"));
         invertCase.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_I);
         invertCase.putValue(Action.SHORT_DESCRIPTION, "Inverts case of selection");
+        invertCase.setEnabled(false);
+
+        ascendingSort.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control A"));
+        ascendingSort.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
+        ascendingSort.putValue(Action.SHORT_DESCRIPTION, "Sorts selected lines in ascending order");
+        ascendingSort.setEnabled(false);
+
+        descendingSort.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control D"));
+        descendingSort.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
+        descendingSort.putValue(Action.SHORT_DESCRIPTION, "Sorts selected lines in descending order");
+        descendingSort.setEnabled(false);
+
+        uniqueAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift U"));
+        uniqueAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);
+        uniqueAction.putValue(Action.SHORT_DESCRIPTION, "Removes duplicate lines in selection");
+        uniqueAction.setEnabled(false);
     }
 
     /**
@@ -250,7 +286,7 @@ public class JNotepadPP extends JFrame {
         sb.add(caretInfoLabel);
 
         // update length & caret info labels on current document change
-        MultipleDocumentListener updateStatusbar = new MultipleDocumentListener() {
+        MultipleDocumentListener updateStatusBar = new MultipleDocumentListener() {
             @Override
             public void currentDocumentChanged(SingleDocumentModel previousModel,
                                                SingleDocumentModel currentModel) {
@@ -263,7 +299,7 @@ public class JNotepadPP extends JFrame {
             @Override
             public void documentRemoved(SingleDocumentModel model) {}
         };
-        mdm.addMultipleDocumentListener(updateStatusbar);
+        mdm.addMultipleDocumentListener(updateStatusBar);
 
         JLabel clockLabel = new JLabel("");
         clockLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -869,6 +905,44 @@ public class JNotepadPP extends JFrame {
         @Override
         public void windowClosing(WindowEvent e) {
             exitNotepad();
+        }
+    };
+
+    /**
+     * Disables appropriate actions when no text is selected.
+     */
+    private final MultipleDocumentListener disableActionsNoSelection = new MultipleDocumentListener() {
+        @Override
+        public void currentDocumentChanged(SingleDocumentModel previousModel,
+                                           SingleDocumentModel currentModel) {
+            if (mdm.getNumberOfDocuments() == 0) {
+                return;
+            }
+            JTextComponent component = currentModel.getTextComponent();
+            ChangeListener checkSelection = e -> {
+                boolean hasSelection = component.getSelectionEnd()
+                        != component.getSelectionStart();
+
+                cutAction.setEnabled(hasSelection);
+                copyAction.setEnabled(hasSelection);
+                toUpperCase.setEnabled(hasSelection);
+                toLowerCase.setEnabled(hasSelection);
+                invertCase.setEnabled(hasSelection);
+                ascendingSort.setEnabled(hasSelection);
+                descendingSort.setEnabled(hasSelection);
+                uniqueAction.setEnabled(hasSelection);
+            };
+            component.getCaret().addChangeListener(checkSelection);
+        }
+
+        @Override
+        public void documentAdded(SingleDocumentModel model) {
+
+        }
+
+        @Override
+        public void documentRemoved(SingleDocumentModel model) {
+
         }
     };
 
