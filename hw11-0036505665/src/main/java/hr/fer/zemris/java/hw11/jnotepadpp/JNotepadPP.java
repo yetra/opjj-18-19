@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.FormLocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJLabel;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJMenu;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
@@ -258,12 +259,16 @@ public class JNotepadPP extends JFrame {
 
         JPanel sb = new JPanel(new GridLayout(0, 3));
         sb.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-        sb.setPreferredSize(new Dimension(getWidth(), 24));
+        sb.setPreferredSize(new Dimension(getWidth(), 28));
 
-        JLabel lengthLabel = new JLabel("length: 0");
-        lengthLabel.setBorder(cellBorder);
-        sb.add(lengthLabel);
-        JLabel caretInfoLabel = new JLabel("Ln: 0  Col: 0  Sel: 0");
+        JPanel lengthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel lengthText = new LJLabel("length", flp);
+        JLabel lengthLabel = new JLabel(": 0");
+        lengthPanel.add(lengthText);
+        lengthPanel.add(lengthLabel);
+        sb.add(lengthPanel);
+
+        JLabel caretInfoLabel = new JLabel("Ln : 0  Col : 0  Sel : 0");
         caretInfoLabel.setBorder(cellBorder);
         sb.add(caretInfoLabel);
 
@@ -696,13 +701,13 @@ public class JNotepadPP extends JFrame {
         Element root = doc.getDefaultRootElement();
 
         component.addCaretListener(e -> {
-            lengthLabel.setText("length: " + component.getText().length());
+            lengthLabel.setText(": " + component.getText().length());
 
             int pos = component.getCaretPosition();
             int ln = root.getElementIndex(pos) + 1;
             int col = pos - root.getElement(ln - 1).getStartOffset() + 1;
             int sel = component.getSelectionEnd() - component.getSelectionStart();
-            caretInfoLabel.setText("Ln: " + ln + "  Col: " + col + "  Sel: " + sel);
+            caretInfoLabel.setText("Ln : " + ln + "  Col : " + col + "  Sel : " + sel);
         });
     }
 
