@@ -512,7 +512,7 @@ public class JNotepadPP extends JFrame {
     private final Action ascendingSort = new LocalizableAction("ascending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            sortSelectedLines(String::compareTo);
+            changeSelectedLines(String::compareTo);
         }
     };
 
@@ -522,7 +522,7 @@ public class JNotepadPP extends JFrame {
     private final Action descendingSort = new LocalizableAction("descending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            sortSelectedLines(Comparator.reverseOrder());
+            changeSelectedLines(Comparator.reverseOrder());
         }
     };
 
@@ -789,7 +789,7 @@ public class JNotepadPP extends JFrame {
      *
      * @param comparator the comparator used for sorting
      */
-    private void sortSelectedLines(Comparator<? super String> comparator) {
+    private void changeSelectedLines(Comparator<? super String> comparator) {
         JTextComponent component = mdm.getCurrentDocument().getTextComponent();
         Document doc = component.getDocument();
 
@@ -807,18 +807,18 @@ public class JNotepadPP extends JFrame {
             List<String> lines = new ArrayList<>();
             for (int line = startLine; line <= endLine; line++) {
                 Element lineElement = root.getElement(line);
-                lines.add(doc.getText(
-                        lineElement.getStartOffset(),
-                        lineElement.getEndOffset() - lineElement.getStartOffset()
-                ));
+                int lineStart = lineElement.getStartOffset();
+                int lineEnd = lineElement.getEndOffset();
+
+                String text = doc.getText(lineStart, lineEnd - lineStart);
+                lines.add(text);
             }
             lines.sort(comparator);
 
-            doc.remove(start, end - start + 1);
+            start = root.getElement(startLine).getStartOffset();
+            end = root.getElement(endLine).getEndOffset();
+            doc.remove(start, end - start);
             doc.insertString(start, String.join("", lines), null);
-
-            component.setSelectionStart(start);
-            component.setSelectionEnd(end);
         } catch (BadLocationException ignorable) {}
     }
 
@@ -846,17 +846,14 @@ public class JNotepadPP extends JFrame {
                 int lineStart = lineElement.getStartOffset();
                 int lineEnd = lineElement.getEndOffset();
 
-                String text = doc.getText(lineStart, lineEnd - lineStart + 1);
+                String text = doc.getText(lineStart, lineEnd - lineStart);
                 lines.add(text);
             }
 
             start = root.getElement(startLine).getStartOffset();
             end = root.getElement(endLine).getEndOffset();
-            doc.remove(start, end - start + 1);
+            doc.remove(start, end - start);
             doc.insertString(start, String.join("", lines), null);
-
-            component.setSelectionStart(start);
-            component.setSelectionEnd(end);
         } catch (BadLocationException ignorable) {}
     }
 
