@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.FormLocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJMenu;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
@@ -189,7 +190,7 @@ public class JNotepadPP extends JFrame {
     private void createMenus() {
         JMenuBar mb = new JMenuBar();
 
-        JMenu file = new JMenu(fileMenu);
+        JMenu file = new LJMenu("file", flp);
         mb.add(file);
         file.add(new JMenuItem(newDocument));
         file.add(new JMenuItem(openDocument));
@@ -200,13 +201,13 @@ public class JNotepadPP extends JFrame {
         file.addSeparator();
         file.add(new JMenuItem(exitNotepad));
 
-        JMenu edit = new JMenu(editMenu);
+        JMenu edit = new LJMenu("edit", flp);
         mb.add(edit);
         edit.add(new JMenuItem(cutAction));
         edit.add(new JMenuItem(copyAction));
         edit.add(new JMenuItem(pasteAction));
 
-        JMenu tools = new JMenu(toolsMenu);
+        JMenu tools = new LJMenu("tools", flp);
         mb.add(tools);
         JMenu changeCase = new JMenu(changeCaseSubmenu);
         tools.add(changeCase);
@@ -219,7 +220,7 @@ public class JNotepadPP extends JFrame {
         sort.add(new JMenuItem(descendingSort));
         tools.add(new JMenuItem(uniqueAction));
 
-        JMenu languages = new JMenu(languagesMenu);
+        JMenu languages = new LJMenu("languages", flp);
         mb.add(languages);
         languages.add(new JMenuItem(switchToCroatian));
         languages.add(new JMenuItem(switchToEnglish));
@@ -296,38 +297,6 @@ public class JNotepadPP extends JFrame {
      * --------------------------------- Actions ---------------------------------
      * ---------------------------------------------------------------------------
      */
-
-    /**
-     * Expands the file {@link JMenu}.
-     */
-    private final Action fileMenu = new LocalizableAction("file", flp) {
-        @Override
-        public void actionPerformed(ActionEvent e) {}
-    };
-
-    /**
-     * Expands the edit {@link JMenu}.
-     */
-    private final Action editMenu = new LocalizableAction("edit", flp) {
-        @Override
-        public void actionPerformed(ActionEvent e) {}
-    };
-
-    /**
-     * Expands the languages {@link JMenu}.
-     */
-    private final Action languagesMenu = new LocalizableAction("languages", flp) {
-        @Override
-        public void actionPerformed(ActionEvent e) {}
-    };
-
-    /**
-     * Expands the tools {@link JMenu}.
-     */
-    private final Action toolsMenu = new LocalizableAction("tools", flp) {
-        @Override
-        public void actionPerformed(ActionEvent e) {}
-    };
 
     /**
      * Expands the change case {@link JMenu}.
