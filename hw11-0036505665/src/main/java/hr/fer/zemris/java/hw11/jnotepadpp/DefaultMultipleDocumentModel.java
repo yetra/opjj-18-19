@@ -176,7 +176,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
                 throw new NoSuchElementException();
             }
 
-            setSelectedIndex(currentIndex); // TODO remove?
+            setSelectedIndex(currentIndex);
             return models.get(currentIndex++);
         }
     }

@@ -925,7 +925,8 @@ public class JNotepadPP extends JFrame {
     /**
      * Disables appropriate actions when no text is selected.
      */
-    private final MultipleDocumentListener disableActionsNoSelection = new MultipleDocumentListener() {
+    private final MultipleDocumentListener disableActionsNoSelection =
+            new MultipleDocumentListener() {
         @Override
         public void currentDocumentChanged(SingleDocumentModel previousModel,
                                            SingleDocumentModel currentModel) {
