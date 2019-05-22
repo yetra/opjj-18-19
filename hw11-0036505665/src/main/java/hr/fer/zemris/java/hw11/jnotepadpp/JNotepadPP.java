@@ -18,6 +18,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.Collator;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -480,7 +481,10 @@ public class JNotepadPP extends JFrame {
     private final Action ascendingSort = new LocalizableAction("ascending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            changeSelectedLines(String::compareTo);
+            Collator collator = Collator.getInstance(new Locale(
+                    flp.getCurrentLanguage()
+            ));
+            sortSelectedLines(collator);
         }
     };
 
@@ -490,7 +494,10 @@ public class JNotepadPP extends JFrame {
     private final Action descendingSort = new LocalizableAction("descending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            changeSelectedLines(Comparator.reverseOrder());
+            Collator collator = Collator.getInstance(new Locale(
+                    flp.getCurrentLanguage()
+            ));
+            sortSelectedLines(collator.reversed());
         }
     };
 
@@ -763,7 +770,7 @@ public class JNotepadPP extends JFrame {
      *
      * @param comparator the comparator used for sorting
      */
-    private void changeSelectedLines(Comparator<? super String> comparator) {
+    private void sortSelectedLines(Comparator<? super String> comparator) {
         JTextComponent component = mdm.getCurrentDocument().getTextComponent();
         Document doc = component.getDocument();
 
