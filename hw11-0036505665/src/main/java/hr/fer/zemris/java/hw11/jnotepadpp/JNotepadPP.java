@@ -8,6 +8,8 @@ import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -85,48 +87,9 @@ public class JNotepadPP extends JFrame {
         cp.add(createToolBar(), BorderLayout.PAGE_START);
         cp.add(createStatusBar(), BorderLayout.PAGE_END);
 
-        // check modified files on exit
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                exitNotepad();
-            }
-        });
-
-        // update window title on tab change
-        mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
-
-            @Override
-            public void currentDocumentChanged(SingleDocumentModel previousModel,
-                                               SingleDocumentModel currentModel) {
-                String title = "JNotepad++";
-
-                if (currentModel != null) {
-                    Path currentDocumentPath = currentModel.getFilePath();
-                    title = (currentDocumentPath == null ?
-                            "(unnamed)" : currentDocumentPath.toString() + "")
-                            + " - " + title;
-                }
-
-                setTitle(title);
-            }
-
-            @Override
-            public void documentAdded(SingleDocumentModel model) {}
-
-            @Override
-            public void documentRemoved(SingleDocumentModel model) {}
-        });
-
-        // disable Save/Save As/Close document actions when no tab present
-        mdm.addChangeListener(e -> {
-            boolean hasTabs = mdm.getNumberOfDocuments() != 0;
-
-            saveDocument.setEnabled(hasTabs);
-            saveAsDocument.setEnabled(hasTabs);
-            closeDocument.setEnabled(hasTabs);
-            showStatistics.setEnabled(hasTabs);
-        });
+        this.addWindowListener(checkModifiedOnExit);
+        mdm.addMultipleDocumentListener(updateTitle);
+        mdm.addChangeListener(disableActionsNoTab);
     }
 
     /**
@@ -286,12 +249,11 @@ public class JNotepadPP extends JFrame {
         caretInfoLabel.setBorder(cellBorder);
         sb.add(caretInfoLabel);
 
-        // update length & caret info labels on tab switch
-        mdm.addMultipleDocumentListener(new MultipleDocumentListener() {
+        // update length & caret info labels on current document change
+        MultipleDocumentListener updateStatusbar = new MultipleDocumentListener() {
             @Override
             public void currentDocumentChanged(SingleDocumentModel previousModel,
                                                SingleDocumentModel currentModel) {
-                // TODO remove listener ?
                 showTextContentInfo(lengthLabel, caretInfoLabel);
             }
 
@@ -300,7 +262,8 @@ public class JNotepadPP extends JFrame {
 
             @Override
             public void documentRemoved(SingleDocumentModel model) {}
-        });
+        };
+        mdm.addMultipleDocumentListener(updateStatusbar);
 
         JLabel clockLabel = new JLabel("");
         clockLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -844,6 +807,64 @@ public class JNotepadPP extends JFrame {
             doc.insertString(start, String.join("", lines), null);
         } catch (BadLocationException ignorable) {}
     }
+
+    /*
+     * ---------------------------------------------------------------------------
+     * ---------------------------- Helper listeners -----------------------------
+     * ---------------------------------------------------------------------------
+     */
+
+    /**
+     * Updates the window title on current document change.
+     */
+    private final MultipleDocumentListener updateTitle = new MultipleDocumentListener() {
+
+        @Override
+        public void currentDocumentChanged(SingleDocumentModel previousModel,
+                SingleDocumentModel currentModel) {
+            String title = "JNotepad++";
+
+            if (currentModel != null) {
+                Path currentDocumentPath = currentModel.getFilePath();
+                title = (currentDocumentPath == null ?
+                        "(unnamed)" : currentDocumentPath.toString() + "")
+                        + " - " + title;
+            }
+
+            setTitle(title);
+        }
+
+        @Override
+        public void documentAdded(SingleDocumentModel model) {}
+
+        @Override
+        public void documentRemoved(SingleDocumentModel model) {}
+    };
+
+    /**
+     * Disables appropriate actions when no tab is present.
+     */
+    private final ChangeListener disableActionsNoTab = new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            boolean hasTabs = mdm.getNumberOfDocuments() != 0;
+
+            saveDocument.setEnabled(hasTabs);
+            saveAsDocument.setEnabled(hasTabs);
+            closeDocument.setEnabled(hasTabs);
+            showStatistics.setEnabled(hasTabs);
+        }
+    };
+
+    /**
+     * Checks if modified files wish to be saved on exit.
+     */
+    private final WindowAdapter checkModifiedOnExit = new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            exitNotepad();
+        }
+    };
 
     /*
      * ---------------------------------------------------------------------------
