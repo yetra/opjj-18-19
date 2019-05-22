@@ -673,6 +673,12 @@ public class JNotepadPP extends JFrame {
      *                       selection length)
      */
     private void showTextContentInfo(JLabel lengthLabel, JLabel caretInfoLabel) {
+        if (mdm.getNumberOfDocuments() == 0) {
+            lengthLabel.setText(": 0");
+            caretInfoLabel.setText("Ln : 0  Col : 0  Sel : 0");
+            return;
+        }
+        
         JTextComponent component = mdm.getCurrentDocument().getTextComponent();
         Document doc = component.getDocument();
         Element root = doc.getDefaultRootElement();
