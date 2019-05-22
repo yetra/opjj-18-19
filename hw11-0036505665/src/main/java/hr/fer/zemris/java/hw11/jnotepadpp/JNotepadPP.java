@@ -61,7 +61,7 @@ public class JNotepadPP extends JFrame {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("JNotepad++");
         setLocation(10, 10);
-        setSize(500, 500);
+        setSize(800, 500);
 
         initGUI();
     }
@@ -144,17 +144,14 @@ public class JNotepadPP extends JFrame {
         pasteAction.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
         pasteAction.putValue(Action.SHORT_DESCRIPTION, "Pastes text from the clipboard");
 
-        switchToCroatian.putValue(Action.NAME, "hr");
         switchToCroatian.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt H"));
         switchToCroatian.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_H);
         switchToCroatian.putValue(Action.SHORT_DESCRIPTION, "Hrvatski");
 
-        switchToEnglish.putValue(Action.NAME, "en");
         switchToEnglish.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt E"));
         switchToEnglish.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_E);
         switchToEnglish.putValue(Action.SHORT_DESCRIPTION, "English");
 
-        switchToGerman.putValue(Action.NAME, "de");
         switchToGerman.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control alt D"));
         switchToGerman.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
         switchToGerman.putValue(Action.SHORT_DESCRIPTION, "Deutsch");
@@ -217,12 +214,12 @@ public class JNotepadPP extends JFrame {
 
         JMenu tools = new LJMenu("tools", flp);
         mb.add(tools);
-        JMenu changeCase = new JMenu(changeCaseSubmenu);
+        JMenu changeCase = new LJMenu("changecase", flp);
         tools.add(changeCase);
         changeCase.add(new JMenuItem(toUpperCase));
         changeCase.add(new JMenuItem(toLowerCase));
         changeCase.add(new JMenuItem(invertCase));
-        JMenu sort = new JMenu(sortSubmenu);
+        JMenu sort = new LJMenu("sort", flp);
         tools.add(sort);
         sort.add(new JMenuItem(ascendingSort));
         sort.add(new JMenuItem(descendingSort));
@@ -315,22 +312,6 @@ public class JNotepadPP extends JFrame {
      * --------------------------------- Actions ---------------------------------
      * ---------------------------------------------------------------------------
      */
-
-    /**
-     * Expands the change case {@link JMenu}.
-     */
-    private final Action changeCaseSubmenu = new LocalizableAction("changecase", flp) {
-        @Override
-        public void actionPerformed(ActionEvent e) {}
-    };
-
-    /**
-     * Expands the sort {@link JMenu}.
-     */
-    private final Action sortSubmenu = new LocalizableAction("sort", flp) {
-        @Override
-        public void actionPerformed(ActionEvent e) {}
-    };
 
     /**
      * Creates a new blank document.
@@ -436,7 +417,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Switches the language to English.
      */
-    private final Action switchToEnglish = new AbstractAction() {
+    private final Action switchToEnglish = new LocalizableAction("en", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("en");
@@ -446,7 +427,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Switches the language to Croatian.
      */
-    private final Action switchToCroatian = new AbstractAction() {
+    private final Action switchToCroatian = new LocalizableAction("hr", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("hr");
@@ -456,7 +437,7 @@ public class JNotepadPP extends JFrame {
     /**
      * Switches the language to German.
      */
-    private final Action switchToGerman = new AbstractAction() {
+    private final Action switchToGerman = new LocalizableAction("de", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("de");
