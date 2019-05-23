@@ -799,7 +799,8 @@ public class JNotepadPP extends JFrame {
 
             start = root.getElement(startLine).getStartOffset();
             end = root.getElement(endLine).getEndOffset();
-            doc.remove(start, end - start);
+            doc.remove(start, (end == doc.getEndPosition().getOffset()) ?
+                    end - start - 1 : end - start);
             doc.insertString(start, String.join("", lines), null);
         } catch (BadLocationException ignorable) {}
     }
