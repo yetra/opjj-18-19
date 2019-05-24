@@ -175,9 +175,7 @@ public class SmartScriptEngine {
                             name = stack.pop().toString();
                             value = stack.pop();
 
-                            requestContext.setPersistentParameter(
-                                    name, value.getValue().toString()
-                            );
+                            requestContext.setPersistentParameter(name, value.toString());
                             break;
 
                         case "pparamDel":
@@ -200,9 +198,7 @@ public class SmartScriptEngine {
                             name = stack.pop().toString();
                             value = stack.pop();
 
-                            requestContext.setTemporaryParameter(
-                                    name, (String) value.getValue()
-                            );
+                            requestContext.setTemporaryParameter(name, value.toString());
                             break;
 
                         case "tparamDel":
@@ -218,7 +214,7 @@ public class SmartScriptEngine {
 
             new ArrayList<>(stack).forEach(e -> {
                 try {
-                    requestContext.write(String.valueOf(e.toString()));
+                    requestContext.write(e.toString());
                 } catch (IOException exc) {
                     System.out.println(exc.getMessage());
                 }
