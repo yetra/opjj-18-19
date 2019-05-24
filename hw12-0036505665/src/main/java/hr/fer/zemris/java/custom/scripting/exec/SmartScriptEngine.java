@@ -115,8 +115,9 @@ public class SmartScriptEngine {
                     switch (function) {
                         case "sin":
                             ValueWrapper value = stack.pop();
+                            double doubleValue = ValueWrapper.toDouble(value.getValue());
                             ValueWrapper sinValue = new ValueWrapper(
-                                    Math.sin(ValueWrapper.toDouble(value.getValue()))
+                                    Math.sin(Math.toRadians(doubleValue))
                             );
 
                             stack.push(sinValue);
