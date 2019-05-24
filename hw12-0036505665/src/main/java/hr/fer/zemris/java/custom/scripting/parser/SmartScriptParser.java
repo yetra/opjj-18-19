@@ -1,13 +1,10 @@
 package hr.fer.zemris.java.custom.scripting.parser;
 
-import hr.fer.zemris.java.custom.collections.ArrayIndexedCollection;
-import hr.fer.zemris.java.custom.collections.ObjectStack;
 import hr.fer.zemris.java.custom.scripting.elems.*;
 import hr.fer.zemris.java.custom.scripting.lexer.*;
 import hr.fer.zemris.java.custom.scripting.nodes.*;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class models a document parser. The document is parsed into different
@@ -36,9 +33,9 @@ public class SmartScriptParser {
     private DocumentNode documentNode;
 
     /**
-     * The stack which contains all the nodes that were parsed from a given text.
+     * A stack that contains all the nodes that were parsed from a given text.
      */
-    private ObjectStack stack;
+    private Stack<Node> stack;
 
     /**
      * The number of currently open non-empty tags that were parsed from the document.
@@ -51,14 +48,12 @@ public class SmartScriptParser {
      * @param documentBody the text to parse
      */
     public SmartScriptParser(String documentBody) {
-        Objects.requireNonNull(documentBody);
-
-        this.lexer = new SmartScriptLexer(documentBody);
+        this.lexer = new SmartScriptLexer(Objects.requireNonNull(documentBody));
         this.openNonEmptyTags = 0;
 
-        this.stack = new ObjectStack();
+        this.stack = new Stack<>();
         this.documentNode = new DocumentNode();
-        this.stack.push((Node) documentNode);
+        this.stack.push(documentNode);
 
         try {
             parseDocument();
@@ -93,7 +88,7 @@ public class SmartScriptParser {
                 switch (token.getType()) {
                     case STRING:
                         String text = (String) token.getValue();
-                        Node parent = (Node) stack.peek();
+                        Node parent = stack.peek();
                         parent.addChildNode(new TextNode(text));
                         break;
 
@@ -168,7 +163,7 @@ public class SmartScriptParser {
     private void parseForTag() {
         openNonEmptyTags++;
 
-        ArrayIndexedCollection children = new ArrayIndexedCollection();
+        List<Element> children = new ArrayList<>();
         SmartScriptToken token = lexer.nextToken();
 
         while (token.getType() != SmartScriptTokenType.TAG_END) {
@@ -195,12 +190,12 @@ public class SmartScriptParser {
 
         ForLoopNode forLoopNode = new ForLoopNode(
                 (ElementVariable) children.get(0),
-                (Element) children.get(1),
-                (Element) children.get(2),
-                children.size() == 4 ? (Element) children.get(3) : null
+                children.get(1),
+                children.get(2),
+                children.size() == 4 ? children.get(3) : null
         );
 
-        Node parent = (Node) stack.peek();
+        Node parent = stack.peek();
         parent.addChildNode(forLoopNode);
         stack.push(forLoopNode);
     }
@@ -211,7 +206,7 @@ public class SmartScriptParser {
      * @throws SmartScriptParserException if the echo tag is invalid
      */
     private void parseEchoTag() {
-        ArrayIndexedCollection children = new ArrayIndexedCollection();
+        List<Element> children = new ArrayList<>();
         SmartScriptToken token = lexer.nextToken();
 
         while (token.getType() != SmartScriptTokenType.TAG_END) {
@@ -223,7 +218,7 @@ public class SmartScriptParser {
                 children.size(), Element[].class);
 
         EchoNode echoNode = new EchoNode(childrenArray);
-        Node parent = (Node) stack.peek();
+        Node parent = stack.peek();
         parent.addChildNode(echoNode);
     }
 
