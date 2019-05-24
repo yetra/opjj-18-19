@@ -93,6 +93,11 @@ public class ForLoopNode extends Node {
     }
 
     @Override
+    public void accept(INodeVisitor visitor) {
+        visitor.visitForLoopNode(this);
+    }
+
+    @Override
     public String toString() {
         return "{$ FOR " + variable.toString() + " "
                 + startExpression.toString() + " "

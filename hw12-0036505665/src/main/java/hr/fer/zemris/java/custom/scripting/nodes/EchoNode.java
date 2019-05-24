@@ -39,6 +39,11 @@ public class EchoNode extends Node {
     }
 
     @Override
+    public void accept(INodeVisitor visitor) {
+        visitor.visitEchoNode(this);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("{$= ");
 

@@ -10,7 +10,7 @@ import java.util.Objects;
  * @author Bruna Dujmović
  *
  */
-public class Node {
+public abstract class Node {
 
     /**
      * A collection of all child nodes of the current node.
@@ -49,6 +49,13 @@ public class Node {
     public Node getChild(int index) {
         return nodes.get(index);
     }
+
+    /**
+     * Applies the operation specified in the given visitor to this node.
+     *
+     * @param visitor the visitor that specifies the operation to apply
+     */
+    public abstract void accept(INodeVisitor visitor);
 
     @Override
     public String toString() {
