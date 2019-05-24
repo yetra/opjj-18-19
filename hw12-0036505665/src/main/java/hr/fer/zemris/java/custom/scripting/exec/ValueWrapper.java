@@ -192,4 +192,17 @@ public class ValueWrapper {
             return INVALID;
         }
     }
+
+    @Override
+    public String toString() {
+        if (value == null) {
+            return "";
+        } else if (value instanceof Integer) {
+            return ((Integer) value).toString();
+        } else if (value instanceof Double) {
+            return ((Double) value).toString();
+        } else {
+            return value.toString();
+        }
+    }
 }
