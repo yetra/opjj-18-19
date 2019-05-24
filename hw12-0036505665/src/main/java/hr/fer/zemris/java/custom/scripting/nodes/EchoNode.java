@@ -6,7 +6,6 @@ import java.util.Objects;
 
 /**
  * A node that represents a command which generates some textual output dynamically.
- * It inherits from the {@link Node} class.
  *
  * @author Bruna Dujmović
  *
@@ -24,9 +23,7 @@ public class EchoNode extends Node {
      * @param elements the elements of the echo node
      */
     public EchoNode(Element[] elements) {
-        Objects.requireNonNull(elements);
-
-        this.elements = elements;
+        this.elements = Objects.requireNonNull(elements);
     }
 
     /**

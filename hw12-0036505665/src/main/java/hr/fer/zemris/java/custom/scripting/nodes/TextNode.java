@@ -4,7 +4,6 @@ import java.util.Objects;
 
 /**
  * A node that represents a piece of textual data.
- * It inherits from the {@link Node} class.
  *
  * @author Bruna Dujmović
  *

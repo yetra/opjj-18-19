@@ -1,8 +1,6 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * The base class for all graph nodes.
@@ -13,7 +11,7 @@ import java.util.Objects;
 public abstract class Node {
 
     /**
-     * A collection of all child nodes of the current node.
+     * A collection of child nodes of the current node.
      */
     private List<Node> nodes;
 
@@ -32,9 +30,9 @@ public abstract class Node {
     }
 
     /**
-     * Returns the number of (direct) children on this node.
+     * Returns the number of (direct) children of this node.
      *
-     * @return the number of (direct) children on this node
+     * @return the number of (direct) children of this node
      */
     public int numberOfChildren() {
         return nodes.size();

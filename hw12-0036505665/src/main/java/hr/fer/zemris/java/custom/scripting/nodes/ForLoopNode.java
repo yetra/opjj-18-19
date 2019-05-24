@@ -7,7 +7,6 @@ import java.util.Objects;
 
 /**
  * A node that represents a single for-loop construct.
- * It inherits from the {@link Node} class.
  *
  * @author Bruna Dujmović
  *
