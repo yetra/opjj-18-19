@@ -153,7 +153,7 @@ public class ValueWrapper {
      * @throws NumberFormatException if the given object is a string and it cannot be
      *         parsed to a {@link Double}
      */
-    private Double toDouble(Object value) {
+    static Double toDouble(Object value) {
         if (value == null) {
             return 0.0;
         } else if (value instanceof Double) {
