@@ -38,7 +38,10 @@ public class ElementString extends Element {
 
     @Override
     public String toString() {
-        String escapedBackslash = value.replace("\\", "\\\\");
+        String escapedWhitespaces = value.replace("\\n", "\n")
+                .replace("\\t", "\t")
+                .replace("\\r", "\r");
+        String escapedBackslash = escapedWhitespaces.replace("\\", "\\\\");
         String escapedQuotes = escapedBackslash.replace("\"", "\\\"");
         return  "\"" + escapedQuotes + "\"";
     }

@@ -202,7 +202,7 @@ public class ValueWrapper {
         } else if (value instanceof Double) {
             return ((Double) value).toString();
         } else {
-            return value.toString();
+            return value.toString().replace("\"", "");
         }
     }
 }

@@ -78,7 +78,7 @@ public class SmartScriptEngine {
                 if (element instanceof ElementConstantDouble
                         || element instanceof ElementConstantInteger
                         || element instanceof ElementString) {
-                    stack.push(new ValueWrapper(element.asText()));
+                    stack.push(new ValueWrapper(element.toString()));
 
                 } else if (element instanceof ElementVariable) {
                     String variable = ((ElementVariable) element).getName();
@@ -92,16 +92,16 @@ public class SmartScriptEngine {
 
                     switch (operator) {
                         case "+":
-                            firstOperand.add(secondOperand.getValue());
+                            firstOperand.add(secondOperand.toString());
                             break;
                         case "-":
-                            firstOperand.subtract(secondOperand.getValue());
+                            firstOperand.subtract(secondOperand.toString());
                             break;
                         case "*":
-                            firstOperand.multiply(secondOperand.getValue());
+                            firstOperand.multiply(secondOperand.toString());
                             break;
                         case "/":
-                            firstOperand.divide(secondOperand.getValue());
+                            firstOperand.divide(secondOperand.toString());
                             break;
                         default:
                             throw new IllegalArgumentException();
