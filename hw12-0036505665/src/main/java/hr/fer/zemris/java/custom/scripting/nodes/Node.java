@@ -1,7 +1,7 @@
 package hr.fer.zemris.java.custom.scripting.nodes;
 
-import hr.fer.zemris.java.custom.collections.ArrayIndexedCollection;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,7 +15,7 @@ public class Node {
     /**
      * A collection of all child nodes of the current node.
      */
-    private ArrayIndexedCollection nodes;
+    private List<Node> nodes;
 
     /**
      * Adds a given child node to an internally managed collection of children.
@@ -25,10 +25,10 @@ public class Node {
      */
     public void addChildNode(Node child) {
         if (nodes == null) {
-            nodes = new ArrayIndexedCollection();
+            nodes = new ArrayList<>();
         }
 
-        nodes.add(child);
+        nodes.add(Objects.requireNonNull(child));
     }
 
     /**
@@ -47,7 +47,7 @@ public class Node {
      * @throws IndexOutOfBoundsException if the index is not in the correct range
      */
     public Node getChild(int index) {
-        return (Node) nodes.get(index);
+        return nodes.get(index);
     }
 
     @Override

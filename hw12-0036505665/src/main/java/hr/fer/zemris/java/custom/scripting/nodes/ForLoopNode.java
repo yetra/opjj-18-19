@@ -49,14 +49,11 @@ public class ForLoopNode extends Node {
      */
     public ForLoopNode(ElementVariable variable, Element startExpression,
                        Element endExpression, Element stepExpression) {
-        Objects.requireNonNull(variable);
-        Objects.requireNonNull(startExpression);
-        Objects.requireNonNull(endExpression);
 
-        this.variable = variable;
-        this.startExpression = startExpression;
-        this.endExpression = endExpression;
-        this.stepExpression = stepExpression;
+        this.variable = Objects.requireNonNull(variable);
+        this.startExpression = Objects.requireNonNull(startExpression);
+        this.endExpression = Objects.requireNonNull(endExpression);
+        this.stepExpression = Objects.requireNonNull(stepExpression);
     }
 
     /**

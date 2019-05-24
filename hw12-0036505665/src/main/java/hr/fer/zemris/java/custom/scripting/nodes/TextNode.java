@@ -23,9 +23,7 @@ public class TextNode extends Node {
      * @throws NullPointerException if the given text is {@code null}
      */
     public TextNode(String text) {
-        Objects.requireNonNull(text);
-
-        this.text = text;
+        this.text = Objects.requireNonNull(text);
     }
 
     /**
