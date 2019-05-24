@@ -229,6 +229,9 @@ public class SmartScriptLexer {
         while (endIndex < data.length && tester.test(endIndex)) {
 
             if (canEscape && escapingIsOn(endIndex)) {
+                if (data[endIndex+1] == 'r' || data[endIndex+1] == 't' || data[endIndex+1] == 'n') {
+                    tokenValue.append("\\");
+                }
                 tokenValue.append(data[endIndex+1]);
                 endIndex += 2;
 
@@ -345,7 +348,9 @@ public class SmartScriptLexer {
             }
 
             boolean invalidTagStateEscaping = state == SmartScriptLexerState.TAG
-                    && data[index+1] != '\\' && data[index+1] != '\"';
+                    && data[index+1] != '\\' && data[index+1] != '\"'
+                    && data[index+1] != 'r' && data[index+1] != 'n'
+                    && data[index+1] != 't';
             boolean invalidTextStateEscaping = state == SmartScriptLexerState.TEXT
                     && data[index+1] != '\\' && data[index+1] != '{';
 
