@@ -66,9 +66,9 @@ public class SmartScriptEngineDemo {
      */
     private static void osnovniDemo() {
         String documentBody = readFromDisk("osnovni.smscr");
-        Map<String,String> parameters = new HashMap<String, String>();
-        Map<String,String> persistentParameters = new HashMap<String, String>();
-        List<RequestContext.RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
+        Map<String,String> parameters = new HashMap<>();
+        Map<String,String> persistentParameters = new HashMap<>();
+        List<RequestContext.RCCookie> cookies = new ArrayList<>();
 
         // create engine and execute it
         new SmartScriptEngine(
@@ -88,9 +88,9 @@ public class SmartScriptEngineDemo {
      */
     private static void zbrajanjeDemo() {
         String documentBody = readFromDisk("zbrajanje.smscr");
-        Map<String,String> parameters = new HashMap<String, String>();
-        Map<String,String> persistentParameters = new HashMap<String, String>();
-        List<RequestContext.RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
+        Map<String,String> parameters = new HashMap<>();
+        Map<String,String> persistentParameters = new HashMap<>();
+        List<RequestContext.RCCookie> cookies = new ArrayList<>();
         parameters.put("a", "4");
         parameters.put("b", "2");
 
@@ -114,9 +114,9 @@ public class SmartScriptEngineDemo {
      */
     private static void brojPozivaDemo() {
         String documentBody = readFromDisk("brojPoziva.smscr");
-        Map<String,String> parameters = new HashMap<String, String>();
-        Map<String,String> persistentParameters = new HashMap<String, String>();
-        List<RequestContext.RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
+        Map<String,String> parameters = new HashMap<>();
+        Map<String,String> persistentParameters = new HashMap<>();
+        List<RequestContext.RCCookie> cookies = new ArrayList<>();
         persistentParameters.put("brojPoziva", "3");
         RequestContext rc = new RequestContext(System.out, parameters, persistentParameters, cookies);
 
@@ -124,7 +124,7 @@ public class SmartScriptEngineDemo {
         new SmartScriptEngine(
                 new SmartScriptParser(documentBody).getDocumentNode(), rc
         ).execute();
-        System.out.println("Vrijednost u mapi: "+rc.getPersistentParameter("brojPoziva"));
+        System.out.println("\nVrijednost u mapi: "+rc.getPersistentParameter("brojPoziva"));
     }
 
     /*
@@ -147,9 +147,9 @@ public class SmartScriptEngineDemo {
      */
     private static void fibonacciDemo() {
         String documentBody = readFromDisk("fibonacci.smscr");
-        Map<String,String> parameters = new HashMap<String, String>();
-        Map<String,String> persistentParameters = new HashMap<String, String>();
-        List<RequestContext.RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
+        Map<String,String> parameters = new HashMap<>();
+        Map<String,String> persistentParameters = new HashMap<>();
+        List<RequestContext.RCCookie> cookies = new ArrayList<>();
 
         // create engine and execute it
         new SmartScriptEngine(
@@ -163,9 +163,9 @@ public class SmartScriptEngineDemo {
      */
     private static void fibonaccihDemo() {
         String documentBody = readFromDisk("fibonaccih.smscr");
-        Map<String,String> parameters = new HashMap<String, String>();
-        Map<String,String> persistentParameters = new HashMap<String, String>();
-        List<RequestContext.RCCookie> cookies = new ArrayList<RequestContext.RCCookie>();
+        Map<String,String> parameters = new HashMap<>();
+        Map<String,String> persistentParameters = new HashMap<>();
+        List<RequestContext.RCCookie> cookies = new ArrayList<>();
 
         // create engine and execute it
         new SmartScriptEngine(
