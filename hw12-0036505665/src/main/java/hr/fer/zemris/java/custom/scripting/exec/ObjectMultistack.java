@@ -9,7 +9,7 @@ import java.util.Objects;
  * values for the same key in stacks.
  *
  * The keys are instances of the class {@link String}, and the values associated
- * with those keys are instances of class {@link ValueWrapper}.
+ * with those keys are stored in stacks as instances of {@link ValueWrapper}.
  *
  * @author Bruna Dujmović
  */
