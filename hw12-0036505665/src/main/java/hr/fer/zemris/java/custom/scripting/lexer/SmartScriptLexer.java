@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.custom.scripting.lexer;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * This class models a lexer that tokenizes a given text.
@@ -137,24 +138,13 @@ public class SmartScriptLexer {
             return new SmartScriptToken(SmartScriptTokenType.TAG_END, null);
 
         } else if (nameIsOn(currentIndex)) {
-            String tokenValue;
-            if (data[currentIndex] == '=') {
-                tokenValue = Character.toString(data[currentIndex++]);
-            } else {
-                tokenValue = readTokenValueWhile(this::nameIsOn, false);
-            }
-
+            String tokenValue = (data[currentIndex] == '=') ?
+                    Character.toString(data[currentIndex++]) :
+                    readTokenValueWhile(this::nameIsOn, false);
             return new SmartScriptToken(SmartScriptTokenType.NAME, tokenValue);
 
         } else if (quoteIsOn(currentIndex)) {
-            currentIndex++;
-            String tokenValue = readTokenValueWhile(index -> !quoteIsOn(index), true);
-
-            if (currentIndex >= data.length) {
-                throw new SmartScriptLexerException("Quotation was never closed.");
-            }
-            currentIndex++;
-
+            String tokenValue = getQuotedString();
             return new SmartScriptToken(SmartScriptTokenType.STRING, tokenValue);
 
         } else if (numberStartsOn(currentIndex)) {
@@ -169,8 +159,8 @@ public class SmartScriptLexer {
             return new SmartScriptToken(SmartScriptTokenType.OPERATOR, tokenValue);
 
         } else {
-            throw new SmartScriptLexerException("Invalid character: \""
-                    + data[currentIndex] + "\".");
+            throw new SmartScriptLexerException(
+                    "Invalid character: \"" + data[currentIndex] + "\".");
         }
     }
 
@@ -205,6 +195,24 @@ public class SmartScriptLexer {
     }
 
     /**
+     * Returns the string surrounded by quotes (without including them) that starts on
+     * the current index.
+     *
+     * @return the string surrounded by quotes that starts on the current index
+     */
+    private String getQuotedString() {
+        currentIndex++;
+        String tokenValue = readTokenValueWhile(index -> !quoteIsOn(index), true);
+
+        if (currentIndex >= data.length) {
+            throw new SmartScriptLexerException("Quotation was never closed.");
+        }
+        currentIndex++;
+
+        return tokenValue;
+    }
+
+    /**
      * Constructs a string of {@link #data} characters that satisfy a given tester.
      *
      * @param tester the tester that checks if a given character satisfies its
@@ -214,11 +222,11 @@ public class SmartScriptLexer {
      * @return the constructed string
      * @throws SmartScriptLexerException if escaping is not valid
      */
-    private String readTokenValueWhile(CharacterTester tester, boolean canEscape) {
+    private String readTokenValueWhile(Predicate<Integer> tester, boolean canEscape) {
         StringBuilder tokenValue = new StringBuilder();
         int endIndex = currentIndex;
 
-        while (endIndex < data.length && tester.testCharOn(endIndex)) {
+        while (endIndex < data.length && tester.test(endIndex)) {
 
             if (canEscape && escapingIsOn(endIndex)) {
                 tokenValue.append(data[endIndex+1]);
@@ -361,22 +369,5 @@ public class SmartScriptLexer {
      */
     private boolean numberStartsOn(int index) {
         return digitIsOn(index) || (data[index] == '-' && digitIsOn(index+1));
-    }
-
-    /**
-     * A functional interface that models a tester of character types.
-     */
-    @FunctionalInterface
-    private static interface CharacterTester {
-
-        /**
-         * Returns {@code true} if the character on the given index satisfies this
-         * tester's condition.
-         *
-         * @param index the index of the character to test
-         * @return {@code true} if the given character satisfies this tester's
-         *         condition
-         */
-        boolean testCharOn(int index);
     }
 }
