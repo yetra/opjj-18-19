@@ -29,9 +29,10 @@ public class RequestContext {
                           List<RCCookie> outputCookies) {
 
         this.outputStream = Objects.requireNonNull(outputStream);
-        this.parameters = parameters;
-        this.persistentParameters = persistentParameters;
-        this.outputCookies = outputCookies;
+        this.parameters = Objects.requireNonNullElse(parameters, new HashMap<>());
+        this.temporaryParameters = new HashMap<>();
+        this.persistentParameters = Objects.requireNonNullElse(persistentParameters, new HashMap<>());
+        this.outputCookies = Objects.requireNonNullElse(outputCookies, new ArrayList<>());
     }
 
     public void setEncoding(String encoding) {
