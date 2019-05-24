@@ -82,7 +82,7 @@ public class SmartScriptEngine {
 
                 } else if (element instanceof ElementVariable) {
                     String variable = ((ElementVariable) element).getName();
-                    stack.push(multistack.peek(variable));
+                    stack.push(new ValueWrapper(multistack.peek(variable).getValue()));
 
                 } else if (element instanceof ElementOperator) {
                     String operator = ((ElementOperator) element).getSymbol();
