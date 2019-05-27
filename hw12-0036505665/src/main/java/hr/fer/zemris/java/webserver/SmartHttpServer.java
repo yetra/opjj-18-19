@@ -172,7 +172,7 @@ public class SmartHttpServer {
     /**
      * This class models a worker in this server's thread pool.
      */
-    private class ClientWorker implements Runnable {
+    private class ClientWorker implements Runnable, IDispatcher {
         /**
          * The socket of the client's request.
          */
@@ -231,6 +231,16 @@ public class SmartHttpServer {
         public ClientWorker(Socket csocket) {
             super();
             this.csocket = csocket;
+        }
+
+
+        public void internalDispatchRequest(String urlPath, boolean directCall)
+                throws Exception {
+        }
+
+        @Override
+        public void dispatchRequest(String urlPath) throws Exception {
+            internalDispatchRequest(urlPath, false);
         }
 
         @Override
@@ -294,6 +304,8 @@ public class SmartHttpServer {
                     parseParameters(paramString);
                 }
 
+                internalDispatchRequest(path, true);
+
                 // requestedPath = resolve path with respect to documentRoot
                 Path requestedFile = documentRoot.resolve(
                         Paths.get(path.startsWith("/") ? path.substring(1) : path)
@@ -336,6 +348,8 @@ public class SmartHttpServer {
 
             } catch (IOException e) {
                 System.out.println("IOException in ClientWorker!");
+            } catch (Exception e) {
+                System.out.println("Exception in ClientWorker!");
             }
         }
 
