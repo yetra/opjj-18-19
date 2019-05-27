@@ -1,5 +1,8 @@
 package hr.fer.zemris.java.webserver;
 
+import hr.fer.zemris.java.custom.scripting.exec.SmartScriptEngine;
+import hr.fer.zemris.java.custom.scripting.parser.SmartScriptParser;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -253,6 +256,7 @@ public class SmartHttpServer {
                 String[] extracted = firstLine.split(" ");
                 if (extracted.length != 3) {
                     sendError(400, "Bad request");
+                    csocket.close();
                     return;
                 }
 
@@ -260,11 +264,13 @@ public class SmartHttpServer {
                 method = extracted[0].toUpperCase();
                 if(!method.equals("GET")) {
                     sendError(405, "Method Not Allowed");
+                    csocket.close();
                     return;
                 }
                 version = extracted[2].toUpperCase();
                 if(!version.equals("HTTP/1.1")) {
                     sendError(505, "HTTP Version Not Supported");
+                    csocket.close();
                     return;
                 }
 
@@ -295,12 +301,14 @@ public class SmartHttpServer {
                 // if requestedPath is not below documentRoot, return response status 403 forbidden
                 if (!requestedFile.toAbsolutePath().startsWith(documentRoot.toAbsolutePath())) {
                     sendError(403, "Forbidden");
+                    csocket.close();
                     return;
                 }
                 // check if requestedPath exists, is file and is readable; if not, return status 404
                 if (!Files.exists(requestedFile) || !Files.isRegularFile(requestedFile)
                         || !Files.isReadable(requestedFile)) {
                     sendError(404, "File Not Found");
+                    csocket.close();
                     return;
                 }
 
@@ -324,6 +332,7 @@ public class SmartHttpServer {
                 // open file, read its content and write it to rc (that will generate header and send
                 // file bytes to client)
                 sendFileToClient(requestedFile, mimeType);
+                csocket.close();
 
             } catch (IOException e) {
                 System.out.println("IOException in ClientWorker!");
