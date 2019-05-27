@@ -24,6 +24,8 @@ public class RequestContext {
 
     private boolean headerGenerated = false;
 
+    private IDispatcher dispatcher;
+
     public RequestContext(OutputStream outputStream, Map<String, String> parameters,
                           Map<String, String> persistentParameters,
                           List<RCCookie> outputCookies) {
@@ -33,6 +35,16 @@ public class RequestContext {
         this.temporaryParameters = new HashMap<>();
         this.persistentParameters = Objects.requireNonNullElse(persistentParameters, new HashMap<>());
         this.outputCookies = Objects.requireNonNullElse(outputCookies, new ArrayList<>());
+    }
+
+    public RequestContext(OutputStream outputStream, Map<String, String> parameters,
+                          Map<String, String> persistentParameters,
+                          List<RCCookie> outputCookies, Map<String,String> temporaryParameters,
+                          IDispatcher dispatcher) {
+
+        this(outputStream, parameters, persistentParameters, outputCookies);
+        this.temporaryParameters = temporaryParameters;
+        this.dispatcher = dispatcher;
     }
 
     public void setEncoding(String encoding) {
@@ -211,6 +223,10 @@ public class RequestContext {
     // TODO ?
     public void addRCCookie(RCCookie cookie) {
         outputCookies.add(cookie);
+    }
+
+    public IDispatcher getDispatcher() {
+        return dispatcher;
     }
 
     public RequestContext write(byte[] data) throws IOException {
