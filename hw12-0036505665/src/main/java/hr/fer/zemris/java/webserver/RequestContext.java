@@ -10,11 +10,11 @@ public class RequestContext {
     private OutputStream outputStream;
     private Charset charset;
 
-    public String encoding = "UTF-8";
-    public int statusCode = 200;
-    public String statusText = "OK";
-    public String mimeType = "text/html";
-    public Long contentLength = null;
+    private String encoding = "UTF-8";
+    private int statusCode = 200;
+    private String statusText = "OK";
+    private String mimeType = "text/html";
+    private Long contentLength = null;
 
     private Map<String, String> parameters;
     private Map<String, String> temporaryParameters;
