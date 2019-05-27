@@ -232,8 +232,7 @@ public class SmartHttpServer {
             super();
             this.csocket = csocket;
         }
-
-
+        
         public void internalDispatchRequest(String urlPath, boolean directCall)
                 throws Exception {
         }
@@ -326,6 +325,23 @@ public class SmartHttpServer {
 
                 // else extract file extension
                 String extension = getExtension(requestedFile);
+
+                // if it's a smart script - parse it and create engine
+                if (extension.equalsIgnoreCase("smscr")) {
+                    String documentBody = Files.readString(requestedFile);
+
+                    RequestContext rc = new RequestContext(ostream, params,
+                            permPrams, outputCookies, tempParams, this);
+
+                    new SmartScriptEngine(
+                            new SmartScriptParser(documentBody).getDocumentNode(),
+                            rc
+                    ).execute();
+                    ostream.flush();
+                    csocket.close();
+                    return;
+                }
+
                 // find in mimeTypes map appropriate mimeType for current file extension
                 // (you filled that map during the construction of SmartHttpServer from mime.properties)
                 String mimeType = mimeTypes.get(extension);
