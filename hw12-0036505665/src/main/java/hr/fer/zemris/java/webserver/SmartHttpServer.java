@@ -232,9 +232,75 @@ public class SmartHttpServer {
             super();
             this.csocket = csocket;
         }
-        
+
+        /**
+         * Processes a given url path.
+         *
+         * @param urlPath the path to process
+         * @param directCall {@code true} if it's a direct call
+         * @throws Exception if the given url cannot be processed
+         */
         public void internalDispatchRequest(String urlPath, boolean directCall)
                 throws Exception {
+
+            // requestedPath = resolve path with respect to documentRoot
+            Path requestedFile = documentRoot.resolve(
+                    Paths.get(urlPath.startsWith("/") ? urlPath.substring(1) : urlPath)
+            );
+            // if requestedPath is not below documentRoot, return response status 403 forbidden
+            if (!requestedFile.toAbsolutePath().startsWith(documentRoot.toAbsolutePath())) {
+                sendError(403, "Forbidden");
+                csocket.close();
+                return;
+            }
+
+            // check if requestedPath exists, is file and is readable; if not, return status 404
+            if (!Files.exists(requestedFile) || !Files.isRegularFile(requestedFile)
+                    || !Files.isReadable(requestedFile)) {
+                sendError(404, "File Not Found");
+                csocket.close();
+                return;
+            }
+
+            // else extract file extension
+            String extension = getExtension(requestedFile);
+
+            // if it's a smart script - parse it and create engine
+            if (extension.equalsIgnoreCase("smscr")) {
+                String documentBody = Files.readString(requestedFile);
+
+                RequestContext rc = new RequestContext(ostream, params,
+                        permPrams, outputCookies, tempParams, this);
+
+                new SmartScriptEngine(
+                        new SmartScriptParser(documentBody).getDocumentNode(),
+                        rc
+                ).execute();
+                ostream.flush();
+                csocket.close();
+                return;
+            }
+
+            // find in mimeTypes map appropriate mimeType for current file extension
+            // (you filled that map during the construction of SmartHttpServer from mime.properties)
+            String mimeType = mimeTypes.get(extension);
+            // if no mime type found, assume application/octet-stream
+            if (mimeType == null) {
+                mimeType = "application/octet-stream";
+            }
+
+            // create a rc = new RequestContext(...); set mime-type; set status to 200
+            RequestContext rc = new RequestContext(ostream, params, permPrams, outputCookies);
+            rc.setMimeType(mimeType);
+            rc.setStatusCode(200);
+            // If you want, you can modify RequestContext to allow you to add additional headers
+            // so that you can add “Content-Length: 12345” if you know that file has 12345 bytes
+
+            // open file, read its content and write it to rc (that will generate header and send
+            // file bytes to client)
+            sendFileToClient(requestedFile, mimeType);
+
+            csocket.close();
         }
 
         @Override
@@ -304,63 +370,6 @@ public class SmartHttpServer {
                 }
 
                 internalDispatchRequest(path, true);
-
-                // requestedPath = resolve path with respect to documentRoot
-                Path requestedFile = documentRoot.resolve(
-                        Paths.get(path.startsWith("/") ? path.substring(1) : path)
-                );
-                // if requestedPath is not below documentRoot, return response status 403 forbidden
-                if (!requestedFile.toAbsolutePath().startsWith(documentRoot.toAbsolutePath())) {
-                    sendError(403, "Forbidden");
-                    csocket.close();
-                    return;
-                }
-                // check if requestedPath exists, is file and is readable; if not, return status 404
-                if (!Files.exists(requestedFile) || !Files.isRegularFile(requestedFile)
-                        || !Files.isReadable(requestedFile)) {
-                    sendError(404, "File Not Found");
-                    csocket.close();
-                    return;
-                }
-
-                // else extract file extension
-                String extension = getExtension(requestedFile);
-
-                // if it's a smart script - parse it and create engine
-                if (extension.equalsIgnoreCase("smscr")) {
-                    String documentBody = Files.readString(requestedFile);
-
-                    RequestContext rc = new RequestContext(ostream, params,
-                            permPrams, outputCookies, tempParams, this);
-
-                    new SmartScriptEngine(
-                            new SmartScriptParser(documentBody).getDocumentNode(),
-                            rc
-                    ).execute();
-                    ostream.flush();
-                    csocket.close();
-                    return;
-                }
-
-                // find in mimeTypes map appropriate mimeType for current file extension
-                // (you filled that map during the construction of SmartHttpServer from mime.properties)
-                String mimeType = mimeTypes.get(extension);
-                // if no mime type found, assume application/octet-stream
-                if (mimeType == null) {
-                    mimeType = "application/octet-stream";
-                }
-
-                // create a rc = new RequestContext(...); set mime-type; set status to 200
-                RequestContext rc = new RequestContext(ostream, params, permPrams, outputCookies);
-                rc.setMimeType(mimeType);
-                rc.setStatusCode(200);
-                // If you want, you can modify RequestContext to allow you to add additional headers
-                // so that you can add “Content-Length: 12345” if you know that file has 12345 bytes
-
-                // open file, read its content and write it to rc (that will generate header and send
-                // file bytes to client)
-                sendFileToClient(requestedFile, mimeType);
-                csocket.close();
 
             } catch (IOException e) {
                 System.out.println("IOException in ClientWorker!");
