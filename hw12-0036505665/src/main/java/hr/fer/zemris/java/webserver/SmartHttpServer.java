@@ -268,9 +268,24 @@ public class SmartHttpServer {
                         outputCookies, tempParams, this);
             }
 
+            if (urlPath.startsWith("/ext/")) {
+                String[] parts = urlPath.split("/");
+                String className = "hr.fer.zemris.java.webserver.workers." + parts[2];
+
+                Class<?> referenceToClass = this.getClass().getClassLoader().loadClass(className);
+                Object newObject = referenceToClass.newInstance();
+                IWebWorker iww = (IWebWorker) newObject;
+                iww.processRequest(context);
+
+                ostream.flush();
+                csocket.close();
+                return;
+            }
+
             // check if urlPath is mapped to IWebWorker
             if (workersMap.containsKey(urlPath)) {
                 workersMap.get(urlPath).processRequest(context);
+
                 ostream.flush();
                 csocket.close();
                 return;
