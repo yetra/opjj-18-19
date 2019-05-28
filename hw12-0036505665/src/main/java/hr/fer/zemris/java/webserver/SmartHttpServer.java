@@ -65,6 +65,11 @@ public class SmartHttpServer {
     private Map<String,String> mimeTypes = new HashMap<>();
 
     /**
+     * A map of web workers.
+     */
+    private Map<String,IWebWorker> workersMap;
+
+    /**
      * The server thread.
      */
     private ServerThread serverThread;
@@ -99,25 +104,34 @@ public class SmartHttpServer {
 
             Path mimeConfig = Paths.get(properties.getProperty("server.mimeConfig"));
             List<String> lines = Files.readAllLines(mimeConfig);
-            lines.forEach(line -> {
-                if (!line.isBlank()) {
+            for (String line : lines) {
+                if (!line.isBlank() && !line.startsWith("#")) {
                     String[] parts = line.split("\\s+=\\s+");
                     mimeTypes.put(parts[0], parts[1]);
                 }
-            });
+            }
 
             Path workers = Paths.get(properties.getProperty("server.workers"));
             lines = Files.readAllLines(workers);
-            lines.forEach(line -> {
-                if (!line.isBlank()) {
-                    // TODO ???
+            for (String line : lines) {
+                if (!line.isBlank() && !line.startsWith("#")) {
+                    String[] parts = line.split("\\s+=\\s+");
+                    String path = parts[0];
+                    String fqcn = parts[1];
+
+                    Class<?> referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
+                    Object newObject = referenceToClass.newInstance();
+                    IWebWorker iww = (IWebWorker) newObject;
+                    workersMap.put(path, iww);
                 }
-            });
+            }
             
         } catch (IOException e) {
             System.out.println("IOException when reading server config file!");
         } catch (IllegalArgumentException e) {
             System.out.println("Config file contains invalid data!");
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
