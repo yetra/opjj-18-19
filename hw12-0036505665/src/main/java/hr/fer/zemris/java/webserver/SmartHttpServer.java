@@ -67,7 +67,7 @@ public class SmartHttpServer {
     /**
      * A map of web workers.
      */
-    private Map<String,IWebWorker> workersMap;
+    private Map<String,IWebWorker> workersMap = new HashMap<>();
 
     /**
      * The server thread.
@@ -263,17 +263,30 @@ public class SmartHttpServer {
         public void internalDispatchRequest(String urlPath, boolean directCall)
                 throws Exception {
 
+            if (context == null) {
+                context = new RequestContext(ostream, params, permPrams,
+                        outputCookies, tempParams, this);
+            }
+
+            // check if urlPath is mapped to IWebWorker
+            if (workersMap.containsKey(urlPath)) {
+                workersMap.get(urlPath).processRequest(context);
+                ostream.flush();
+                csocket.close();
+                return;
+            }
+
             // requestedPath = resolve path with respect to documentRoot
             Path requestedFile = documentRoot.resolve(
                     Paths.get(urlPath.startsWith("/") ? urlPath.substring(1) : urlPath)
             );
+
             // if requestedPath is not below documentRoot, return response status 403 forbidden
             if (!requestedFile.toAbsolutePath().startsWith(documentRoot.toAbsolutePath())) {
                 sendError(403, "Forbidden");
                 csocket.close();
                 return;
             }
-
             // check if requestedPath exists, is file and is readable; if not, return status 404
             if (!Files.exists(requestedFile) || !Files.isRegularFile(requestedFile)
                     || !Files.isReadable(requestedFile)) {
@@ -288,11 +301,6 @@ public class SmartHttpServer {
             // if it's a smart script - parse it and create engine
             if (extension.equalsIgnoreCase("smscr")) {
                 String documentBody = Files.readString(requestedFile);
-
-                if (context == null) {
-                    context = new RequestContext(ostream, params, permPrams,
-                            outputCookies, tempParams, this);
-                }
 
                 new SmartScriptEngine(
                         new SmartScriptParser(documentBody).getDocumentNode(),
@@ -312,10 +320,7 @@ public class SmartHttpServer {
                 mimeType = "application/octet-stream";
             }
 
-            // create a rc = new RequestContext(...); set mime-type; set status to 200
-            if (context == null) {
-                context = new RequestContext(ostream, params, permPrams, outputCookies);
-            }
+            // set mime-type; set status to 200
             context.setMimeType(mimeType);
             context.setStatusCode(200);
             // If you want, you can modify RequestContext to allow you to add additional headers
