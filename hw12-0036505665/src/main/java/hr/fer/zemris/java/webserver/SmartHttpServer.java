@@ -187,6 +187,7 @@ public class SmartHttpServer {
      * This class models a worker in this server's thread pool.
      */
     private class ClientWorker implements Runnable, IDispatcher {
+
         /**
          * The socket of the client's request.
          */
@@ -231,6 +232,11 @@ public class SmartHttpServer {
          * A list of cookies.
          */
         private List<RequestContext.RCCookie> outputCookies = new ArrayList<>();
+
+        /**
+         * The context of the request.
+         */
+        private RequestContext context;
 
         /**
          * The ID of the session.
@@ -283,13 +289,16 @@ public class SmartHttpServer {
             if (extension.equalsIgnoreCase("smscr")) {
                 String documentBody = Files.readString(requestedFile);
 
-                RequestContext rc = new RequestContext(ostream, params,
-                        permPrams, outputCookies, tempParams, this);
+                if (context == null) {
+                    context = new RequestContext(ostream, params, permPrams,
+                            outputCookies, tempParams, this);
+                }
 
                 new SmartScriptEngine(
                         new SmartScriptParser(documentBody).getDocumentNode(),
-                        rc
+                        context
                 ).execute();
+
                 ostream.flush();
                 csocket.close();
                 return;
@@ -304,9 +313,11 @@ public class SmartHttpServer {
             }
 
             // create a rc = new RequestContext(...); set mime-type; set status to 200
-            RequestContext rc = new RequestContext(ostream, params, permPrams, outputCookies);
-            rc.setMimeType(mimeType);
-            rc.setStatusCode(200);
+            if (context == null) {
+                context = new RequestContext(ostream, params, permPrams, outputCookies);
+            }
+            context.setMimeType(mimeType);
+            context.setStatusCode(200);
             // If you want, you can modify RequestContext to allow you to add additional headers
             // so that you can add “Content-Length: 12345” if you know that file has 12345 bytes
 
