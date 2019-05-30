@@ -300,6 +300,7 @@ public class SmartHttpServer {
                         outputCookies, tempParams, this);
             }
 
+            // check /ext/ convention
             if (urlPath.startsWith("/ext/")) {
                 String[] parts = urlPath.split("/");
                 String className = "hr.fer.zemris.java.webserver.workers." + parts[2];
@@ -322,7 +323,7 @@ public class SmartHttpServer {
                 return;
             }
 
-            // check if urlPath is mapped to IWebWorker
+            // check if urlPath is mapped to an IWebWorker
             if (workersMap.containsKey(urlPath)) {
                 workersMap.get(urlPath).processRequest(context);
 
@@ -331,18 +332,15 @@ public class SmartHttpServer {
                 return;
             }
 
-            // requestedPath = resolve path with respect to documentRoot
             Path requestedFile = documentRoot.resolve(
                     Paths.get(urlPath.startsWith("/") ? urlPath.substring(1) : urlPath)
             );
 
-            // if requestedPath is not below documentRoot, return response status 403 forbidden
             if (!requestedFile.toAbsolutePath().startsWith(documentRoot.toAbsolutePath())) {
                 sendError(403, "Forbidden");
                 csocket.close();
                 return;
             }
-            // check if requestedPath exists, is file and is readable; if not, return status 404
             if (!Files.exists(requestedFile) || !Files.isRegularFile(requestedFile)
                     || !Files.isReadable(requestedFile)) {
                 sendError(404, "File Not Found");
@@ -350,10 +348,9 @@ public class SmartHttpServer {
                 return;
             }
 
-            // else extract file extension
             String extension = getExtension(requestedFile);
 
-            // if it's a smart script - parse it and create engine
+            // if it's a smart script, parse it and create engine
             if (extension.equalsIgnoreCase("smscr")) {
                 String documentBody = Files.readString(requestedFile);
 
@@ -367,22 +364,14 @@ public class SmartHttpServer {
                 return;
             }
 
-            // find in mimeTypes map appropriate mimeType for current file extension
-            // (you filled that map during the construction of SmartHttpServer from mime.properties)
             String mimeType = mimeTypes.get(extension);
-            // if no mime type found, assume application/octet-stream
             if (mimeType == null) {
                 mimeType = "application/octet-stream";
             }
 
-            // set mime-type; set status to 200
             context.setMimeType(mimeType);
             context.setStatusCode(200);
-            // If you want, you can modify RequestContext to allow you to add additional headers
-            // so that you can add “Content-Length: 12345” if you know that file has 12345 bytes
 
-            // open file, read its content and write it to rc (that will generate header and send
-            // file bytes to client)
             sendFileToClient(requestedFile, mimeType);
 
             csocket.close();
@@ -396,23 +385,18 @@ public class SmartHttpServer {
         @Override
         public void run() {
             try {
-                // obtain input stream from socket
-                istream = new PushbackInputStream(
-                        new BufferedInputStream(csocket.getInputStream())
-                );
-                // obtain output stream from socket
+                istream = new PushbackInputStream(new BufferedInputStream(
+                        csocket.getInputStream()));
                 ostream = new BufferedOutputStream(csocket.getOutputStream());
 
-                // Then read complete request header from your client in separate method...
                 List<String> request = readRequest();
-                // If header is invalid (less then a line at least) return response status 400
                 if (request == null || request.size() < 1) {
                     sendError(400, "Bad request");
                     return;
                 }
 
                 String firstLine = request.get(0);
-                // Extract (method, requestedPath, version) from firstLine
+
                 String[] extracted = firstLine.split(" ");
                 if (extracted.length != 3) {
                     sendError(400, "Bad request");
@@ -420,9 +404,8 @@ public class SmartHttpServer {
                     return;
                 }
 
-                // if method not GET or version not HTTP/1.0 or HTTP/1.1 return response status 400
                 method = extracted[0].toUpperCase();
-                if(!method.equals("GET")) {
+                if(!method.equalsIgnoreCase("GET")) {
                     sendError(405, "Method Not Allowed");
                     csocket.close();
                     return;
@@ -434,9 +417,6 @@ public class SmartHttpServer {
                     return;
                 }
 
-                // Go through headers, and if there is header “Host: xxx”, assign host property
-                //   to trimmed value after “Host:”; else, set it to server’s domainName
-                //   If xxx is of form some-name:number, just remember “some-name”-part
                 for (String header : request) {
                     if (header.startsWith("Host: ")) {
                         host = header.split(":")[1].trim();
@@ -447,12 +427,10 @@ public class SmartHttpServer {
                 checkSession(request);
 
                 String requestedPath = extracted[1];
-                // (path, paramString) = split requestedPath to path and parameterString
                 String[] parts = requestedPath.split("\\?");
                 String path = parts[0];
                 if (parts.length == 2) {
                     String paramString = parts[1];
-                    // parseParameters(paramString); ==> your method to fill map parameters
                     parseParameters(paramString);
                 }
 
