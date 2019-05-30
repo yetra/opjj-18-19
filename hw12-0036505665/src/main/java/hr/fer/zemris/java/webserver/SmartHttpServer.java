@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -83,6 +84,16 @@ public class SmartHttpServer {
      * A path to the document root.
      */
     private Path documentRoot;
+
+    /**
+     * A map of session data.
+     */
+    private Map<String, SessionMapEntry> sessions = new HashMap<>();
+
+    /**
+     * A random number generator for session IDs.
+     */
+    private Random sessionRandom = new Random();
 
     /**
      * Constructs a {@link SmartHttpServer} based on the given config file.
@@ -412,6 +423,8 @@ public class SmartHttpServer {
                     }
                 }
 
+                checkSession(request);
+
                 String requestedPath = extracted[1];
                 // (path, paramString) = split requestedPath to path and parameterString
                 String[] parts = requestedPath.split("\\?");
@@ -580,7 +593,117 @@ public class SmartHttpServer {
                 ostream.flush();
             }
         }
+
+        /**
+         * Checks the currently stored sessions and cookies, and adds new ones if needed.
+         *
+         * @param headers a list of header lines
+         */
+        private synchronized void checkSession(List<String> headers) {
+            String sidCandidate = null;
+
+            for (String line : headers) {
+                if (!line.startsWith("Cookie:")) {
+                    continue;
+                }
+
+                String[] cookies = line.substring(8).split(";");
+                for (String cookie : cookies) {
+                    if (cookie.startsWith("sid=")) {
+                        sidCandidate = cookie.substring(5, cookie.length() - 1);
+                    }
+                }
+            }
+
+            if (sidCandidate == null) {
+                sidCandidate = generateSid();
+
+            } else {
+                SessionMapEntry entry = sessions.get(sidCandidate);
+
+                if (entry != null && entry.host.equals(host)) {
+                    if (entry.validUntil < System.currentTimeMillis() / 1000) {
+                        sessions.remove(sidCandidate);
+
+                    } else {
+                        entry.validUntil = System.currentTimeMillis() / 1000 + sessionTimeout;
+                        permPrams = entry.map;
+                        return;
+                    }
+                }
+            }
+
+            SessionMapEntry entry = new SessionMapEntry(
+                    sidCandidate, host,
+                    System.currentTimeMillis() / 1000 + sessionTimeout,
+                    new ConcurrentHashMap<>()
+            );
+            sessions.put(sidCandidate, entry);
+            permPrams = entry.map;
+
+            outputCookies.add(
+                    new RequestContext.RCCookie("sid", sidCandidate, null, host, "/")
+            );
+        }
+
+        /**
+         * Generates a session id consisting of 20 random uppercase letters.
+         *
+         * @return a session id consisting of 20 random uppercase letters
+         */
+        private String generateSid() {
+            char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+            char[] sidChars = new char[20];
+
+            for (int i = 0; i < 20; i++) {
+                sidChars[i] = letters[sessionRandom.nextInt(20)];
+            }
+
+            return new String(sidChars);
+        }
     }
+
+    /**
+     * This class represents an entry in the {@link #sessions} map.
+     */
+    private static class SessionMapEntry {
+
+        /**
+         * A large random identifier of this session.
+         */
+        String sid;
+
+        /**
+         * The host of this session.
+         */
+        String host;
+
+        /**
+         * The time until this object is valid.
+         */
+        long validUntil;
+
+        /**
+         * A map for storing the client's data.
+         */
+        Map<String, String> map;
+
+        /**
+         * Constructs a new {@link SessionMapEntry} of the given parameters.
+         *
+         * @param sid the identifier of this session
+         * @param host the host of this session
+         * @param validUntil the time until this object is valid
+         * @param map a map for storing the client's data
+         */
+        SessionMapEntry(String sid, String host, long validUntil, Map<String, String> map) {
+            this.sid = sid;
+            this.host = host;
+            this.validUntil = validUntil;
+            this.map = map;
+        }
+    }
+
 
     /**
      * The main method. Creates and starts the {@link SmartHttpServer}.
