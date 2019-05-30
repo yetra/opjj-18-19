@@ -96,6 +96,11 @@ public class SmartHttpServer {
     private Random sessionRandom = new Random();
 
     /**
+     * A flag for signalizing when the server thread should stop.
+     */
+    private volatile boolean stop = false;
+
+    /**
      * Constructs a {@link SmartHttpServer} based on the given config file.
      *
      * @param configFileName the path string of the config file
@@ -153,6 +158,7 @@ public class SmartHttpServer {
         if (serverThread == null || !serverThread.isAlive()) {
             serverThread = new ServerThread();
             serverThread.start();
+            stop = false;
 
             threadPool = Executors.newFixedThreadPool(workerThreads);
         }
@@ -177,6 +183,7 @@ public class SmartHttpServer {
      */
     protected synchronized void stop() {
         try {
+            stop = true;
             serverThread.join();
         } catch (InterruptedException ignorable) {}
 
@@ -196,7 +203,7 @@ public class SmartHttpServer {
                         new InetSocketAddress(InetAddress.getByName(address), port)
                 );
 
-                while (true) {
+                while (!stop) {
                     Socket client = serverSocket.accept();
                     ClientWorker cw = new ClientWorker(client);
                     threadPool.submit(cw);
