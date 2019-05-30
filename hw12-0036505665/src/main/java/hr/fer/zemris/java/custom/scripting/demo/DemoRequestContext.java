@@ -29,7 +29,7 @@ public class DemoRequestContext {
         rc.setStatusText("Idemo dalje");
 
         // Only at this point will header be created and written...
-        rc.write("Čevapčići i Šiščevapčići.");
+        rc.write("Čevapčići i Šiščevapčići.");
 
         os.close();
     }
@@ -47,7 +47,7 @@ public class DemoRequestContext {
         rc.addRCCookie(new RCCookie("zgrada", "B4", null, null, "/"));
 
         // Only at this point will header be created and written...
-        rc.write("Čevapčići i Šiščevapčići.");
+        rc.write("Čevapčići i Šiščevapčići.");
 
         os.close();
     }
