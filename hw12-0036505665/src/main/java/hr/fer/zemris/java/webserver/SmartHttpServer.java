@@ -572,6 +572,13 @@ public class SmartHttpServer {
             return fileName.substring(lastDot + 1);
         }
 
+        /**
+         * Sends the specified file to the client.
+         *
+         * @param file the path of the file to send
+         * @param mimeType the mime type for the file
+         * @throws IOException if the was an issue with the sending
+         */
         private void sendFileToClient(Path file, String mimeType) throws IOException {
             long length = Files.size(file);
 
