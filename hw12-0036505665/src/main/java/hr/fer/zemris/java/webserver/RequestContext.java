@@ -482,6 +482,11 @@ public class RequestContext {
         private String path;
 
         /**
+         * {@code true} if this cookie is an HttpOnly-cookie.
+         */
+        private boolean httpOnly = false;
+
+        /**
          * Constructs an {@link RCCookie} from the given parameters.
          *
          * @param name the name of the cookie
@@ -497,6 +502,22 @@ public class RequestContext {
             this.maxAge = maxAge;
             this.domain = domain;
             this.path = path;
+        }
+
+        /**
+         * Constructs an {@link RCCookie} from the given parameters.
+         *
+         * @param name the name of the cookie
+         * @param value the value of the cookie
+         * @param maxAge the maximum age of the cookie
+         * @param domain the domain of the cookie
+         * @param path the path of the cookie
+         * @param httpOnly {@code true} if this cookie is an HttpOnly-cookie
+         */
+        public RCCookie(String name, String value, Integer maxAge, String domain,
+                        String path, boolean httpOnly) {
+            this(name, value, maxAge, domain, path);
+            this.httpOnly = httpOnly;
         }
 
         /**
@@ -558,6 +579,9 @@ public class RequestContext {
             }
             if (maxAge != null) {
                 sb.append("; Max-Age=").append(maxAge);
+            }
+            if (httpOnly) {
+                sb.append("HttpOnly");
             }
 
             return sb.toString();

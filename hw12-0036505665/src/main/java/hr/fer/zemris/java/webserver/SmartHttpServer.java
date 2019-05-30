@@ -646,9 +646,9 @@ public class SmartHttpServer {
             sessions.put(sidCandidate, entry);
             permPrams = entry.map;
 
-            outputCookies.add(
-                    new RequestContext.RCCookie("sid", sidCandidate, null, host, "/")
-            );
+            outputCookies.add(new RequestContext.RCCookie(
+                    "sid", sidCandidate, null, host, "/", true
+            ));
         }
 
         /**
