@@ -35,6 +35,8 @@ import java.util.concurrent.Executors;
  */
 public class SmartHttpServer {
 
+    private static final String DEFAULT_MIME = "application/octet-stream";
+
     /**
      * The address of the server.
      */
@@ -364,10 +366,7 @@ public class SmartHttpServer {
                 return;
             }
 
-            String mimeType = mimeTypes.get(extension);
-            if (mimeType == null) {
-                mimeType = "application/octet-stream";
-            }
+            String mimeType = mimeTypes.getOrDefault(extension, DEFAULT_MIME);
 
             context.setMimeType(mimeType);
             context.setStatusCode(200);
