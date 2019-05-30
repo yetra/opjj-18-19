@@ -156,6 +156,20 @@ public class SmartHttpServer {
 
             threadPool = Executors.newFixedThreadPool(workerThreads);
         }
+
+        Thread cleaner = new Thread(() -> {
+            sessions.forEach((sid, entry) -> {
+                if (entry.validUntil < System.currentTimeMillis() / 1000) {
+                    sessions.remove(sid);
+                }
+            });
+
+            try {
+                Thread.sleep(5 * 60 * 1000);
+            } catch (InterruptedException ignorable) {}
+        });
+        cleaner.setDaemon(true);
+        cleaner.start();
     }
 
     /**
