@@ -65,7 +65,7 @@ public class SmartScriptEngineDemo {
      * Reads and executes the osnovni.smscr smart script.
      */
     private static void osnovniDemo() {
-        String documentBody = readFromDisk("osnovni.smscr");
+        String documentBody = readFromDisk("webroot/scripts/osnovni.smscr");
         Map<String,String> parameters = new HashMap<>();
         Map<String,String> persistentParameters = new HashMap<>();
         List<RequestContext.RCCookie> cookies = new ArrayList<>();
@@ -87,7 +87,7 @@ public class SmartScriptEngineDemo {
      * Reads and executes the zbrajanje.smscr smart script.
      */
     private static void zbrajanjeDemo() {
-        String documentBody = readFromDisk("zbrajanje.smscr");
+        String documentBody = readFromDisk("webroot/scripts/zbrajanje.smscr");
         Map<String,String> parameters = new HashMap<>();
         Map<String,String> persistentParameters = new HashMap<>();
         List<RequestContext.RCCookie> cookies = new ArrayList<>();
@@ -113,7 +113,7 @@ public class SmartScriptEngineDemo {
      * Reads and executes the brojPoziva.smscr smart script.
      */
     private static void brojPozivaDemo() {
-        String documentBody = readFromDisk("brojPoziva.smscr");
+        String documentBody = readFromDisk("webroot/scripts/brojPoziva.smscr");
         Map<String,String> parameters = new HashMap<>();
         Map<String,String> persistentParameters = new HashMap<>();
         List<RequestContext.RCCookie> cookies = new ArrayList<>();
@@ -146,7 +146,7 @@ public class SmartScriptEngineDemo {
      * Reads and executes the fibonacci.smscr smart script.
      */
     private static void fibonacciDemo() {
-        String documentBody = readFromDisk("fibonacci.smscr");
+        String documentBody = readFromDisk("webroot/scripts/fibonacci.smscr");
         Map<String,String> parameters = new HashMap<>();
         Map<String,String> persistentParameters = new HashMap<>();
         List<RequestContext.RCCookie> cookies = new ArrayList<>();
@@ -162,7 +162,7 @@ public class SmartScriptEngineDemo {
      * Reads and executes the fibonaccih.smscr smart script.
      */
     private static void fibonaccihDemo() {
-        String documentBody = readFromDisk("fibonaccih.smscr");
+        String documentBody = readFromDisk("webroot/scripts/fibonaccih.smscr");
         Map<String,String> parameters = new HashMap<>();
         Map<String,String> persistentParameters = new HashMap<>();
         List<RequestContext.RCCookie> cookies = new ArrayList<>();
