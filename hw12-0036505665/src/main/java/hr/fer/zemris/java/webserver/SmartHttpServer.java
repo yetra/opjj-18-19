@@ -282,6 +282,14 @@ public class SmartHttpServer {
                 return;
             }
 
+            // check if direct call of private URLs is attempted
+            if ((urlPath.equals("/private") || urlPath.startsWith("/private/"))
+                    && directCall) {
+                sendError(404, "Invalid URL");
+                csocket.close();
+                return;
+            }
+
             // check if urlPath is mapped to IWebWorker
             if (workersMap.containsKey(urlPath)) {
                 workersMap.get(urlPath).processRequest(context);
