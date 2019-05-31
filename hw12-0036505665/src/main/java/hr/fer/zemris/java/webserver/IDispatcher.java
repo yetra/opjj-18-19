@@ -1,7 +1,7 @@
 package hr.fer.zemris.java.webserver;
 
 /**
- * An interface used for dispatching url requests.
+ * An interface used for dispatching URL requests.
  *
  * @author Bruna Dujmović
  * 
