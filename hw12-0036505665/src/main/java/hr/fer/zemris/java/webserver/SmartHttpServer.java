@@ -371,7 +371,8 @@ public class SmartHttpServer {
             context.setMimeType(mimeType);
             context.setStatusCode(200);
 
-            sendFileToClient(requestedFile, mimeType);
+            long length = sendFileToClient(requestedFile, mimeType);
+            context.setContentLength(length);
 
             csocket.close();
         }
@@ -571,13 +572,14 @@ public class SmartHttpServer {
         }
 
         /**
-         * Sends the specified file to the client.
+         * Sends the specified file to the client and returns its length.
          *
          * @param file the path of the file to send
          * @param mimeType the mime type for the file
+         * @return the length of the sent file
          * @throws IOException if the was an issue with the sending
          */
-        private void sendFileToClient(Path file, String mimeType) throws IOException {
+        private long sendFileToClient(Path file, String mimeType) throws IOException {
             long length = Files.size(file);
 
             try (InputStream fis = new BufferedInputStream(Files.newInputStream(file))) {
@@ -597,6 +599,8 @@ public class SmartHttpServer {
                 }
                 ostream.flush();
             }
+
+            return length;
         }
 
         /**
