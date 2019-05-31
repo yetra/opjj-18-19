@@ -3,8 +3,6 @@ package hr.fer.zemris.java.webserver.workers;
 import hr.fer.zemris.java.webserver.IWebWorker;
 import hr.fer.zemris.java.webserver.RequestContext;
 
-import java.util.Map;
-
 /**
  * A web worker for calculating and displaying the sum of two numbers given through the
  * URL path.
@@ -27,16 +25,14 @@ public class SumWorker implements IWebWorker {
     public void processRequest(RequestContext context) throws Exception {
         context.setMimeType("text/html");
 
-        Map<String, String> parameters = context.getParameters();
         int a = 1; int b = 2;
-
         try {
-            if (parameters.containsKey("a")) {
-                a = Integer.parseInt(parameters.get("a"));
-            }
-            if (parameters.containsKey("b")) {
-                b = Integer.parseInt(parameters.get("b"));
-            }
+            String aStr = context.getParameter("a");
+            a = (aStr == null) ? 1 : Integer.parseInt(aStr);
+
+            String bStr = context.getParameter("b");
+            b = (bStr == null) ? 2 : Integer.parseInt(bStr);
+
         } catch (NumberFormatException ignorable) {}
 
         context.setTemporaryParameter("zbroj", Integer.toString(a + b));
