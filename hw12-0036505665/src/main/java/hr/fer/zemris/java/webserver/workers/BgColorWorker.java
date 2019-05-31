@@ -33,8 +33,8 @@ public class BgColorWorker implements IWebWorker {
     }
 
     /**
-     * Generates a HTML document on the given context with a link to /index2.html and the
-     * provided message.
+     * Generates a HTML document on the given context with a link to /index2.html and
+     * the provided message.
      *
      * @param message the message to diplay on the page
      */
@@ -45,7 +45,7 @@ public class BgColorWorker implements IWebWorker {
         context.write(message);
         context.write("</p>");
 
-        context.write("<a href=\"/index2.html\">index2</a>");
+        context.write("<p>See it on <a href=\"/index2.html\">index2</a></p>");
 
         context.write("</body></html>");
     }
