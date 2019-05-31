@@ -13,6 +13,7 @@ import java.io.IOException;
  * A web worker for producing a 200x200 PNG image of a single filled circle.
  */
 public class CircleWorker implements IWebWorker {
+
     @Override
     public void processRequest(RequestContext context) throws Exception {
         BufferedImage bim = new BufferedImage(200, 200, BufferedImage.TYPE_3BYTE_BGR);
