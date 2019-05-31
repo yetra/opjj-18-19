@@ -137,6 +137,10 @@ public class SmartHttpServer {
                     String path = parts[0];
                     String fqcn = parts[1];
 
+                    if (workersMap.containsKey("path")) {
+                        throw new IllegalArgumentException("Multiple lines have the same path!");
+                    }
+
                     Class<?> referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
                     Object newObject = referenceToClass.newInstance();
                     IWebWorker iww = (IWebWorker) newObject;
