@@ -299,7 +299,7 @@ public class SmartHttpServer {
 
             if (context == null) {
                 context = new RequestContext(ostream, params, permPrams,
-                        outputCookies, tempParams, this);
+                        outputCookies, tempParams, this, SID);
             }
 
             // check /ext/ convention
@@ -621,10 +621,10 @@ public class SmartHttpServer {
             }
 
             if (sidCandidate == null) {
-                sidCandidate = generateSid();
+                sidCandidate = SID = generateSid();
 
             } else {
-                SessionMapEntry entry = sessions.get(sidCandidate);
+                SessionMapEntry entry = sessions.get(SID = sidCandidate);
 
                 if (entry != null && entry.host.equals(host)) {
                     if (entry.validUntil < System.currentTimeMillis() / 1000) {

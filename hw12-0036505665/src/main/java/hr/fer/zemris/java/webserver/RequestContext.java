@@ -75,6 +75,11 @@ public class RequestContext {
     private IDispatcher dispatcher;
 
     /**
+     * The ID of the session.
+     */
+    private String sessionID;
+
+    /**
      * Constructs a {@link RequestContext} with the given parameters.
      *
      * @param outputStream the output stream for writing content
@@ -103,15 +108,17 @@ public class RequestContext {
      * @param outputCookies the list of cookies
      * @param temporaryParameters the map of temporary parameters
      * @param dispatcher the object used for dispatching URL requests
+     * @param sessionID the ID of the session
      */
     public RequestContext(OutputStream outputStream, Map<String, String> parameters,
                           Map<String, String> persistentParameters,
                           List<RCCookie> outputCookies, Map<String,String> temporaryParameters,
-                          IDispatcher dispatcher) {
+                          IDispatcher dispatcher, String sessionID) {
 
         this(outputStream, parameters, persistentParameters, outputCookies);
         this.temporaryParameters = temporaryParameters;
         this.dispatcher = dispatcher;
+        this.sessionID = sessionID;
     }
 
     /**
@@ -315,7 +322,7 @@ public class RequestContext {
      * @return a unique identifier for the current user session
      */
     public String getSessionID() {
-        return "";
+        return sessionID;
     }
 
     /**
