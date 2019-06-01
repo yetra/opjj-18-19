@@ -16,5 +16,7 @@
         Završni kut:<br><input type="number" name="b" min="0" max="360" step="1" value="360"><br>
         <input type="submit" value="Tabeliraj"><input type="reset" value="Reset">
     </form>
+
+    <p><a href="stories/funny.jsp">A funny story</a></p>
 </body>
 </html>
