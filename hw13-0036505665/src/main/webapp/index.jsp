@@ -8,6 +8,13 @@
 	<style>body {background-color: ${sessionScope.pickedBgCol};}</style>
 </head>
 <body>
-	<a href="colors.jsp">Background color chooser</a>
+	<p><a href="colors.jsp">Background color chooser</a></p>
+	<p><a href="trigonometric?a=0&b=90">Trigonometric function values for 0&deg; and 90&deg;</a></p>
+
+    <form action="trigonometric" method="GET">
+        Početni kut:<br><input type="number" name="a" min="0" max="360" step="1" value="0"><br>
+        Završni kut:<br><input type="number" name="b" min="0" max="360" step="1" value="360"><br>
+        <input type="submit" value="Tabeliraj"><input type="reset" value="Reset">
+    </form>
 </body>
 </html>
