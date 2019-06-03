@@ -18,5 +18,7 @@
     </form>
 
     <p><a href="stories/funny.jsp">A funny story</a></p>
+
+    <p><a href="powers?a=1&b=100&n=3">Download power.xls for a=1, b=100, n=3</a></p>
 </body>
 </html>
