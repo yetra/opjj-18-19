@@ -28,9 +28,7 @@
     <h1>Trigonometric function values</h1>
     <table>
         <thead>
-            <th scope="col">Function</th>
-            <th scope="col">a</th>
-            <th scope="col">b</th>
+            <tr><th>Function</th><th>a</th><th>b</th></tr>
         </thead>
         <tbody>
             <tr><td>sin(x)</td><td>${requestScope.sinA}</td><td>${requestScope.sinB}</td></tr>
