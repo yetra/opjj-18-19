@@ -50,10 +50,10 @@ public class TrigonometricServlet extends HttpServlet {
             b = a + 720;
         }
 
-        req.setAttribute("sinA", Math.sin(a));
-        req.setAttribute("sinB", Math.sin(b));
-        req.setAttribute("cosA", Math.cos(a));
-        req.setAttribute("cosB", Math.cos(b));
+        req.setAttribute("sinA", String.format("%.4f", Math.sin(Math.toRadians(a))));
+        req.setAttribute("sinB", String.format("%.4f", Math.sin(Math.toRadians(b))));
+        req.setAttribute("cosA", String.format("%.4f", Math.cos(Math.toRadians(a))));
+        req.setAttribute("cosB", String.format("%.4f", Math.cos(Math.toRadians(b))));
 
         req.getRequestDispatcher("/WEB-INF/pages/trigonometric.jsp").forward(req, resp);
     }
