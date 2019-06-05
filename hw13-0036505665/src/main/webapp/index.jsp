@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Background color chooser</title>
+	<title>Home</title>
 	<style>body {background-color: ${sessionScope.pickedBgCol};}</style>
 </head>
 <body>
