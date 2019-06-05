@@ -15,5 +15,7 @@
 		<li><a href="setcolor?col=green">GREEN</a></li>
 		<li><a href="setcolor?col=cyan">CYAN</a></li>
 	</ul>
+
+	<p><a href="index.jsp">Back</a></p>
 </body>
 </html>
