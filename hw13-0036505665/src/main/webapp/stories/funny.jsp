@@ -16,14 +16,15 @@
 <html>
 <head>
     <title>Funny story</title>
-    <style>body {
-        background-color: ${sessionScope.pickedBgCol};
-        color: <% out.write(getRandomColor()); %>;
-    }
+    <style>
+        body {
+            background-color: ${sessionScope.pickedBgCol};
+            color: <% out.write(getRandomColor()); %>;
+        }
     </style>
 </head>
 <body>
     <h1>A funny story.</h1>
-    <p>&lt;insert funny story here&gt;</p>
+    <p>This is a funny story...</p>
 </body>
 </html>
