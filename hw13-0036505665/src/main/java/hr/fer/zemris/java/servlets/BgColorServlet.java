@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author Bruna Dujmović
  *
  */
-@WebServlet(name="bgcolor", urlPatterns = {"/setcolor"})
+@WebServlet("/setcolor")
 public class BgColorServlet extends HttpServlet {
 
     /**

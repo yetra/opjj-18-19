@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author Bruna Dujmović
  *
  */
-@WebServlet(name="trigonometric", urlPatterns = {"/trigonometric"})
+@WebServlet("/trigonometric")
 public class TrigonometricServlet extends HttpServlet {
 
     /**
