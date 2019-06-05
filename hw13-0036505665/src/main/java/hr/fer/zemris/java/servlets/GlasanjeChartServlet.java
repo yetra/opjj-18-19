@@ -3,11 +3,11 @@ package hr.fer.zemris.java.servlets;
 import hr.fer.zemris.java.util.BandData;
 import hr.fer.zemris.java.util.GlasanjeUtil;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.util.Rotation;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.util.Rotation;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,7 +46,7 @@ public class GlasanjeChartServlet extends HttpServlet {
         List<BandData> results = GlasanjeUtil.getVotingResults(req);
         JFreeChart usageChart = getGlasanjeChart(results);
 
-        ChartUtilities.writeChartAsPNG(
+        ChartUtils.writeChartAsPNG(
                 outputStream, usageChart, CHART_WIDTH, CHART_HEIGHT
         );
     }

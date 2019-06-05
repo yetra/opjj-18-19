@@ -1,11 +1,11 @@
 package hr.fer.zemris.java.servlets;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.util.Rotation;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.util.Rotation;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +38,7 @@ public class ReportImageServlet extends HttpServlet {
 
         JFreeChart usageChart = getUsageChart();
 
-        ChartUtilities.writeChartAsPNG(
+        ChartUtils.writeChartAsPNG(
                 outputStream, usageChart, CHART_WIDTH, CHART_HEIGHT
         );
     }
