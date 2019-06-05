@@ -8,9 +8,12 @@
 	<style>body {background-color: ${sessionScope.pickedBgCol};}</style>
 </head>
 <body>
-	<a href="setcolor?col=white">WHITE</a>
-	<a href="setcolor?col=red">RED</a>
-	<a href="setcolor?col=green">GREEN</a>
-	<a href="setcolor?col=cyan">CYAN</a>
+	<h1>Choose a background color:</h1>
+	<ul>
+		<li><a href="setcolor?col=white">WHITE</a></li>
+		<li><a href="setcolor?col=red">RED</a></li>
+		<li><a href="setcolor?col=green">GREEN</a></li>
+		<li><a href="setcolor?col=cyan">CYAN</a></li>
+	</ul>
 </body>
 </html>
