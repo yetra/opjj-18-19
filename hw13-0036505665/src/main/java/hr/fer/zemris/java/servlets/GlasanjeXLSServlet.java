@@ -48,7 +48,7 @@ public class GlasanjeXLSServlet extends HttpServlet {
         headerRow.createCell(1).setCellValue("Score");
 
         for (int i = 0, rows = results.size(); i < rows; i++) {
-            HSSFRow row = sheet.createRow(i);
+            HSSFRow row = sheet.createRow(i + 1);
             BandData band = results.get(i);
 
             row.createCell(0).setCellValue(band.getName());
