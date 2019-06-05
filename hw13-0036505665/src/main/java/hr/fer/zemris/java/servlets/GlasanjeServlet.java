@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -49,6 +50,8 @@ public class GlasanjeServlet extends HttpServlet {
 
             index.add(new BandData(Integer.parseInt(parts[0]), parts[1], parts[2], 0));
         });
+
+        index.sort(Comparator.comparingInt(BandData::getID));
 
         return index;
     }
