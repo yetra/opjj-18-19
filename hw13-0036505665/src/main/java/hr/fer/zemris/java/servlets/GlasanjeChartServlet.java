@@ -1,6 +1,6 @@
 package hr.fer.zemris.java.servlets;
 
-import hr.fer.zemris.java.util.BandInfo;
+import hr.fer.zemris.java.util.BandData;
 import hr.fer.zemris.java.util.GlasanjeUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -43,7 +43,7 @@ public class GlasanjeChartServlet extends HttpServlet {
 
         OutputStream outputStream = resp.getOutputStream();
 
-        List<BandInfo> results = GlasanjeUtil.getVotingResults(req);
+        List<BandData> results = GlasanjeUtil.getVotingResults(req);
         JFreeChart usageChart = getGlasanjeChart(results);
 
         ChartUtilities.writeChartAsPNG(
@@ -56,7 +56,7 @@ public class GlasanjeChartServlet extends HttpServlet {
      *
      * @return a {@link JFreeChart} showing favorite band voting results
      */
-    public static JFreeChart getGlasanjeChart(List<BandInfo> results) {
+    private static JFreeChart getGlasanjeChart(List<BandData> results) {
         DefaultPieDataset dataset = new DefaultPieDataset();
 
         results.forEach(

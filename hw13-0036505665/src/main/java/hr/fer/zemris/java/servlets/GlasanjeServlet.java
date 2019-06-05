@@ -1,6 +1,6 @@
 package hr.fer.zemris.java.servlets;
 
-import hr.fer.zemris.java.util.BandInfo;
+import hr.fer.zemris.java.util.BandData;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,14 +40,14 @@ public class GlasanjeServlet extends HttpServlet {
      * @return a list of band information parsed from the config file
      * @throws IOException if there was an issue with reading the file
      */
-    private List<BandInfo> getIndex(Path filePath) throws IOException {
-        List<BandInfo> index = new ArrayList<>();
+    private List<BandData> getIndex(Path filePath) throws IOException {
+        List<BandData> index = new ArrayList<>();
         List<String> lines = Files.readAllLines(filePath);
 
         lines.forEach(line -> {
             String[] parts = line.split("\t");
 
-            index.add(new BandInfo(Integer.parseInt(parts[0]), parts[1], parts[2], 0));
+            index.add(new BandData(Integer.parseInt(parts[0]), parts[1], parts[2], 0));
         });
 
         return index;

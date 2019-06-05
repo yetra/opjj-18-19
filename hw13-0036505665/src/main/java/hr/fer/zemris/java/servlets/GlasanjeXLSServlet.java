@@ -1,6 +1,6 @@
 package hr.fer.zemris.java.servlets;
 
-import hr.fer.zemris.java.util.BandInfo;
+import hr.fer.zemris.java.util.BandData;
 import hr.fer.zemris.java.util.GlasanjeUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,7 +28,7 @@ public class GlasanjeXLSServlet extends HttpServlet {
         resp.setContentType("application/vnd.ms-excel");
         resp.setHeader("Content-Disposition", "attachment; filename=\"glasanje.xls\"");
 
-        List<BandInfo> results = GlasanjeUtil.getVotingResults(req);
+        List<BandData> results = GlasanjeUtil.getVotingResults(req);
         HSSFWorkbook workbook = getGlasanjeXLS(results);
 
         workbook.write(resp.getOutputStream());
@@ -39,7 +39,7 @@ public class GlasanjeXLSServlet extends HttpServlet {
      *
      * @param results the list of voting results to be shown in the workbook
      */
-    private HSSFWorkbook getGlasanjeXLS(List<BandInfo> results) {
+    private HSSFWorkbook getGlasanjeXLS(List<BandData> results) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("Voting results");
 
@@ -49,7 +49,7 @@ public class GlasanjeXLSServlet extends HttpServlet {
 
         for (int i = 0, rows = results.size(); i < rows; i++) {
             HSSFRow row = sheet.createRow(i);
-            BandInfo band = results.get(i);
+            BandData band = results.get(i);
 
             row.createCell(0).setCellValue(band.getName());
             row.createCell(1).setCellValue(band.getScore());
