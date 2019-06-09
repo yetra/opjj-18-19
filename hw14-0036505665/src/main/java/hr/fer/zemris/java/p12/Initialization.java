@@ -2,10 +2,12 @@ package hr.fer.zemris.java.p12;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -64,34 +66,27 @@ public class Initialization implements ServletContextListener {
 	 */
 	private static String getConnectionURL(String path) {
 		try {
-			List<String> lines = Files.readAllLines(Paths.get(path));
+			InputStream config = Files.newInputStream(Paths.get(path));
+			Properties properties = new Properties();
+			properties.load(config);
 
-			return "jdbc:derby://" + getDBSetting("host", lines.get(0))
-					+ ":" + getDBSetting("port", lines.get(1))
-					+ "/" + getDBSetting("name", lines.get(2))
-					+ ";user=" + getDBSetting("user", lines.get(3))
-					+ ";password=" + getDBSetting("password", lines.get(4));
+			String host = properties.getProperty("host");
+			String port = properties.getProperty("port");
+			String name = properties.getProperty("name");
+			String user = properties.getProperty("user");
+			String password = properties.getProperty("password");
+
+			if (host == null || port == null || name == null || user == null
+					|| password == null) {
+				throw new IllegalArgumentException("Invalid database settings!");
+			}
+
+			return "jdbc:derby://" + host + ":" + port + "/" + name + ";user="
+					+ user + ";password=" + password;
 
 		} catch (IOException e) {
 			throw new RuntimeException("Invalid .properties file!");
 		}
-	}
-
-	/**
-	 * Returns the value of a database URL setting specified by a given name.
-	 *
-	 * @param name the name of the setting
-	 * @param line the string containing the setting
-	 * @return the value of a database URL setting specified by a given name
-	 */
-	private static String getDBSetting(String name, String line) {
-		String[] parts = line.split("=");
-
-		if (!parts[0].equals(name)) {
-			throw new IllegalArgumentException("Invalid entry for " + name + "!");
-		}
-
-		return parts[1];
 	}
 
 }
