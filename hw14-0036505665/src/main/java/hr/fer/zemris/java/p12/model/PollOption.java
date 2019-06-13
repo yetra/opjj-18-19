@@ -9,6 +9,11 @@ package hr.fer.zemris.java.p12.model;
 public class PollOption implements Comparable<PollOption> {
 
     /**
+     * The ID of the option.
+     */
+    private long ID;
+
+    /**
      * The title of the option.
      */
     private String optionTitle;
@@ -26,14 +31,36 @@ public class PollOption implements Comparable<PollOption> {
     /**
      * Constructs a {@link PollOption} of the given attributes.
      *
-     * @param title the title of the option
-     * @param link the option's link
+     * @param optionTitle the title of the option
+     * @param optionLink the option's link
      * @param votesCount the number of votes that the option received
      */
-    public PollOption(String title, String link, int votesCount) {
-        this.optionTitle = title;
-        this.optionLink = link;
+    public PollOption(String optionTitle, String optionLink, int votesCount) {
+        this.optionTitle = optionTitle;
+        this.optionLink = optionLink;
         this.votesCount = votesCount;
+    }
+
+    /**
+     * Constructs a {@link PollOption} of the given attributes.
+     *
+     * @param ID the ID of the option
+     * @param optionTitle the title of the option
+     * @param optionLink the option's link
+     * @param votesCount the number of votes that the option received
+     */
+    public PollOption(long ID, String optionTitle, String optionLink, int votesCount) {
+        this(optionTitle, optionLink, votesCount);
+        this.ID = ID;
+    }
+
+    /**
+     * Returns the ID of the option.
+     *
+     * @return the ID of the option
+     */
+    public long getID() {
+        return ID;
     }
 
     /**
