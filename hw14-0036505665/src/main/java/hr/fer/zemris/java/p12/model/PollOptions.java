@@ -5,8 +5,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * A helper class for reading poll options data from a config file.
+ *
+ * @author Bruna Dujmović
+ */
 public class PollOptions {
 
+    /**
+     * Returns a list of {@link PollOption}s parsed from a given file.
+     *
+     * @param path the path to the file to parse
+     * @return a list of {@link PollOption}s parsed from the given file
+     */
     public static List<PollOption> fromFile(Path path) {
         List<PollOption> options = new ArrayList<>();
 
