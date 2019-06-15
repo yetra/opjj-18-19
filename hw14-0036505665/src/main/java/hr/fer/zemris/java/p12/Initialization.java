@@ -18,8 +18,6 @@ import com.mchange.v2.c3p0.DataSources;
 import hr.fer.zemris.java.p12.model.PollOption;
 import hr.fer.zemris.java.p12.model.PollOptions;
 
-import static hr.fer.zemris.java.p12.dao.sql.SQLConnectionProvider.getConnection;
-
 /**
  * Initializes and terminates the app when the appropriate {@link ServletContextEvent}
  * occurs.
@@ -111,33 +109,35 @@ public class Initialization implements ServletContextListener {
 	 * @throws SQLException if there was an issue with the database
 	 */
 	private void createTables(Connection conn) throws SQLException {
-		Statement statement = conn.createStatement();
-		DatabaseMetaData databaseMetadata = getConnection().getMetaData();
+		DatabaseMetaData databaseMetaData = conn.getMetaData();
 
-		try (ResultSet rset = databaseMetadata.getTables(null, null, "Polls", null)) {
-			if (!rset.next()) {
-				statement.execute(
-						"CREATE TABLE Polls (" +
-						"    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
-						"    title VARCHAR(150) NOT NULL," +
-						"    message CLOB(2048) NOT NULL" +
-						");"
-				);
-			}
-		}
+        PreparedStatement pst = null;
 
-		try (ResultSet rset = databaseMetadata.getTables(null, null, "PollOptions", null)) {
+        try (ResultSet rset = databaseMetaData.getTables(null, null, "POLLS", null)) {
+            if (!rset.next()) {
+                pst = conn.prepareStatement(
+                        "CREATE TABLE Polls\n" +
+                        " (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,\n" +
+                        " title VARCHAR(150) NOT NULL,\n" +
+                        " message CLOB(2048) NOT NULL\n" +
+                        ")");
+                pst.executeUpdate();
+            }
+        }
+
+		try (ResultSet rset = databaseMetaData.getTables(null, null, "POLLOPTIONS", null)) {
 			if (!rset.next()) {
-				statement.execute(
-						"CREATE TABLE PollOptions (" +
-						"    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
-						"    optionTitle VARCHAR(100) NOT NULL," +
-						"    optionLink VARCHAR(150) NOT NULL," +
-						"    pollID BIGINT," +
-						"    votesCount BIGINT," +
-						"    FOREIGN KEY (pollID) REFERENCES Polls(id)" +
-						");"
-				);
+                pst = conn.prepareStatement(
+                        "CREATE TABLE PollOptions\n" +
+                        " (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,\n" +
+                        " optionTitle VARCHAR(100) NOT NULL,\n" +
+                        " optionLink VARCHAR(150) NOT NULL,\n" +
+                        " pollID BIGINT,\n" +
+                        " votesCount BIGINT,\n" +
+                        " FOREIGN KEY (pollID) REFERENCES Polls(id)\n" +
+                        ")");
+				pst.executeUpdate();
+				pst.close();
 			}
 		}
 
@@ -182,7 +182,7 @@ public class Initialization implements ServletContextListener {
 							Connection conn) throws SQLException {
 
 		PreparedStatement pst = conn.prepareStatement(
-				"INSERT INTO Polls (title, message) values (?,?);",
+				"INSERT INTO Polls (title, message) values (?,?)",
 				Statement.RETURN_GENERATED_KEYS
 		);
 
@@ -194,10 +194,8 @@ public class Initialization implements ServletContextListener {
 			if (rset != null && rset.next()) {
 				long pollID = rset.getLong(1);
 
-				pst = getConnection().prepareStatement(
-						"INSERT INTO PollOptions (" +
-						"    optionTitle, optionLink, pollID, votesCount" +
-						") VALUES (?,?,?,?);"
+				pst = conn.prepareStatement(
+						"INSERT INTO PollOptions(optionTitle, optionLink, pollID, votesCount) VALUES (?,?,?,?)"
 				);
 
 				for (PollOption option : options) {
@@ -210,5 +208,4 @@ public class Initialization implements ServletContextListener {
 			}
 		}
 	}
-
 }
