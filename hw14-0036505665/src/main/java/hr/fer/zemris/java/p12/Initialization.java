@@ -30,9 +30,15 @@ public class Initialization implements ServletContextListener {
 	 */
 	private static final String DB_SETTINGS_PATH = "/WEB-INF/dbsettings.properties";
 
-	private static final String BAND_DATA = "band-data.txt";
+    /**
+     * The path to the band data file.
+     */
+	private static final String BAND_DATA = "/WEB-INF/band-data.txt";
 
-	private static final String ANIMAL_DATA = "animal-data.txt";
+    /**
+     * The path to the animal data file.
+     */
+	private static final String ANIMAL_DATA = "/WEB-INF/animal-data.txt";
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
