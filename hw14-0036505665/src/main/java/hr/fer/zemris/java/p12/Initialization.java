@@ -55,8 +55,11 @@ public class Initialization implements ServletContextListener {
 
 		try (Connection conn = cpds.getConnection()) {
 			createTables(conn);
-		} catch (SQLException e) {
-			System.out.println("Can't get a connection to the database!");
+			String bandData = sce.getServletContext().getRealPath(BAND_DATA);
+			String animalData = sce.getServletContext().getRealPath(ANIMAL_DATA);
+			addDefaultPolls(conn, bandData, animalData);
+		} catch (Exception e) {
+            e.printStackTrace();
 		}
 
 		sce.getServletContext().setAttribute("hr.fer.zemris.dbpool", cpds);
@@ -108,8 +111,8 @@ public class Initialization implements ServletContextListener {
 	}
 
 	/**
-	 * Creates and populates the Polls and PollOptions tables if they don't already
-	 * exist in the database.
+	 * Creates the Polls and PollOptions tables if they don't already exist in the
+     * database.
 	 *
 	 * @param conn a connection with the database
 	 * @throws SQLException if there was an issue with the database
@@ -146,19 +149,31 @@ public class Initialization implements ServletContextListener {
 				pst.close();
 			}
 		}
-
-		if (isPollsEmpty(conn)) {
-			createPoll("Glasanje za omiljeni bend:",
-					"Od sljedećih bendova, koji Vam je bend najdraži? " +
-							"Kliknite na link kako biste glasali!",
-					PollOptions.fromFile(Paths.get(BAND_DATA)), conn);
-
-			createPoll("Glasanje za omiljenu životinju:",
-					"Od sljedećih životinja, koji Vam je životinja najdraža? " +
-							"Kliknite na link kako biste glasali!",
-					PollOptions.fromFile(Paths.get(ANIMAL_DATA)), conn);
-		}
 	}
+
+    /**
+     * Inserts default data into the PollOptions table.
+     *
+     * @param conn a connection with the database
+     * @param bandData a file specifying the band default poll data
+     * @param animalData a file specifying the animal default poll data
+     * @throws SQLException if there was an issue with the database
+     */
+    private void addDefaultPolls(Connection conn, String bandData, String animalData)
+            throws SQLException {
+
+        if (isPollsEmpty(conn)) {
+            createPoll("Glasanje za omiljeni bend:",
+                    "Od sljedećih bendova, koji Vam je bend najdraži? " +
+                            "Kliknite na link kako biste glasali!",
+                    PollOptions.fromFile(Paths.get(bandData)), conn);
+
+            createPoll("Glasanje za omiljenu životinju:",
+                    "Od sljedećih životinja, koji Vam je životinja najdraža? " +
+                            "Kliknite na link kako biste glasali!",
+                    PollOptions.fromFile(Paths.get(animalData)), conn);
+        }
+    }
 
 	/**
 	 * Returns {@code true} if the Polls table is empty.
