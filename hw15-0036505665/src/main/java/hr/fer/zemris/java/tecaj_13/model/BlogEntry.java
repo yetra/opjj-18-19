@@ -19,74 +19,155 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@NamedQueries({
-	@NamedQuery(name="BlogEntry.upit1",query="select b from BlogComment as b where b.blogEntry=:be and b.postedOn>:when")
-})
+/**
+ * Models a user's blog entry containing a list of comments.
+ */
 @Entity
-@Table(name="blog_entries")
-@Cacheable(true)
+@Table(name = "blog_entries")
 public class BlogEntry {
 
+	/**
+	 * The ID of this entry.
+	 */
 	private Long id;
+
+	/**
+	 * A list of comments for this entry.
+	 */
 	private List<BlogComment> comments = new ArrayList<>();
+
+	/**
+	 * This entry's date of creation.
+	 */
 	private Date createdAt;
+
+	/**
+	 * This entry's last date of modification.
+	 */
 	private Date lastModifiedAt;
+
+	/**
+	 * The title of this entry.
+	 */
 	private String title;
+
+	/**
+	 * The text of this entry.
+	 */
 	private String text;
-	
+
+	/**
+	 * Returns the ID of this entry.
+	 *
+	 * @return the ID of this entry
+	 */
 	@Id @GeneratedValue
 	public Long getId() {
 		return id;
 	}
-	
+
+	/**
+	 * Sets the ID of this entry to the given value.
+	 *
+	 * @param id the ID to set
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	@OneToMany(mappedBy="blogEntry",fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval=true)
+	/**
+	 * Returns a list of comments for this entry.
+	 *
+	 * @return a list of comments for this entry
+	 */
 	@OrderBy("postedOn")
+	@OneToMany(mappedBy="blogEntry",fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval=true)
 	public List<BlogComment> getComments() {
 		return comments;
 	}
-	
+
+	/**
+	 * Sets the list of comments of this entry to the given value.
+	 *
+	 * @param comments the list of comments to set
+	 */
 	public void setComments(List<BlogComment> comments) {
 		this.comments = comments;
 	}
 
+	/**
+	 * Returns this entry's date of creation.
+	 *
+	 * @return this entry's date of creation
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable=false)
 	public Date getCreatedAt() {
 		return createdAt;
 	}
 
+	/**
+	 * Sets this entry's date of creation to the given value.
+	 *
+	 * @param createdAt the date of creation to set
+	 */
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
+	/**
+	 * Returns this entry's last date of modification.
+	 *
+	 * @return this entry's last date of modification
+	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable=true)
 	public Date getLastModifiedAt() {
 		return lastModifiedAt;
 	}
 
+	/**
+	 * Sets this entry's last date of modification to the given value.
+	 *
+	 * @param lastModifiedAt the last date of modification to set
+	 */
 	public void setLastModifiedAt(Date lastModifiedAt) {
 		this.lastModifiedAt = lastModifiedAt;
 	}
 
+	/**
+	 * Returns the title of this entry.
+	 *
+	 * @return the title of this entry
+	 */
 	@Column(length=200,nullable=false)
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * Sets the title of this entry to the given value.
+	 *
+	 * @param title the title to set
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
+	/**
+	 * Returns the text of this entry.
+	 *
+	 * @return the text of this entry
+	 */
 	@Column(length=4096,nullable=false)
 	public String getText() {
 		return text;
 	}
 
+	/**
+	 * Sets the text of this entry to the given value.
+	 *
+	 * @param text the text to set
+	 */
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -109,10 +190,7 @@ public class BlogEntry {
 			return false;
 		BlogEntry other = (BlogEntry) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 }
