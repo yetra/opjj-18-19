@@ -4,20 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 /**
  * Models a user's blog entry containing a list of comments.
@@ -55,6 +42,11 @@ public class BlogEntry {
 	 * The text of this entry.
 	 */
 	private String text;
+
+	/**
+	 * The user who created this entry.
+	 */
+	private BlogUser creator;
 
 	/**
 	 * Returns the ID of this entry.
@@ -170,6 +162,26 @@ public class BlogEntry {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	/**
+	 * Returns the user who created this entry.
+	 *
+	 * @return the user who created this entry
+	 */
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	public BlogUser getCreator() {
+		return creator;
+	}
+
+	/**
+	 * Sets the user who created this entry to the given value.
+	 *
+	 * @param creator the user to set
+	 */
+	public void setCreator(BlogUser creator) {
+		this.creator = creator;
 	}
 
 	@Override
