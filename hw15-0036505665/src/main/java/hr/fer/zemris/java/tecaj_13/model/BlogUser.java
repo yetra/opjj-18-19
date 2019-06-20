@@ -6,7 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 
 /**
- * Models a blog user that can login to the blog, create or edit blog entries, and post comments.
+ * Models a blog user that can login to the blog, create or edit blog entries, and post
+ * comments.
  *
  * @author Bruna Dujmović
  *
@@ -123,6 +124,11 @@ public class BlogUser {
         this.firstName = firstName;
     }
 
+    /**
+     * Sets the user's last name to the given value.
+     *
+     * @param lastName the last name to set
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
