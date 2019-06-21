@@ -28,8 +28,8 @@ public class BlogCommentForm extends AbstractForm {
      * @param req the {@link HttpServletRequest} containing the parameters
      */
     public void fromHttpRequest(HttpServletRequest req) {
-        usersEMail = req.getParameter("usersEMail");
-        message = req.getParameter("message");
+        usersEMail = prepare(req.getParameter("usersEMail"));
+        message = prepare(req.getParameter("message"));
     }
 
     /**
