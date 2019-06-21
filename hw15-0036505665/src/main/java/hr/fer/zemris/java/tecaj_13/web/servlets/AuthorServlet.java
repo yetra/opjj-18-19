@@ -159,12 +159,10 @@ public class AuthorServlet extends HttpServlet {
         }
 
         BlogEntry entry = new BlogEntry();
-        form.toBlogEntry(entry);
 
         if (isEdit) {
-            String entryID = req.getParameter("id");
-            getEntryFromParameter(entryID, req, resp);
-            entry.setId(Long.parseLong(entryID));
+            entry = getEntryFromParameter(req.getParameter("id"), req, resp);
+            entry.setLastModifiedAt(new Date());
 
         } else {
             BlogUser user = DAOProvider.getDAO().getBlogUser(nick);
@@ -179,6 +177,7 @@ public class AuthorServlet extends HttpServlet {
             entry.setLastModifiedAt(new Date());
         }
 
+        form.toBlogEntry(entry);
         DAOProvider.getDAO().addBlogEntry(entry);
         resp.sendRedirect(req.getContextPath() + "/servleti/author/" + nick);
     }
