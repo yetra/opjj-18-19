@@ -28,6 +28,13 @@ public class RegistrationServlet extends HttpServlet {
 
         RegistrationForm form = new RegistrationForm();
         form.fromHttpRequest(req);
+        form.validate();
+
+        if (form.hasErrors()) {
+            req.setAttribute("form", form);
+            req.getRequestDispatcher("/WEB-INF/pages/RegistrationPage.jsp").forward(req, resp);
+            return;
+        }
 
         BlogUser newUser = new BlogUser();
         form.toBlogUser(newUser);
