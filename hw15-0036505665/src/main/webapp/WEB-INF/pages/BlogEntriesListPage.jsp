@@ -27,7 +27,7 @@
         </c:when>
         <c:otherwise>
             <c:forEach items="${requestScope.entries}" var="entry">
-                <li><a href="${sessionScope["current.user.id"]}/${entry.id}">
+                <li><a href="${sessionScope["current.user.nick"]}/${entry.id}">
                         ${entry.title}
                 </a></li>
             </c:forEach>
