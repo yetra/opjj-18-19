@@ -102,7 +102,7 @@ public class LoginForm extends AbstractForm {
         }
 
         if (passwordHash.isEmpty()) {
-            setError("passwordHash", "Password not given!");
+            setError("password", "Password not given!");
         }
     }
 }
