@@ -189,14 +189,14 @@ public class RegistrationForm extends AbstractForm {
         } else if (!email.matches(EMAIL_REGEX)) {
             setError("email", "Invalid e-mail format!");
         } else if (email.length() > BlogUser.EMAIL_LENGTH) {
-            setError("email", "Email cannot be larger than " +
+            setError("email", "Email cannot be longer than " +
                     BlogUser.EMAIL_LENGTH + " characters!");
         }
 
         if (nick.isEmpty()) {
             setError("nick", "Nickname not given!");
         } else if (nick.length() > BlogUser.NICK_LENGTH) {
-            setError("nick", "Nickname cannot be larger than " +
+            setError("nick", "Nickname cannot be longer than " +
                     BlogUser.NICK_LENGTH + " characters!");
         }
     }

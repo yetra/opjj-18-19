@@ -96,7 +96,7 @@ public class LoginForm extends AbstractForm {
         if (nick.isEmpty()) {
             setError("nick", "Nickname not given!");
         } else if (nick.length() > BlogUser.NICK_LENGTH) {
-            setError("nick", "Nickname cannot be larger than " +
+            setError("nick", "Nickname cannot be longer than " +
                     BlogUser.NICK_LENGTH + " characters!");
         }
 
