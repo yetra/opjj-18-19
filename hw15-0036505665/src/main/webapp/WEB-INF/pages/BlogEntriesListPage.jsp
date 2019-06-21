@@ -22,7 +22,7 @@
     <h1>Blog entries</h1>
 
     <c:choose>
-        <c:when test="${requestScope.entries == null}">
+        <c:when test="${requestScope.entries.isEmpty()}">
             <p>This user hasn't created any blog entries.</p>
         </c:when>
         <c:otherwise>
