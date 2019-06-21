@@ -35,8 +35,7 @@ public class AuthorServlet extends HttpServlet {
         req.setAttribute("nick", nick);
 
         if (pathInfo.length == 1) {
-            // TODO use entries attribute of user
-            req.setAttribute("entries", DAOProvider.getDAO().getBlogEntriesFor(nick));
+            req.setAttribute("entries", DAOProvider.getDAO().getBlogUser(nick).getEntires());
             req.getRequestDispatcher("/WEB-INF/pages/BlogEntriesListPage.jsp").forward(req, resp);
 
         } else if (pathInfo.length == 2) {

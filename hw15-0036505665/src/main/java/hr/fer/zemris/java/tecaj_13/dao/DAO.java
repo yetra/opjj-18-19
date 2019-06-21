@@ -44,15 +44,6 @@ public interface DAO {
 	BlogUser getBlogUser(String nick) throws DAOException;
 
     /**
-     * Returns a list of blog entries created by the specified user.
-     *
-     * @param nick the nickname of the user
-     * @return a list of blog entries created by the specified user
-     * @throws DAOException if there's an error with retrieving the data
-     */
-	List<BlogEntry> getBlogEntriesFor(String nick) throws DAOException;
-
-    /**
      * Adds a new {@link BlogUser} to the database.
      *
      * @param user the {@link BlogUser} to add

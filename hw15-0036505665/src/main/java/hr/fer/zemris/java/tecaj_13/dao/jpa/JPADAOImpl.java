@@ -8,7 +8,6 @@ import hr.fer.zemris.java.tecaj_13.model.BlogUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
@@ -41,11 +40,6 @@ public class JPADAOImpl implements DAO {
 		} catch (NoResultException e) {
 			return null;
 		}
-	}
-
-	@Override
-	public List<BlogEntry> getBlogEntriesFor(String nick) {
-		return null;
 	}
 
 	@Override
