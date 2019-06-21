@@ -25,13 +25,13 @@
                 Logged in as ${sessionScope["current.user.fn"]}
                     ${sessionScope["current.user.ln"]}
             </p>
-            <a href="servleti/logout">Log out</a>
+            <a href="logout">Log out</a>
         </c:otherwise>
     </c:choose>
 
     <h1>Register</h1>
 
-    <form action="servleti/register" method="post">
+    <form action="register" method="post">
 
         <label for="firstName">First name:</label>
         <input type="text" id="firstName" name="firstName"
