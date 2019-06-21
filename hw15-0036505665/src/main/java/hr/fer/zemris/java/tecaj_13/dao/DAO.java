@@ -1,10 +1,17 @@
 package hr.fer.zemris.java.tecaj_13.dao;
 
+import hr.fer.zemris.java.tecaj_13.model.BlogComment;
 import hr.fer.zemris.java.tecaj_13.model.BlogEntry;
 import hr.fer.zemris.java.tecaj_13.model.BlogUser;
 
 import java.util.List;
 
+/**
+ * An interface for database communication.
+ *
+ * @author Bruna Dujmović
+ *
+ */
 public interface DAO {
 
 	/**
@@ -51,4 +58,18 @@ public interface DAO {
      * @param user the {@link BlogUser} to add
      */
 	void addBlogUser(BlogUser user);
+
+    /**
+     * Adds a new {@link BlogEntry} to the database.
+     *
+     * @param entry the {@link BlogUser} to add
+     */
+	void addBlogEntry(BlogEntry entry);
+
+    /**
+     * Adds a new {@link BlogComment} to the database.
+     *
+     * @param comment the {@link BlogComment} to add
+     */
+	void addBlogComment(BlogComment comment);
 }
