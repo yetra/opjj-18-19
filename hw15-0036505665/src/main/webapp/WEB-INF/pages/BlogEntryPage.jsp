@@ -15,7 +15,7 @@
                 Logged in as ${sessionScope["current.user.fn"]}
                     ${sessionScope["current.user.ln"]}
             </p>
-            <a href="servleti/logout">Log out</a>
+            <a href="logout">Log out</a>
         </c:otherwise>
     </c:choose>
 
@@ -24,7 +24,7 @@
     <p>${requestScope.entry.text}</p>
 
     <c:if test="${sessionScope[\"current.user.nick\"].equals(requestScope.nick)}">
-        <p><a href="servleti/author/${requestScope.nick}/edit?id=${requestScope.entry.id}">
+        <p><a href="edit?id=${requestScope.entry.id}">
             Edit
         </a></p>
     </c:if>
@@ -36,7 +36,7 @@
     </c:forEach>
 
     <h5>Add new comment</h5>
-    <form action="servleti/main" method="post">
+    <form action="main" method="post">
 
         <label for="email">E-mail:</label>
         <input type="text" id="email" name="email" required>

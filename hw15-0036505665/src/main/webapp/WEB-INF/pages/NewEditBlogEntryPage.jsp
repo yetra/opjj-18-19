@@ -34,7 +34,7 @@
 
     <h1>New/Edit blog entry</h1>
 
-    <form action="author" method="post">
+    <form action="${requestScope.formAction}" method="post">
 
         <div class="form-element">
             <label for="title">Title:</label>
