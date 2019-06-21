@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 public class BlogEntryForm extends AbstractForm {
 
     /**
-     * The title of this entry.
+     * The title of this entry form.
      */
     private String title;
 
     /**
-     * The text of this entry.
+     * The text of this entry form.
      */
     private String text;
 
@@ -49,6 +49,42 @@ public class BlogEntryForm extends AbstractForm {
     public void toBlogEntry(BlogEntry entry) {
         entry.setTitle(title);
         entry.setText(text);
+    }
+
+    /**
+     * Returns the title of this entry form.
+     *
+     * @return the title of this entry form.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Returns the text of this entry form.
+     *
+     * @return the text of this entry form
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * Sets the title of this entry form to the given value.
+     *
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Sets the text of this entry form to the given value.
+     *
+     * @param text the title to set
+     */
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
