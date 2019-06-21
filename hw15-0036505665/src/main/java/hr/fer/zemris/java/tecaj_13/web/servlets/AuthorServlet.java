@@ -44,16 +44,19 @@ public class AuthorServlet extends HttpServlet {
                 checkSessionNick(nick, req, resp);
 
                 req.setAttribute("form", new BlogEntryForm());
+                req.setAttribute("formAction", req.getContextPath() + "/servleti/author/" + nick + "/new");
                 req.getRequestDispatcher("/WEB-INF/pages/NewEditBlogEntryPage.jsp").forward(req, resp);
 
             } else if (pathInfo[1].equals("edit")) {
                 checkSessionNick(nick, req, resp);
 
                 BlogEntryForm form = new BlogEntryForm();
-                BlogEntry entry = getEntryFromParameter(req.getParameter("id"), req, resp);
+                String id = req.getParameter("id");
+                BlogEntry entry = getEntryFromParameter(id, req, resp);
 
                 form.fromBlogEntry(entry);
                 req.setAttribute("form", form);
+                req.setAttribute("formAction", req.getContextPath() + "/servleti/author/" + nick + "/edit?id=" + id);
                 req.getRequestDispatcher("/WEB-INF/pages/NewEditBlogEntryPage.jsp").forward(req, resp);
 
             } else {
@@ -130,7 +133,7 @@ public class AuthorServlet extends HttpServlet {
         DAOProvider.getDAO().addBlogComment(comment);
 
         req.setAttribute("entry", entry);
-        resp.sendRedirect("author/" + nick + "/" + entryID);
+        resp.sendRedirect(req.getContextPath() + "/servleti/author/" + nick + "/" + entryID);
     }
 
     /**
@@ -151,7 +154,7 @@ public class AuthorServlet extends HttpServlet {
 
         if (form.hasErrors()) {
             req.setAttribute("form", form);
-            req.getRequestDispatcher("/WEB-INF/pages/NewEditBlogEntry.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/pages/NewEditBlogEntryPage.jsp").forward(req, resp);
             return;
         }
 
@@ -177,7 +180,7 @@ public class AuthorServlet extends HttpServlet {
         }
 
         DAOProvider.getDAO().addBlogEntry(entry);
-        resp.sendRedirect("author/" + nick);
+        resp.sendRedirect(req.getContextPath() + "/servleti/author/" + nick);
     }
 
     /**
@@ -224,8 +227,7 @@ public class AuthorServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
             req.setAttribute("errorMessage", "Invalid entry ID!");
             req.getRequestDispatcher("/WEB-INF/pages/ErrorPage.jsp").forward(req, resp);
+            return new BlogEntry();
         }
-
-        return null;
     }
 }
