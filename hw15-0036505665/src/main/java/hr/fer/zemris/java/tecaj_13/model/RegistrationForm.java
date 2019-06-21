@@ -47,8 +47,10 @@ public class RegistrationForm extends AbstractForm {
         lastName = prepare(req.getParameter("lastName"));
         email = prepare(req.getParameter("email"));
         nick = prepare(req.getParameter("nick"));
-        passwordHash = Utility.getDigestOf(
-                prepare(req.getParameter("password")));
+
+        String preparedPassword = prepare(req.getParameter("password"));
+        passwordHash = preparedPassword.isEmpty() ? "" :
+                Utility.getDigestOf(preparedPassword);
     }
 
     /**
@@ -194,6 +196,10 @@ public class RegistrationForm extends AbstractForm {
         } else if (nick.length() > BlogUser.NICK_LENGTH) {
             setError("nick", "Nickname cannot be longer than " +
                     BlogUser.NICK_LENGTH + " characters!");
+        }
+
+        if (passwordHash.isEmpty()) {
+            setError("password", "Password not given!");
         }
     }
 }

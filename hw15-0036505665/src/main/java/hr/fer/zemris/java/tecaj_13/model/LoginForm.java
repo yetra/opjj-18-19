@@ -30,7 +30,10 @@ public class LoginForm extends AbstractForm {
      */
     public void fromHttpRequest(HttpServletRequest req) {
         nick = prepare(req.getParameter("nick"));
-        passwordHash = Utility.getDigestOf(prepare(req.getParameter("password")));
+
+        String preparedPassword = prepare(req.getParameter("password"));
+        passwordHash = preparedPassword.isEmpty() ? "" :
+                Utility.getDigestOf(preparedPassword);
     }
 
     /**
