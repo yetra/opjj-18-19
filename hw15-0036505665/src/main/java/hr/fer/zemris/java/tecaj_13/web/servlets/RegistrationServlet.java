@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * A web servlet providing user registration functionality for the blog webapp.
+ *
+ * @author Bruna Dujmović
+ */
 @WebServlet("/servleti/register")
 public class RegistrationServlet extends HttpServlet {
 
