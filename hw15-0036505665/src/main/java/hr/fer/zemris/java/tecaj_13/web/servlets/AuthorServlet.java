@@ -114,6 +114,14 @@ public class AuthorServlet extends HttpServlet {
 
         BlogCommentForm form = new BlogCommentForm();
         form.fromHttpRequest(req);
+
+        Object sessionNick = req.getSession().getAttribute("current.user.nick");
+        if (sessionNick != null && sessionNick.equals(nick)) {
+            form.setUsersEMail(
+                    (String) req.getSession().getAttribute("current.user.email")
+            );
+        }
+
         form.validate();
 
         if (form.hasErrors()) {

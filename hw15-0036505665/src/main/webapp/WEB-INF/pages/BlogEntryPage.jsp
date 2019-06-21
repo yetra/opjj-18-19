@@ -50,14 +50,16 @@
     <h5>Add new comment</h5>
     <form action="${requestScope.entry.id}" method="post">
 
-        <div class="form-element">
-            <label for="usersEMail">E-mail:</label>
-            <input type="text" id="usersEMail" name="usersEMail"
-                   value="${requestScope.form.usersEMail}">
-            <c:if test="${requestScope.form.hasError('usersEMail')}">
-                <p class="error">${requestScope.form.getError('usersEMail')}</p>
-            </c:if>
-        </div>
+        <c:if test="${!sessionScope[\"current.user.nick\"].equals(requestScope.nick)}">
+            <div class="form-element">
+                <label for="usersEMail">E-mail:</label>
+                <input type="text" id="usersEMail" name="usersEMail"
+                       value="${requestScope.form.usersEMail}">
+                <c:if test="${requestScope.form.hasError('usersEMail')}">
+                    <p class="error">${requestScope.form.getError('usersEMail')}</p>
+                </c:if>
+            </div>
+        </c:if>
 
         <div class="form-element">
             <label for="message">Message:</label>
