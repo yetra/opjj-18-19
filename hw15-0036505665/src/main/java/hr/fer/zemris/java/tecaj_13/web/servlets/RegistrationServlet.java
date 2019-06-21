@@ -43,12 +43,7 @@ public class RegistrationServlet extends HttpServlet {
 
         if (dbUser == null) {
             DAOProvider.getDAO().addBlogUser(newUser);
-
-            req.getSession().setAttribute("current.user.id", newUser.getId());
-            req.getSession().setAttribute("current.user.fn", newUser.getFirstName());
-            req.getSession().setAttribute("current.user.ln", newUser.getLastName());
-            req.getSession().setAttribute("current.user.nick", newUser.getNick());
-            resp.sendRedirect("RegistrationPage.jsp");
+            resp.sendRedirect("main");
 
         } else {
             form.setError("nick", "A user with the nickname " + newUser.getNick()
