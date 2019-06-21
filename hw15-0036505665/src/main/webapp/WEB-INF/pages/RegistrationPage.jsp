@@ -4,13 +4,16 @@
 <html>
 <head>
     <title>Register</title>
+
     <style type="text/css">
         .error {
-            font-family: fantasy;
+            font-family: monospace;
             font-weight: bold;
             font-size: 0.9em;
             color: #FF0000;
-            padding-left: 110px;
+        }
+        .form-element {
+            padding: 3px;
         }
     </style>
 </head>
@@ -33,28 +36,34 @@
 
     <form action="register" method="post">
 
-        <label for="firstName">First name:</label>
-        <input type="text" id="firstName" name="firstName"
-               value="${requestScope.form.firstName}" required>
+        <div class="form-element">
+            <label for="firstName">First name:</label>
+            <input type="text" id="firstName" name="firstName"
+                   value="${requestScope.form.firstName}">
+        </div>
 
-        <label for="lastName">Last name:</label>
-        <input type="text" id="lastName" name="lastName"
-               value="${requestScope.form.lastName}" required>
+        <div class="form-element">
+            <label for="lastName">Last name:</label>
+            <input type="text" id="lastName" name="lastName"
+                   value="${requestScope.form.lastName}">
+        </div>
 
-        <label for="email">E-mail:</label>
-        <input type="text" id="email" name="email"
-               value="${requestScope.form.email}" required>
+        <div class="form-element">
+            <label for="email">E-mail:</label>
+            <input type="text" id="email" name="email"
+                   value="${requestScope.form.email}">
+        </div>
 
-        <label for="nick">Nickname:</label>
-        <input type="text" id="nick" name="nick"
-               value="${requestScope.form.nick}" required>
-        <c:if test="${requestScope.form.hasError('nick')}">
-            <p class="error">${requestScope.form.getError('nick')}</p>
-        </c:if>
+        <div class="form-element">
+            <label for="nick">Nickname:</label>
+            <input type="text" id="nick" name="nick"
+                   value="${requestScope.form.nick}">
+        </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"
-               value="${requestScope.form.password}" required>
+        <div class="form-element">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+        </div>
 
         <input type="submit" name="method" value="Register">
     </form>
