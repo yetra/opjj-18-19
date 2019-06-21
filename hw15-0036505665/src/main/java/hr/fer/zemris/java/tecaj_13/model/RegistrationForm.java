@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Models a blog user registration form.
  *
+ * @see AbstractForm
  * @author Bruna Dujmović
  */
 public class RegistrationForm extends AbstractForm {

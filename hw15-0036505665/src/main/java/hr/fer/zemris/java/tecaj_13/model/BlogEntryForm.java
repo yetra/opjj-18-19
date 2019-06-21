@@ -2,6 +2,12 @@ package hr.fer.zemris.java.tecaj_13.model;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Models a blog entry form.
+ *
+ * @see AbstractForm
+ * @author Bruna Dujmović
+ */
 public class BlogEntryForm extends AbstractForm {
 
     /**

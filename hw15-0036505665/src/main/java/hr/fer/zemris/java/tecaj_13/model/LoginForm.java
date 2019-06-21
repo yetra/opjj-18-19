@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Models a blog user login form.
  *
+ * @see AbstractForm
  * @author Bruna Dujmović
  */
 public class LoginForm extends AbstractForm {
