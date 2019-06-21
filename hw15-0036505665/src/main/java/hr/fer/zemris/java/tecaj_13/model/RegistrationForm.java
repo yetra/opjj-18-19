@@ -12,11 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 public class RegistrationForm extends AbstractForm {
 
     /**
-     * A simple regex for validating e-mails.
-     */
-    private static final String EMAIL_REGEX = "^[^@]+@[^@]+\\.[^@]+$";
-
-    /**
      * The first name of the user.
      */
     private String firstName;
@@ -186,7 +181,7 @@ public class RegistrationForm extends AbstractForm {
 
         if (email.isEmpty()) {
             setError("email", "E-mail not given!");
-        } else if (!email.matches(EMAIL_REGEX)) {
+        } else if (!email.matches(Utility.EMAIL_REGEX)) {
             setError("email", "Invalid e-mail format!");
         } else if (email.length() > BlogUser.EMAIL_LENGTH) {
             setError("email", "Email cannot be longer than " +
