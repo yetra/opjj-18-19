@@ -14,6 +14,16 @@ import javax.persistence.*;
 public class BlogEntry {
 
 	/**
+	 * The maximum length of this entry's title.
+	 */
+	public static final int TITLE_LENGTH = 200;
+
+	/**
+	 * The maximum length of this entry's text content.
+	 */
+	public static final int TEXT_LENGTH = 4096;
+
+	/**
 	 * The ID of this entry.
 	 */
 	private Long id;
@@ -73,7 +83,7 @@ public class BlogEntry {
 	 * @return a list of comments for this entry
 	 */
 	@OrderBy("postedOn")
-	@OneToMany(mappedBy="blogEntry",fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval=true)
+	@OneToMany(mappedBy = "blogEntry", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
 	public List<BlogComment> getComments() {
 		return comments;
 	}
@@ -93,7 +103,7 @@ public class BlogEntry {
 	 * @return this entry's date of creation
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -131,7 +141,7 @@ public class BlogEntry {
 	 *
 	 * @return the title of this entry
 	 */
-	@Column(length=200,nullable=false)
+	@Column(length = TITLE_LENGTH, nullable = false)
 	public String getTitle() {
 		return title;
 	}
@@ -150,7 +160,7 @@ public class BlogEntry {
 	 *
 	 * @return the text of this entry
 	 */
-	@Column(length=4096,nullable=false)
+	@Column(length = TEXT_LENGTH, nullable = false)
 	public String getText() {
 		return text;
 	}

@@ -17,6 +17,21 @@ import java.util.List;
 public class BlogUser {
 
     /**
+     * The maximum length of this user's nickname.
+     */
+    public static final int NICK_LENGTH = 100;
+
+    /**
+     * The maximum length of this user's e-mail.
+     */
+    public static final int EMAIL_LENGTH = 100;
+
+    /**
+     * The maximum length of the password hash value.
+     */
+    public static final int HASH_LENGTH = 265;
+
+    /**
      * The ID of this user.
      */
     private Long id;
@@ -87,7 +102,7 @@ public class BlogUser {
      *
      * @return the nickname of this user
      */
-    @Column(length = 100, unique = true, nullable = false)
+    @Column(length = NICK_LENGTH, unique = true, nullable = false)
     public String getNick() {
         return nick;
     }
@@ -97,7 +112,7 @@ public class BlogUser {
      *
      * @return the e-mail of this user
      */
-    @Column(length = 100, nullable = false)
+    @Column(length = EMAIL_LENGTH, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -107,7 +122,7 @@ public class BlogUser {
      *
      * @return the hex-encoded hash value obtained from this user's password
      */
-    @Column(length = 256, nullable = false)
+    @Column(length = HASH_LENGTH, nullable = false)
     public String getPasswordHash() {
         return passwordHash;
     }

@@ -20,6 +20,16 @@ import javax.persistence.TemporalType;
 public class BlogComment {
 
 	/**
+	 * The maximum length of the comment creator's e-mail.
+	 */
+	public static final int EMAIL_LENGTH = 100;
+
+	/**
+	 * The maximum length of the comment message.
+	 */
+	public static final int MESSAGE_LENGTH = 4096;
+
+	/**
 	 * The ID of this comment.
 	 */
 	private Long id;
@@ -69,7 +79,7 @@ public class BlogComment {
 	 * @return the blog entry that this comment belongs to
 	 */
 	@ManyToOne
-	@JoinColumn(nullable=false)
+	@JoinColumn(nullable = false)
 	public BlogEntry getBlogEntry() {
 		return blogEntry;
 	}
@@ -88,7 +98,7 @@ public class BlogComment {
 	 *
 	 * @return the e-mail of the user who created this comment.
 	 */
-	@Column(length=100,nullable=false)
+	@Column(length = EMAIL_LENGTH, nullable = false)
 	public String getUsersEMail() {
 		return usersEMail;
 	}
@@ -107,7 +117,7 @@ public class BlogComment {
 	 *
 	 * @return the message of this comment
 	 */
-	@Column(length=4096,nullable=false)
+	@Column(length = MESSAGE_LENGTH, nullable = false)
 	public String getMessage() {
 		return message;
 	}
@@ -127,7 +137,7 @@ public class BlogComment {
 	 * @return this comment's date of creation
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable=false)
+	@Column(nullable = false)
 	public Date getPostedOn() {
 		return postedOn;
 	}
