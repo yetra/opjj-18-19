@@ -2,6 +2,7 @@ package hr.fer.zemris.java.tecaj_13.dao.jpa;
 
 import java.io.IOException;
 
+import javax.persistence.EntityManager;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -10,6 +11,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
+/**
+ * A web filter for closing the {@link EntityManager}.
+ */
 @WebFilter("/servleti/*")
 public class JPAFilter implements Filter {
 

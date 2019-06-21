@@ -4,10 +4,21 @@ import hr.fer.zemris.java.tecaj_13.dao.DAOException;
 
 import javax.persistence.EntityManager;
 
+/**
+ * A class for retrieving the {@link EntityManager}.
+ */
 public class JPAEMProvider {
 
+	/**
+	 * A collection of thread-local {@link EntityManager} variables.
+	 */
 	private static ThreadLocal<EntityManager> locals = new ThreadLocal<>();
 
+	/**
+	 * Provides an {@link EntityManager} instance.
+	 *
+	 * @return an {@link EntityManager} instance
+	 */
 	public static EntityManager getEntityManager() {
 		EntityManager em = locals.get();
 		if(em==null) {
@@ -18,6 +29,11 @@ public class JPAEMProvider {
 		return em;
 	}
 
+	/**
+	 * Closes the provided {@link EntityManager}.
+	 *
+	 * @throws DAOException if there was an issue with closing the {@link EntityManager}
+	 */
 	public static void close() throws DAOException {
 		EntityManager em = locals.get();
 		if(em==null) {
