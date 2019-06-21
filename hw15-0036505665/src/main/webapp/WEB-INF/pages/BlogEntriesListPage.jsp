@@ -14,8 +14,8 @@
             <p>
                 Logged in as ${sessionScope["current.user.fn"]}
                     ${sessionScope["current.user.ln"]}
+                <a href="../logout">Log out</a>
             </p>
-            <a href="logout">Log out</a>
         </c:otherwise>
     </c:choose>
 
