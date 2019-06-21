@@ -8,8 +8,12 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+/**
+ * A web listener for initializing the database connection on app startup and
+ * terminating the connection when the application is shut down.
+ */
 @WebListener
-public class Inicijalizacija implements ServletContextListener {
+public class Initialization implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
