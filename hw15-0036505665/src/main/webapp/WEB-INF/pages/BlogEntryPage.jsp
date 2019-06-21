@@ -4,6 +4,18 @@
 <html>
 <head>
     <title>Blog entry</title>
+
+    <style type="text/css">
+        .error {
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #FF0000;
+        }
+        .form-element {
+            padding: 3px;
+        }
+    </style>
 </head>
 <body>
     <c:choose>
@@ -38,11 +50,22 @@
     <h5>Add new comment</h5>
     <form action="main" method="post">
 
-        <label for="email">E-mail:</label>
-        <input type="text" id="email" name="email" required>
+        <div class="form-element">
+            <label for="usersEMail">E-mail:</label>
+            <input type="text" id="usersEMail" name="usersEMail"
+                   value="${requestScope.form.usersEMail}">
+            <c:if test="${requestScope.form.hasError('usersEMail')}">
+                <p class="error">${requestScope.form.getError('usersEMail')}</p>
+            </c:if>
+        </div>
 
-        <label for="text">Text:</label>
-        <textarea name="text" id="text" cols="30" rows="10" required></textarea>
+        <div class="form-element">
+            <label for="message">Message:</label>
+            <textarea name="message" id="message">${requestScope.form.message}</textarea>
+            <c:if test="${requestScope.form.hasError('message')}">
+                <p class="error">${requestScope.form.getError('message')}</p>
+            </c:if>
+        </div>
 
         <input type="submit" name="method" value="Add comment">
     </form>

@@ -27,8 +27,8 @@
             <p>
                 Logged in as ${sessionScope["current.user.fn"]}
                     ${sessionScope["current.user.ln"]}
+                <a href="../../logout">Log out</a>
             </p>
-            <a href="logout">Log out</a>
         </c:otherwise>
     </c:choose>
 
@@ -47,9 +47,7 @@
 
         <div class="form-element">
             <label for="text">Text:</label>
-            <textarea id="text" name="text">
-                ${requestScope.form.text}
-            </textarea>
+            <textarea id="text" name="text">${requestScope.form.text}</textarea>
             <c:if test="${requestScope.form.hasError('text')}">
                 <p class="error">${requestScope.form.getError('text')}</p>
             </c:if>
