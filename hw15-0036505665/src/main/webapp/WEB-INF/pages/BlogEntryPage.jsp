@@ -48,7 +48,7 @@
     </c:forEach>
 
     <h5>Add new comment</h5>
-    <form action="main" method="post">
+    <form action="${requestScope.entry.id}" method="post">
 
         <div class="form-element">
             <label for="usersEMail">E-mail:</label>
