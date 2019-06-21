@@ -12,6 +12,9 @@
             font-size: 0.9em;
             color: #FF0000;
         }
+        .form-element {
+            padding: 3px;
+        }
     </style>
 </head>
 
