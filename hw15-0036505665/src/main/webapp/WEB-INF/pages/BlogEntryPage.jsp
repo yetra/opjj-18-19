@@ -41,11 +41,15 @@
         </a></p>
     </c:if>
 
-    <h5>Comments</h5>
-    <c:forEach items="${requestScope.entry.comments}" var="comment">
-        <h5>${comment.postedOn} ${comment.usersEMail}</h5>
-        <p>${comment.message}</p>
-    </c:forEach>
+    <h3>Comments</h3>
+    <ul>
+        <c:forEach items="${requestScope.entry.comments}" var="comment">
+            <li>
+                <h5>${comment.postedOn} ${comment.usersEMail}</h5>
+                <p>${comment.message}</p>
+            </li>
+        </c:forEach>
+    </ul>
 
     <h5>Add new comment</h5>
     <form action="${requestScope.entry.id}" method="post">
