@@ -28,9 +28,8 @@ public class LoginForm extends AbstractForm {
      * @param req the {@link HttpServletRequest} containing the parameters
      */
     public void fromHttpRequest(HttpServletRequest req) {
-        this.nick = prepare(req.getParameter("nick"));
-        this.passwordHash = Utility.getDigestOf(
-                prepare(req.getParameter("password")));
+        nick = prepare(req.getParameter("nick"));
+        passwordHash = Utility.getDigestOf(prepare(req.getParameter("password")));
     }
 
     /**
@@ -39,8 +38,8 @@ public class LoginForm extends AbstractForm {
      * @param user the {@link BlogUser} containing the original data
      */
     public void fromBlogUser(BlogUser user) {
-        this.nick = user.getNick();
-        this.passwordHash = user.getPasswordHash();
+        nick = user.getNick();
+        passwordHash = user.getPasswordHash();
     }
 
     /**
@@ -50,8 +49,8 @@ public class LoginForm extends AbstractForm {
      * @param user the {@link BlogUser} to fill
      */
     public void toBlogUser(BlogUser user) {
-        user.setNick(this.nick);
-        user.setPasswordHash(this.passwordHash);
+        user.setNick(nick);
+        user.setPasswordHash(passwordHash);
     }
 
     /**
@@ -90,4 +89,19 @@ public class LoginForm extends AbstractForm {
         this.passwordHash = passwordHash;
     }
 
+    @Override
+    public void validate() {
+        super.validate();
+
+        if (nick.isEmpty()) {
+            setError("nick", "Nickname not given!");
+        } else if (nick.length() > BlogUser.NICK_LENGTH) {
+            setError("nick", "Nickname cannot be larger than " +
+                    BlogUser.NICK_LENGTH + " characters!");
+        }
+
+        if (passwordHash.isEmpty()) {
+            setError("passwordHash", "Password not given!");
+        }
+    }
 }
