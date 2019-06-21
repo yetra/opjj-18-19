@@ -40,29 +40,44 @@
             <label for="firstName">First name:</label>
             <input type="text" id="firstName" name="firstName"
                    value="${requestScope.form.firstName}">
+            <c:if test="${requestScope.form.hasError('firstName')}">
+                <p class="error">${requestScope.form.getError('firstName')}</p>
+            </c:if>
         </div>
 
         <div class="form-element">
             <label for="lastName">Last name:</label>
             <input type="text" id="lastName" name="lastName"
                    value="${requestScope.form.lastName}">
+            <c:if test="${requestScope.form.hasError('lastName')}">
+                <p class="error">${requestScope.form.getError('lastName')}</p>
+            </c:if>
         </div>
 
         <div class="form-element">
             <label for="email">E-mail:</label>
             <input type="text" id="email" name="email"
                    value="${requestScope.form.email}">
+            <c:if test="${requestScope.form.hasError('email')}">
+                <p class="error">${requestScope.form.getError('email')}</p>
+            </c:if>
         </div>
 
         <div class="form-element">
             <label for="nick">Nickname:</label>
             <input type="text" id="nick" name="nick"
                    value="${requestScope.form.nick}">
+            <c:if test="${requestScope.form.hasError('nick')}">
+                <p class="error">${requestScope.form.getError('nick')}</p>
+            </c:if>
         </div>
 
         <div class="form-element">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password">
+            <c:if test="${requestScope.form.hasError('password')}">
+                <p class="error">${requestScope.form.getError('password')}</p>
+            </c:if>
         </div>
 
         <input type="submit" name="method" value="Register">
