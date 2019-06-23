@@ -62,6 +62,9 @@ public class ImageServlet extends HttpServlet {
         g.dispose();
 
         // save to thumbnails
+        if (!Files.exists(Paths.get(BASE_PATH_THUMBNAILS))) {
+            Files.createDirectories(Paths.get(BASE_PATH_THUMBNAILS));
+        }
         ImageIO.write(smallImage, "jpg", Files.newOutputStream(smallImagePath));
 
         // TODO return it
