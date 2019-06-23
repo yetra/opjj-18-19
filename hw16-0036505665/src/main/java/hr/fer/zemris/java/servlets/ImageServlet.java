@@ -26,12 +26,12 @@ public class ImageServlet extends HttpServlet {
     /**
      * The base path of a thumbnail.
      */
-    private static final String BASE_PATH_THUMBNAILS = "WEB-INF/thumbnails/";
+    private static final String BASE_PATH_THUMBNAILS = "WEB-INF/thumbnails";
 
     /**
      * The base path of an original image.
      */
-    private static final String BASE_PATH_ORIGINALS = "WEB-INF/slike/";
+    private static final String BASE_PATH_ORIGINALS = "WEB-INF/slike";
 
     /**
      * The size (both width and height) of the image after resizing.
@@ -43,7 +43,7 @@ public class ImageServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String imageName = req.getParameter("name");
-        Path smallImagePath = Paths.get(BASE_PATH_THUMBNAILS + imageName);
+        Path smallImagePath = Paths.get(BASE_PATH_THUMBNAILS + "/" + imageName);
 
         // check if 150x150 exists in WEB-INF/thumbnails
         if (Files.exists(smallImagePath)) {
@@ -52,7 +52,7 @@ public class ImageServlet extends HttpServlet {
         }
 
         // else - read big picture
-        Path largeImagePath = Paths.get(BASE_PATH_ORIGINALS + imageName);
+        Path largeImagePath = Paths.get(BASE_PATH_ORIGINALS + "/" + imageName);
         BufferedImage largeImage = ImageIO.read(new BufferedInputStream(Files.newInputStream(largeImagePath)));
 
         // resize to 150x150
