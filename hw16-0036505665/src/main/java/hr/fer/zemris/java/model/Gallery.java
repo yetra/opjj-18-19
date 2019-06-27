@@ -68,5 +68,22 @@ public class Gallery implements ServletContextListener {
         return tags;
     }
 
+    /**
+     * Returns a list of {@link GalleryImage} objects that contain a specified tag.
+     *
+     * @param tag the tag that the images should contain
+     * @return a list of {@link GalleryImage} objects that contain the specified tag
+     */
+    public static List<GalleryImage> getImagesWithTag(String tag) {
+        List<GalleryImage> imagesWithTag = new ArrayList<>();
+
+        for (GalleryImage image : galleryImages) {
+            if (image.getTags().contains(tag)) {
+                imagesWithTag.add(image);
+            }
+        }
+
+        return imagesWithTag;
+    }
 
 }
