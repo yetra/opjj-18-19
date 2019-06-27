@@ -86,4 +86,23 @@ public class Gallery implements ServletContextListener {
         return imagesWithTag;
     }
 
+    /**
+     * Returns a {@link GalleryImage} object from the {@link #galleryImages} array that
+     * has the specified file name. If there is no such object, this method will return
+     * {@code null}.
+     *
+     * @param fileName the file name of the image
+     * @return a {@link GalleryImage} object of the specified file name, or {@code null}
+     *         if there is no such object
+     */
+    public static GalleryImage getGalleryImageFor(String fileName) {
+        for (GalleryImage image : galleryImages) {
+            if (image.getFileName().equals(fileName)) {
+                return image;
+            }
+        }
+
+        return null;
+    }
+
 }
