@@ -1,7 +1,5 @@
 package hr.fer.zemris.java.servlets;
 
-import hr.fer.zemris.java.model.GalleryImage;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +18,7 @@ import java.nio.file.Paths;
  *
  * @author Bruna Dujmović
  */
-@WebServlet // TODO mapping
+@WebServlet("/image")
 public class ImageServlet extends HttpServlet {
 
     /**
@@ -42,12 +40,15 @@ public class ImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        resp.setContentType("image/jpg");
+
         String imageName = req.getParameter("name");
         Path smallImagePath = Paths.get(BASE_PATH_THUMBNAILS + "/" + imageName);
 
         // check if 150x150 exists in WEB-INF/thumbnails
         if (Files.exists(smallImagePath)) {
-            // TODO if yes - return it
+            BufferedImage smallImage = new BufferedImage(SMALL_SIZE, SMALL_SIZE, BufferedImage.TYPE_INT_RGB);
+            ImageIO.write(smallImage, "jpg", resp.getOutputStream());
             return;
         }
 
@@ -67,8 +68,8 @@ public class ImageServlet extends HttpServlet {
         }
         ImageIO.write(smallImage, "jpg", Files.newOutputStream(smallImagePath));
 
-        // TODO return it
-        GalleryImage.toGalleryImage(imageName, smallImage);
+        // return
+        ImageIO.write(smallImage, "jpg", resp.getOutputStream());
     }
 
 }
