@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A class representing a gallery image. It consists of an image description, tags,
@@ -35,18 +36,18 @@ public class GalleryImage {
     private String description;
 
     /**
-     * A list of tags of this gallery image.
+     * A set of tags of this gallery image.
      */
-    private List<String> tags;
+    private Set<String> tags;
 
     /**
      * Constructs a {@link GalleryImage} of the given parameters.
      *
      * @param image an {@link Image} object representing this gallery image
      * @param description the description of this gallery image
-     * @param tags a list of tags of this gallery image
+     * @param tags a set of tags of this gallery image
      */
-    public GalleryImage(Image image, String description, List<String> tags) {
+    public GalleryImage(Image image, String description, Set<String> tags) {
         this.image = image;
         this.description = description;
         this.tags = tags;
@@ -71,11 +72,11 @@ public class GalleryImage {
     }
 
     /**
-     * Returns a list of tags of this gallery image
+     * Returns a set of tags of this gallery image
      *
-     * @return a list of tags of this gallery image
+     * @return a set of tags of this gallery image
      */
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
