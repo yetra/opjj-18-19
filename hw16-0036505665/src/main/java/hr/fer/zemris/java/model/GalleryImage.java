@@ -1,14 +1,8 @@
 package hr.fer.zemris.java.model;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,11 +13,6 @@ import java.util.Set;
  *
  */
 public class GalleryImage {
-
-    /**
-     * The path to the image descriptions file.
-     */
-    private static final Path DESCRIPTIONS = Paths.get("WEB-INF/opisnik.txt");
 
     /**
      * The name of the image file.
@@ -78,34 +67,5 @@ public class GalleryImage {
      */
     public Set<String> getTags() {
         return tags;
-    }
-
-    /**
-     * Returns a {@link GalleryImage} object for the given image by reading its
-     * description and tags from the {@link #DESCRIPTIONS} file.
-     *
-     * @param name the name of the image
-     * @param image an {@link Image} object representing the image
-     * @return a {@link GalleryImage} object for the given image
-     * @throws IOException if there was an issue with the image descriptions
-     */
-    public static GalleryImage toGalleryImage(String name, Image image)
-            throws IOException {
-
-        List<String> tags = new ArrayList<>();
-        String description = null;
-
-        try (BufferedReader br = Files.newBufferedReader(DESCRIPTIONS)) {
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                if (line.equals(name)) {
-                    description = br.readLine();
-                    tags = Arrays.asList(br.readLine().split(", "));
-                }
-            }
-        }
-
-        return new GalleryImage(image, description, tags);
     }
 }
