@@ -16,6 +16,7 @@ import java.nio.file.Paths;
  * A web servlet for displaying a gallery image in its original size.
  *
  * @author Bruna Dujmović
+ *
  */
 @WebServlet("/image")
 public class ImageServlet extends HttpServlet {
@@ -32,7 +33,9 @@ public class ImageServlet extends HttpServlet {
         resp.setContentType("image/jpg");
 
         String imageName = req.getParameter("name");
-        Path largeImagePath = Paths.get(BASE_PATH_ORIGINALS + "/" + imageName);
+        Path largeImagePath = Paths.get(
+                req.getServletContext().getRealPath(
+                        BASE_PATH_ORIGINALS + "/" + imageName));
         BufferedImage largeImage = ImageIO.read(
                 new BufferedInputStream(Files.newInputStream(largeImagePath)));
 

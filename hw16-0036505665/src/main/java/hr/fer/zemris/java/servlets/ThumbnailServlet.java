@@ -17,6 +17,7 @@ import java.nio.file.Paths;
  * A web servlet for resizing a given image to 150x150.
  *
  * @author Bruna Dujmović
+ *
  */
 @WebServlet("/thumbnail")
 public class ThumbnailServlet extends HttpServlet {
@@ -43,7 +44,9 @@ public class ThumbnailServlet extends HttpServlet {
         resp.setContentType("image/jpg");
 
         String imageName = req.getParameter("name");
-        Path smallImagePath = Paths.get(BASE_PATH_THUMBNAILS + "/" + imageName);
+        Path smallImagePath = Paths.get(
+                req.getServletContext().getRealPath(
+                        BASE_PATH_THUMBNAILS + "/" + imageName));
 
         // check if 150x150 exists in WEB-INF/thumbnails
         if (Files.exists(smallImagePath)) {
@@ -52,9 +55,11 @@ public class ThumbnailServlet extends HttpServlet {
             return;
         }
 
-        // else - read big picture
-        Path largeImagePath = Paths.get(BASE_PATH_ORIGINALS + "/" + imageName);
-        BufferedImage largeImage = ImageIO.read(new BufferedInputStream(Files.newInputStream(largeImagePath)));
+        Path largeImagePath = Paths.get(
+                req.getServletContext().getRealPath(
+                        BASE_PATH_ORIGINALS + "/" + imageName));
+        BufferedImage largeImage = ImageIO.read(
+                new BufferedInputStream(Files.newInputStream(largeImagePath)));
 
         // resize to 150x150
         BufferedImage smallImage = new BufferedImage(SMALL_SIZE, SMALL_SIZE, BufferedImage.TYPE_INT_RGB);
@@ -63,8 +68,10 @@ public class ThumbnailServlet extends HttpServlet {
         g.dispose();
 
         // save to thumbnails
-        if (!Files.exists(Paths.get(BASE_PATH_THUMBNAILS))) {
-            Files.createDirectories(Paths.get(BASE_PATH_THUMBNAILS));
+        Path thumbnailsPath = Paths.get(
+                req.getServletContext().getRealPath(BASE_PATH_THUMBNAILS));
+        if (!Files.exists(thumbnailsPath)) {
+            Files.createDirectories(thumbnailsPath);
         }
         ImageIO.write(smallImage, "jpg", Files.newOutputStream(smallImagePath));
 

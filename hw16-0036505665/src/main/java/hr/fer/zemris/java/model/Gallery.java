@@ -2,6 +2,7 @@ package hr.fer.zemris.java.model;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,7 +24,7 @@ public class Gallery implements ServletContextListener {
     /**
      * The path to the image descriptions file.
      */
-    private static final Path DESCRIPTIONS = Paths.get("WEB-INF/opisnik.txt");
+    private static final String DESCRIPTIONS = "WEB-INF/opisnik.txt";
 
     /**
      * A list of {@link GalleryImage} data obtained from the {@link #DESCRIPTIONS} file.
@@ -33,7 +34,8 @@ public class Gallery implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            List<String> lines = Files.readAllLines(DESCRIPTIONS);
+            Path path = Paths.get(sce.getServletContext().getRealPath(DESCRIPTIONS));
+            List<String> lines = Files.readAllLines(path);
 
             for (int i = 0, size = lines.size(); i < size; i += 3) {
                 String fileName = lines.get(i);
