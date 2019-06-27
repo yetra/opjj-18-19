@@ -18,7 +18,9 @@ import java.util.Set;
  * object in a list.
  *
  * @author Bruna Dujmović
+ *
  */
+@WebListener
 public class Gallery implements ServletContextListener {
 
     /**
