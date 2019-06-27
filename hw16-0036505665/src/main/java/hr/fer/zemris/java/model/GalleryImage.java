@@ -26,9 +26,9 @@ public class GalleryImage {
     private static final Path DESCRIPTIONS = Paths.get("WEB-INF/opisnik.txt");
 
     /**
-     * An {@link Image} object representing this gallery image.
+     * The name of the image file.
      */
-    private Image image;
+    private String fileName;
 
     /**
      * The description of this gallery image.
@@ -43,23 +43,23 @@ public class GalleryImage {
     /**
      * Constructs a {@link GalleryImage} of the given parameters.
      *
-     * @param image an {@link Image} object representing this gallery image
+     * @param fileName the name of the image file
      * @param description the description of this gallery image
      * @param tags a set of tags of this gallery image
      */
-    public GalleryImage(Image image, String description, Set<String> tags) {
-        this.image = image;
+    public GalleryImage(String fileName, String description, Set<String> tags) {
+        this.fileName = fileName;
         this.description = description;
         this.tags = tags;
     }
 
     /**
-     * Returns an {@link Image} object representing this gallery image.
+     * Returns the name of the image file.
      *
-     * @return an {@link Image} object representing this gallery image
+     * @return the name of the image file
      */
-    public Image getImage() {
-        return image;
+    public String getFileName() {
+        return fileName;
     }
 
     /**
