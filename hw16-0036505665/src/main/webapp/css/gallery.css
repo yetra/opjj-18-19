@@ -1,0 +1,60 @@
+body {
+    background-color: black;
+    margin: 0;
+    padding: 2.5em 3em;
+
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 400;
+    color: white;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: 500;
+}
+
+.tag_button {
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+    transition: 0.25s;
+
+    color: white;
+
+    border: 2px solid;
+    margin: 0.5em;
+    padding: 1em 2em;
+    line-height: 1;
+
+}
+
+.tag_button:hover,
+.tag_button:focus {
+    box-shadow: inset 0 -3.25em 0 0 white;
+    border-color: white;
+
+    color: black;
+}
+
+#thumbnails {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    justify-items: center;
+    align-items: center;
+
+    grid-gap: 20px;
+    gap: 20px;
+
+    padding: 3em 0;
+}
+
+.thumbnail:hover {
+    border: 0.4em solid white;
+}
+
+#original_image {
+    align-content: center;
+}
