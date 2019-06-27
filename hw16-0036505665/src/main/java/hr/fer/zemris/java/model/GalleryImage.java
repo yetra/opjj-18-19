@@ -1,8 +1,6 @@
 package hr.fer.zemris.java.model;
 
 import java.awt.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Set;
 
 /**
