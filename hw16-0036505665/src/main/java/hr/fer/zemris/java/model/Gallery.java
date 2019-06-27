@@ -53,5 +53,20 @@ public class Gallery implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {}
 
+    /**
+     * Returns a set of all image tags found in this gallery.
+     *
+     * @return a set of all image tags found in this gallery
+     */
+    public static Set<String> getTags() {
+        Set<String> tags = new HashSet<>();
+
+        for (GalleryImage image : galleryImages) {
+            tags.addAll(image.getTags());
+        }
+
+        return tags;
+    }
+
 
 }
