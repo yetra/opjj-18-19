@@ -50,7 +50,8 @@ public class ThumbnailServlet extends HttpServlet {
 
         // check if 150x150 exists in WEB-INF/thumbnails
         if (Files.exists(smallImagePath)) {
-            BufferedImage smallImage = new BufferedImage(SMALL_SIZE, SMALL_SIZE, BufferedImage.TYPE_INT_RGB);
+            BufferedImage smallImage = ImageIO.read(
+                    new BufferedInputStream(Files.newInputStream(smallImagePath)));
             ImageIO.write(smallImage, "jpg", resp.getOutputStream());
             return;
         }
