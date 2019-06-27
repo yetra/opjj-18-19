@@ -48,7 +48,6 @@ public class ThumbnailServlet extends HttpServlet {
                 req.getServletContext().getRealPath(
                         BASE_PATH_THUMBNAILS + "/" + imageName));
 
-        // check if 150x150 exists in WEB-INF/thumbnails
         if (Files.exists(smallImagePath)) {
             BufferedImage smallImage = ImageIO.read(
                     new BufferedInputStream(Files.newInputStream(smallImagePath)));
@@ -62,8 +61,9 @@ public class ThumbnailServlet extends HttpServlet {
         BufferedImage largeImage = ImageIO.read(
                 new BufferedInputStream(Files.newInputStream(largeImagePath)));
 
-        // resize to 150x150
-        BufferedImage smallImage = new BufferedImage(SMALL_SIZE, SMALL_SIZE, BufferedImage.TYPE_INT_RGB);
+        // resize
+        BufferedImage smallImage = new BufferedImage(
+                SMALL_SIZE, SMALL_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics g = smallImage.createGraphics();
         g.drawImage(largeImage, 0, 0, SMALL_SIZE, SMALL_SIZE, null);
         g.dispose();
@@ -76,7 +76,6 @@ public class ThumbnailServlet extends HttpServlet {
         }
         ImageIO.write(smallImage, "jpg", Files.newOutputStream(smallImagePath));
 
-        // return
         ImageIO.write(smallImage, "jpg", resp.getOutputStream());
     }
 
