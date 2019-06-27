@@ -18,8 +18,8 @@ import java.nio.file.Paths;
  *
  * @author Bruna Dujmović
  */
-@WebServlet("/image")
-public class ImageServlet extends HttpServlet {
+@WebServlet("/thumbnail")
+public class ThumbnailServlet extends HttpServlet {
 
     /**
      * The base path of a thumbnail.
