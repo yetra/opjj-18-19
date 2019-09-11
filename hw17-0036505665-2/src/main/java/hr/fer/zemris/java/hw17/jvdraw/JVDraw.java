@@ -424,8 +424,8 @@ public class JVDraw extends JFrame {
 
         try {
             String fileName = file.toPath().getFileName().toString();
-            if (!fileName.endsWith(".jpg") && !fileName.equals(".png")
-                    && !fileName.equals(".gif")) {
+            if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")
+                    && !fileName.endsWith(".gif")) {
                 throw new RuntimeException("Invalid extension!");
             }
             ImageIO.write(image, fileName.substring(fileName.length() - 3), file);
