@@ -48,6 +48,7 @@ public class LineEditor extends GeometricalObjectEditor {
      */
     public LineEditor(Line line) {
         this.line = line;
+        this.chosenColor = line.getLineColor();
 
         this.setLayout(new GridLayout(5, 1));
 
