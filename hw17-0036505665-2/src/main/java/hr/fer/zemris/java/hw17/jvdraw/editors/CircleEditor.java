@@ -47,13 +47,13 @@ public class CircleEditor extends GeometricalObjectEditor {
 
         this.setLayout(new GridLayout(5, 1));
 
-        centerXField = new JTextField(circle.getCenter().x);
+        centerXField = new JTextField(Integer.toString(circle.getCenter().x));
         this.add(centerXField);
 
-        centerYField = new JTextField(circle.getCenter().y);
+        centerYField = new JTextField(Integer.toString(circle.getCenter().y));
         this.add(centerYField);
 
-        radiusField = new JTextField(circle.getRadius());
+        radiusField = new JTextField(Integer.toString(circle.getRadius()));
         this.add(radiusField);
 
         JButton colorChooserButton = new JButton("Choose color");
