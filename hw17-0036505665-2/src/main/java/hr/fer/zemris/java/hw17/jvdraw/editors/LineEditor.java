@@ -51,16 +51,16 @@ public class LineEditor extends GeometricalObjectEditor {
 
         this.setLayout(new GridLayout(5, 1));
 
-        startXField = new JTextField(line.getStart().x);
+        startXField = new JTextField(Integer.toString(line.getStart().x));
         this.add(startXField);
 
-        startYField = new JTextField(line.getStart().y);
+        startYField = new JTextField(Integer.toString(line.getStart().y));
         this.add(startYField);
 
-        endXField = new JTextField(line.getEnd().x);
+        endXField = new JTextField(Integer.toString(line.getEnd().x));
         this.add(endXField);
 
-        endYField = new JTextField(line.getEnd().y);
+        endYField = new JTextField(Integer.toString(line.getEnd().y));
         this.add(endYField);
 
         JButton colorChooserButton = new JButton("Choose color");
