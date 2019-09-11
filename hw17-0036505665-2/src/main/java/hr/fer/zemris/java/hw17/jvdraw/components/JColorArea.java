@@ -45,6 +45,16 @@ public class JColorArea extends JComponent implements IColorProvider {
     }
 
     @Override
+    public Dimension getMaximumSize() {
+        return getPreferredSize();
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return getPreferredSize();
+    }
+
+    @Override
     public Color getCurrentColor() {
         return selectedColor;
     }
