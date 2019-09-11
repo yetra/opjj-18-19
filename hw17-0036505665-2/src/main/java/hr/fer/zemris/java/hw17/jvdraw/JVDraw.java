@@ -454,7 +454,7 @@ public class JVDraw extends JFrame {
             }
         }
 
-        JVDraw.this.exit();
+        JVDraw.this.dispose();
     }
 
     // ------------------------------------------------------------------------------
