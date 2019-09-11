@@ -345,6 +345,14 @@ public class JVDraw extends JFrame {
             }
 
             savePath = jfc.getSelectedFile().toPath();
+            String fileName = savePath.getFileName().toString();
+            if (!fileName.endsWith(".jvd")) {
+                JOptionPane.showMessageDialog(
+                        JVDraw.this, "Invalid extension " + fileName + "!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (Files.exists(savePath)) {
                 int response = JOptionPane.showConfirmDialog(
                         this, "A file already exists on the path " + savePath +
