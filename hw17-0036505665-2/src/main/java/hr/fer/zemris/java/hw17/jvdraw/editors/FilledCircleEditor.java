@@ -31,12 +31,13 @@ public class FilledCircleEditor extends CircleEditor {
     public FilledCircleEditor(FilledCircle filledCircle) {
         super(filledCircle);
         this.filledCircle = filledCircle;
+        this.chosenFillColor = filledCircle.getFillColor();
 
         JButton fillColorChooserButton = new JButton("Choose fill color");
         fillColorChooserButton.addActionListener(e ->
                 chosenFillColor = JColorChooser.showDialog(
                         FilledCircleEditor.this, "Choose fill color",
-                        filledCircle.getLineColor()));
+                        filledCircle.getFillColor()));
         this.add(fillColorChooserButton);
     }
 
