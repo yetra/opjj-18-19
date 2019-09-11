@@ -117,6 +117,7 @@ public class Circle extends GeometricalObject {
      */
     public void setRadius(int radius) {
         this.radius = radius;
+        notifyListeners();
     }
 
     /**
