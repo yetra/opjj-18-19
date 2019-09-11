@@ -44,6 +44,7 @@ public class CircleEditor extends GeometricalObjectEditor {
      */
     public CircleEditor(Circle circle) {
         this.circle = circle;
+        this.chosenColor = circle.getLineColor();
 
         this.setLayout(new GridLayout(5, 1));
 
