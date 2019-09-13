@@ -361,7 +361,9 @@ public class JNotepadPP extends JFrame {
     private final Action closeDocument = new LocalizableAction("close", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            mdm.closeDocument(mdm.getCurrentDocument());
+            SingleDocumentModel document = mdm.getCurrentDocument();
+            checkChangesOf(document);
+            mdm.closeDocument(document);
         }
     };
 
@@ -644,25 +646,39 @@ public class JNotepadPP extends JFrame {
      */
     private void exitNotepad() {
         for (SingleDocumentModel document : mdm) {
-            if (document.isModified()) {
-                int response = JOptionPane.showConfirmDialog(
-                        this,
-                        "This document has unsaved changes. Do you wish to save them?",
-                        "Unsaved changes found",
-                        JOptionPane.YES_NO_CANCEL_OPTION
-                );
-
-                if (response == JOptionPane.CANCEL_OPTION) {
-                    break;
-                }
-
-                if (response == JOptionPane.YES_OPTION) {
-                    saveDocument(false);
-                }
+            if (!checkChangesOf(document)) {
+                return;
             }
         }
 
         dispose();
+    }
+
+    /**
+     * Checks if a given document is modified and asks the user to save it.
+     *
+     * @param document the document to check
+     * @return {@code false} if check should be aborted
+     */
+    private boolean checkChangesOf(SingleDocumentModel document) {
+        if (document.isModified()) {
+            int response = JOptionPane.showConfirmDialog(
+                    this,
+                    "This document has unsaved changes. Do you wish to save them?",
+                    "Unsaved changes found",
+                    JOptionPane.YES_NO_CANCEL_OPTION
+            );
+
+            if (response == JOptionPane.CANCEL_OPTION) {
+                return false;
+            }
+
+            if (response == JOptionPane.YES_OPTION) {
+                saveDocument(false);
+            }
+        }
+
+        return true;
     }
 
     /**
