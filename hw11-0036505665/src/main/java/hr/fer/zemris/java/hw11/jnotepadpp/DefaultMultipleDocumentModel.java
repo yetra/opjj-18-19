@@ -80,6 +80,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             if (model.getFilePath() != null && model.getFilePath().equals(path)) {
                 setSelectedIndex(i);
+                return model;
             }
         }
 
