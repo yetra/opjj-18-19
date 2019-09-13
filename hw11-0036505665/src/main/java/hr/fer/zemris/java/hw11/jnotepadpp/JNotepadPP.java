@@ -873,7 +873,10 @@ public class JNotepadPP extends JFrame {
         public void currentDocumentChanged(SingleDocumentModel previousModel,
                 SingleDocumentModel currentModel) {
             updateTitle(currentModel);
-            currentModel.addSingleDocumentListener(updateTitleOnPathChange);
+
+            if (currentModel != null) {
+                currentModel.addSingleDocumentListener(updateTitleOnPathChange);
+            }
         }
 
         @Override
